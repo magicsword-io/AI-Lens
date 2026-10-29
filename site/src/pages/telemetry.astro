@@ -3,7 +3,6 @@ import Layout from "../layouts/Layout.astro";
 import CodeBlock from "../components/CodeBlock.astro";
 import Downloads from "../components/Downloads.astro";
 import { href, source } from "../data/project";
-const previewSource = source;
 const sources = [
   ["claude-code-otel", "Claude Code", "Local runtime · opt-in client configuration", "OTLP import / HTTP"],
   ["claude-cowork-otel", "Claude Cowork", "Cowork runtime · Team / Enterprise admin", "OTLP via reachable collector"],
@@ -20,10 +19,10 @@ const sources = [
 ---
 
 <Layout title="Hooks & telemetry — AI Lens" active="telemetry"
-  description="Experimental integration guide to seven native hook adapters and eleven observation-only telemetry sources. Review blocking, setup, privacy, and coverage limits.">
+  description="Integration guide to seven native hook adapters and eleven observation-only telemetry sources. Review blocking, setup, privacy, and coverage limits.">
   <div class="container">
     <header class="page-intro">
-      <p class="eyebrow">FIELD GUIDE / 03 · EXPERIMENTAL</p>
+      <p class="eyebrow">FIELD GUIDE / 03</p>
       <h1>More sources.<br /><span>Clearer boundaries.</span></h1>
       <p>Request blocking through native pre-tool hooks. Collect runtime telemetry and provider audit records for observation. Choose the integration that answers your question.</p>
     </header>
@@ -43,8 +42,8 @@ const sources = [
           <p class="eyebrow">01 / DOWNLOAD & EXTRACT</p>
           <h2>Get the integrations locally.</h2>
           <div class="callout">
-            <strong>Seven adapters. Experimental telemetry.</strong>
-            <p>The release includes seven native adapters and eleven telemetry sources. The three newer adapters and telemetry ingestion remain experimental. Cowork Desktop/VM execution remains unvalidated.</p>
+            <strong>Native hooks and telemetry, together.</strong>
+            <p>Seven native adapters connect tool activity to local policy decisions. Eleven telemetry sources bring runtime and provider audit observations into the same workflow. Review <a href={source("docs/verification.md")}>tested coverage and experimental integrations</a> before choosing your setup.</p>
           </div>
           <Downloads />
           <p><a href={href("getting-started/#downloads")}>Extract your package and review platform prerequisites</a>,
@@ -72,7 +71,7 @@ const sources = [
             <li><strong>Copilot CLI: 12 events.</strong> Merge into <code>.github/hooks/*.json</code> or user <code>.copilot/hooks/*.json</code>, complete trust, and restart the CLI. Only <code>preToolUse</code> blocks. Direct <code>exec</code>/<code>args</code> configuration is CLI-only; its 30-second timeout <strong>fails open upstream</strong>. It is not an IDE/cloud integration.</li>
             <li><strong>Cowork: five events.</strong> Package generated <code>hooks/hooks.json</code> with a plugin manifest, then install and activate through Desktop's plugin flow. Only <code>PreToolUse</code> blocks; its config requests <code>onFailure: block</code>. Provision the executable/library separately, without top-level <code>bin/</code> or a required skill. Documented plugin support does not establish Desktop/VM execution or path reachability.</li>
           </ul>
-          <p>Review <a href={previewSource("docs/agents.md")}>complete event registries, installation and failure contracts</a> and the <a href={previewSource("examples/cowork-plugin/README.md")}>Cowork packaging example</a>. Configuration output does not install settings, grant trust, or prove hook invocation. Keep executable, engine, state, rules and output reachable in the actual runtime.</p>
+          <p>Review <a href={source("docs/agents.md")}>complete event registries, installation and failure contracts</a> and the <a href={source("examples/cowork-plugin/README.md")}>Cowork packaging example</a>. Configuration output does not install settings, grant trust, or prove hook invocation. Keep executable, engine, state, rules and output reachable in the actual runtime.</p>
           <p><code>config --agent cursor</code> configures a native gate. <code>telemetry config --source cursor-runtime</code> configures observation. Cowork OTel, Copilot OTel, session streams and provider audit feeds follow that same boundary.</p>
         </section>
         <section class="doc-section" id="sources">
@@ -119,9 +118,9 @@ const sources = [
           <p class="eyebrow">04 / EXPLICIT CONFIGURATION</p>
           <h2>Review before connecting.</h2>
           <CodeBlock code="./agent-lens telemetry config --source claude-code-otel" label="Print configuration for review" />
-          <p>Review the <a href={previewSource("examples/telemetry/configs")}>configuration templates</a> and merge only the relevant settings manually. Managed policy can override local values. Complete normal client consent and trust steps; Lens does not edit global settings or bypass policy.</p>
+          <p>Review the <a href={source("examples/telemetry/configs")}>configuration templates</a> and merge only the relevant settings manually. Managed policy can override local values. Complete normal client consent and trust steps; Lens does not edit global settings or bypass policy.</p>
           <p>Cowork exports from its VM or cloud runtime. Cursor exports from its servers and requires public HTTPS with authentication. Their loopback address is not your host. Use a reachable, secured collector and forward to Lens on the collector host.</p>
-          <p>The <a href={previewSource("examples/telemetry/configs/otel-collector.yaml")}>Collector Contrib example</a> provides TLS/auth ingress and an optional gRPC bridge. Supply real certificates and secrets outside source control, preserve source separation, and validate it against your installed Collector release. It is an example, not a tested production deployment.</p>
+          <p>The <a href={source("examples/telemetry/configs/otel-collector.yaml")}>Collector Contrib example</a> provides TLS/auth ingress and an optional gRPC bridge. Supply real certificates and secrets outside source control, preserve source separation, and validate it against your installed Collector release. It is an example, not a tested production deployment.</p>
         </section>
         <section class="doc-section" id="privacy">
           <p class="eyebrow">05 / METADATA FIRST</p>
@@ -133,12 +132,12 @@ const sources = [
             <li>Filtering does not erase content already present in the source file, producer, or collector buffers.</li>
             <li>Allow for batching, delayed events, duplicates, and gaps. Preserve source time and receipt time separately.</li>
           </ul>
-          <p>Configure output access, retention, rotation, and downstream identity yourself. This preview is not a durable, tamper-evident audit service and does not prove complete agent visibility.</p>
+          <p>Configure output access, retention, rotation, and downstream identity yourself. AI Lens is not a durable, tamper-evident audit service and does not prove complete agent visibility.</p>
         </section>
         <section class="doc-section" id="evidence">
           <p class="eyebrow">06 / TRACEABLE RESEARCH</p>
           <h2>Follow the provider contracts.</h2>
-          <p>The <a href={previewSource("docs/telemetry-sources.md")}>full source guide</a> preserves official URLs, retrieval dates, schemas, permissions, latency and content caveats for all eleven sources. It separates published contracts from local implementation tests.</p>
+          <p>The <a href={source("docs/telemetry-sources.md")}>full source guide</a> preserves official URLs, retrieval dates, schemas, permissions, latency and content caveats for all eleven sources. It separates published contracts from local implementation tests.</p>
           <p>Local fixture and receiver tests do not validate enterprise entitlements, managed-policy rollout, live-client delivery, cloud networking, or production reliability. No enterprise live test is claimed for these integrations.</p>
         </section>
       </div>

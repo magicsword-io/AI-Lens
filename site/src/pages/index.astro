@@ -44,11 +44,16 @@ const event = `{"schema_version":1,"agent":"claude","hook_event":"PreToolUse","t
           <strong>Hermes</strong>
           <i></i>
           <strong>Gemini CLI</strong>
+          <i></i>
+          <strong>Cursor</strong>
+          <i></i>
+          <strong>Copilot CLI</strong>
+          <i></i>
+          <strong>Cowork</strong>
         </div>
         <p class="small-note">
-          Plus Cursor, Copilot CLI and experimental Cowork. Seven native adapters,
-          with <a href={href("telemetry/")}>eleven observation-only telemetry sources</a>.
-          Coverage depends on the client and event; Cowork Desktop/VM execution remains unvalidated.
+          Native hooks for tool decisions.
+          <a href={href("telemetry/")}>OTLP and provider audit feeds</a> for a broader view of agent activity.
         </p>
       </div>
       <div
