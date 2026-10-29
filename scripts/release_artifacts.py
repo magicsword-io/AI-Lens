@@ -24,6 +24,12 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def dependency_sha256(root: Path = ROOT) -> str:
+    # Git's Windows checkout can convert LF to CRLF without changing dependencies.
+    committed = subprocess.check_output(["git", "show", "HEAD:Cargo.lock"], cwd=root)
+    return hashlib.sha256(committed).hexdigest()
+
+
 def provenance(output: Path) -> None:
     target = native_platform()
     source = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
@@ -35,7 +41,8 @@ def provenance(output: Path) -> None:
         "os": platform.platform(),
         "runner_image": {key: os.environ.get(key) for key in ("ImageOS", "ImageVersion")},
         "rustc": subprocess.check_output(["rustc", "-vV"], text=True).strip(),
-        "cargo_lock_sha256": sha256(ROOT / "Cargo.lock"),
+        "cargo_lock_sha256": dependency_sha256(),
+        "cargo_lock_checkout_sha256": sha256(ROOT / "Cargo.lock"),
         "native_sha256": {name: sha256(ROOT / "target/release" / name) for name in NATIVE_FILES[target]},
         "packages": {path.name: sha256(path) for path in sorted((ROOT / "dist").glob("*.zip"))},
     }
@@ -68,7 +75,7 @@ def prepare(input_dir: Path, output_dir: Path, tag: str, source: str) -> None:
             raise ValueError(f"source/version/platform provenance mismatch: {target}")
         if report.get("packages") != {name: digest}:
             raise ValueError(f"package provenance mismatch: {target}")
-        if report.get("cargo_lock_sha256") != sha256(ROOT / "Cargo.lock"):
+        if report.get("cargo_lock_sha256") != dependency_sha256():
             raise ValueError(f"dependency provenance mismatch: {target}")
         verified.append((archive, digest))
         reports.append(report)

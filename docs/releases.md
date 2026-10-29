@@ -30,6 +30,7 @@ build only after diagnosing its first failure. If upload fails, inspect and
 remove the incomplete draft before a deliberate retry; published versions must
 never silently change. Withdraw a faulty release and publish a new version.
 
-Build provenance records the exact source, Cargo.lock hash, compiler, runner
+Build provenance records the exact source, committed Cargo.lock hash (plus the
+checkout hash, which can differ with Windows line endings), compiler, runner
 image, architecture, native binary/library hashes and ZIP hashes. These records
 and SHA256SUMS identify artifacts; they do not provide code signing or notarization.

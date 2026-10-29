@@ -4,9 +4,11 @@
 import json
 from pathlib import Path
 import tempfile
+import hashlib
+import subprocess
 import unittest
 
-from release_artifacts import PLATFORMS, ROOT, prepare, sha256
+from release_artifacts import PLATFORMS, dependency_sha256, prepare, sha256
 
 
 class ReleaseArtifactsTest(unittest.TestCase):
@@ -30,7 +32,7 @@ class ReleaseArtifactsTest(unittest.TestCase):
             (directory / "build-provenance.json").write_text(json.dumps({
                 "source": self.source, "version": "0.3.0", "platform": target,
                 "architecture": arch, "packages": {name: digest},
-                "cargo_lock_sha256": sha256(ROOT / "Cargo.lock"),
+                "cargo_lock_sha256": dependency_sha256(),
             }))
 
     def run_prepare(self):
@@ -82,6 +84,20 @@ class ReleaseArtifactsTest(unittest.TestCase):
     def test_extra_package(self):
         (self.input / "agent-lens-linux/dist/extra.zip").write_bytes(b"extra")
         self.assert_rejected("package inventory")
+
+    def test_dependency_identity_survives_windows_checkout_conversion(self):
+        repository = Path(self.temp.name) / "repository"
+        subprocess.run(["git", "init", "--quiet", str(repository)], check=True)
+        lock = repository / "Cargo.lock"
+        committed = b'version = 4\n\n[[package]]\nname = "synthetic"\n'
+        lock.write_bytes(committed)
+        subprocess.run(["git", "-c", "core.autocrlf=false", "add", "Cargo.lock"], cwd=repository, check=True)
+        subprocess.run(["git", "-c", "user.name=Release Test", "-c", "user.email=test@example.invalid",
+                        "commit", "--quiet", "-m", "synthetic lockfile"], cwd=repository, check=True)
+        lock.write_bytes(committed.replace(b"\n", b"\r\n"))
+        expected = hashlib.sha256(committed).hexdigest()
+        self.assertNotEqual(sha256(lock), expected, "fixture lacks actual checkout conversion")
+        self.assertEqual(dependency_sha256(repository), expected)
 
 
 if __name__ == "__main__":
