@@ -7,7 +7,7 @@ import integrityYAML from "../../../examples/rules/agent-config-integrity.yaml?r
 import toolsYAML from "../../../examples/rules/restricted-tools.yaml?raw";
 
 export const repository = "https://github.com/magicsword-io/AI-Lens";
-export const releaseVersion = "0.3.0";
+export const releaseVersion = "0.3.1";
 export const releaseTag = `v${releaseVersion}`;
 export const releaseURL = `${repository}/releases/tag/${releaseTag}`;
 export const releaseAsset = (filename: string) =>

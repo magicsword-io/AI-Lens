@@ -23,9 +23,9 @@ response. Coverage depends on the client version, tool, and execution host.
 | Codex | `codex` | `PreToolUse`, `PermissionRequest` |
 | Hermes | `hermes` | `pre_tool_call` via native shell hooks |
 | Gemini CLI | `gemini` | `BeforeTool`; other registered events observe only |
-| Cursor — preview | `cursor` | `preToolUse`; complete native-client acceptance pending |
-| GitHub Copilot CLI — preview | `copilot` | `preToolUse`; Linux account-free CLI test available |
-| Claude Cowork — preview | `cowork` | `PreToolUse` via a hooks-only plugin; Desktop/VM execution unvalidated |
+| Cursor | `cursor` | `preToolUse`; tested with Windows Desktop 3.27.22 |
+| GitHub Copilot CLI | `copilot` | `preToolUse`; tested with Windows CLI 1.0.105 |
+| Claude Cowork | `cowork` | `PreToolUse` via plugin; tested with Desktop 4.29.0 cloud tasks |
 
 Post-tool and lifecycle events are observational. Copilot hook timeouts fail
 open upstream. Gemini `SessionEnd` delivery is best effort; Antigravity is
@@ -41,16 +41,17 @@ admin/audit credentials are separate from ordinary model inference keys.
 
 ## Download and try it
 
-[Download v0.3.0](https://github.com/magicsword-io/AI-Lens/releases/tag/v0.3.0)
+[Download v0.3.1](https://github.com/magicsword-io/AI-Lens/releases/tag/v0.3.1)
 includes the CLI, engine, rules, examples, and documentation. Pick your platform:
 
 | Platform | ZIP |
 | --- | --- |
-| Windows x64 | [Download](https://github.com/magicsword-io/AI-Lens/releases/download/v0.3.0/agent-lens-0.3.0-windows-x86_64.zip) |
-| Linux x64 | [Download](https://github.com/magicsword-io/AI-Lens/releases/download/v0.3.0/agent-lens-0.3.0-linux-x86_64.zip) |
-| macOS Apple Silicon | [Download](https://github.com/magicsword-io/AI-Lens/releases/download/v0.3.0/agent-lens-0.3.0-macos-aarch64.zip) |
+| Windows x64 | [Download](https://github.com/magicsword-io/AI-Lens/releases/download/v0.3.1/agent-lens-0.3.1-windows-x86_64.zip) |
+| Linux x64 | [Download](https://github.com/magicsword-io/AI-Lens/releases/download/v0.3.1/agent-lens-0.3.1-linux-x86_64.zip) |
+| macOS Apple Silicon | [Download](https://github.com/magicsword-io/AI-Lens/releases/download/v0.3.1/agent-lens-0.3.1-macos-aarch64.zip) |
+| Cowork cloud plugin | [Download](https://github.com/magicsword-io/AI-Lens/releases/download/v0.3.1/ai-lens-cowork-0.3.1.zip) · [Upload instructions](examples/cowork-plugin/README.md) |
 
-Extract the ZIP and open a terminal in its `agent-lens-0.3.0-…` folder.
+Extract the ZIP and open a terminal in its `agent-lens-0.3.1-…` folder.
 Keep the executable and engine library together. On Linux/macOS, run:
 
 ```sh
@@ -67,7 +68,7 @@ On Windows, use PowerShell:
 ```
 
 `demo` writes five synthetic events, needs no account, and installs no hooks.
-Packages are unsigned. [SHA256SUMS](https://github.com/magicsword-io/AI-Lens/releases/download/v0.3.0/SHA256SUMS)
+Packages are unsigned. [SHA256SUMS](https://github.com/magicsword-io/AI-Lens/releases/download/v0.3.1/SHA256SUMS)
 and build provenance accompany each release. See the
 [getting started guide](https://magicsword-io.github.io/AI-Lens/getting-started/)
 for checksum, extraction and setup commands.

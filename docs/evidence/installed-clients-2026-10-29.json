@@ -1,0 +1,511 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-29",
+  "status": "passed_scoped_installed_client_checks",
+  "release": {
+    "version": "0.3.0",
+    "source_revision": "ff2fc329",
+    "note": "Existing release artifacts; historical aggregate hashes remain unchanged."
+  },
+  "evidence_basis": "Cursor v0.3.0 and Copilot/Cowork v0.3.1 candidate exported ledgers independently inspected with exact artifact custody. Prior prototype/helper records retained separately. No full platform/event matrix claim.",
+  "cursor": {
+    "client": "Cursor Desktop",
+    "client_version": "3.27.22",
+    "client_architecture": "ARM64",
+    "execution_host": "Windows 11 ARM64 build 26200.9168",
+    "lens_architecture": "x86_64 under ARM64 emulation",
+    "configuration": "generated project hooks with PowerShell commands",
+    "binary_sha256": "ae09b1c6d269824dfefdd5d43c708954ccf9334a9cb7a4c95a75a33566cecc3e",
+    "library_sha256": "8223407b77239f1a7dd9c92306a336a7d109706bbb175d99e80ac146f024c6fe",
+    "checks": {
+      "allowed_write_exact_contents": true,
+      "denied_env_absent": true,
+      "denial_is_read_precheck": true,
+      "matched_rule": "protect-env-files",
+      "stopped_policy_control_exact_contents": true,
+      "restored_policy_enabled": true,
+      "restored_policy_reblock": true,
+      "metadata_content_nonces_absent": true,
+      "native_session_id_on_tool_callbacks": true,
+      "native_tool_call_id_established": false
+    },
+    "observed_event_types": [
+      "afterAgentResponse",
+      "postToolUse",
+      "postToolUseFailure",
+      "preToolUse",
+      "stop",
+      "workspaceOpen"
+    ],
+    "positive_control": {
+      "file": "cursor-allow-1029.txt",
+      "contents": "CURSOR_ALLOW_1029\r\n"
+    },
+    "stopped_policy_control": {
+      "file": ".env.cursor-control-1029",
+      "contents": "DEMO_ONLY=CONTROL_1029\r\n"
+    },
+    "limitations": [
+      "No all-eleven-event delivery, timeout, other-platform or native Windows ARM64 Lens build claim."
+    ],
+    "hooks_sha256": "bbb94091b4795f8235db6dee7c441ee7ba5ed6d236d077c9ab71f66c29f3265e",
+    "rules_sha256": "1ccbfd95302c34f7eb83e95ad2d959b9640d02540413ead6dab0b9fa98132710",
+    "events_sha256": "87cfdf7e2cb6cb3c1b5bd46bdb997406e2d9ca470df59c47492283b76ac2c3ff",
+    "prior_events_sha256": "9eede9f6edd423a45ee8cb73fecffe550fef8a4da158e0585c02593cc8daa6e3",
+    "event_count": 15,
+    "event_counts": {
+      "workspaceOpen": 1,
+      "preToolUse": 4,
+      "postToolUseFailure": 3,
+      "postToolUse": 1,
+      "afterAgentResponse": 3,
+      "stop": 3
+    },
+    "decision_counts": {
+      "allow": 11,
+      "block": 2,
+      "would_block": 2
+    },
+    "restored_block_timestamp": "2026-10-29T17:50:55.522Z",
+    "status": "passed_scoped_installed_client_checks"
+  },
+  "cowork": {
+    "frontend": "Claude Desktop",
+    "frontend_version": "4.29.0",
+    "frontend_host": "macOS",
+    "execution_host": {
+      "os": "Linux",
+      "architecture": "x86_64",
+      "workspace": "/home/claude"
+    },
+    "plugin_sha256": "0f467ab082ab01ae9716b8a95a9a46beaf48a20e80d5c4d0f8a6cd5974f0cf47",
+    "plugin_files_sha256": {
+      ".claude-plugin/plugin.json": "c523580a46cc210c22d41418f1b529271dc691c776ee77dd8456dfb6bb2d8708",
+      "hooks/hooks.json": "f75ff731341c5b25009b5f74d2517dab26023e53475910f605c8932420ef75cf",
+      "scripts/lens-hook.sh": "fb169fad3cb21d0999dc0b566f3a6ffb1ceb49fec213f517103267a2e132fb0b",
+      "scripts/rules.yaml": "d6a3716cf20de19b85d4ca3ac8a0deeee12090645c55671d9cb521f738553ddc",
+      "scripts/runtime/linux-x86_64/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "scripts/runtime/linux-x86_64/NOTICE": "4db961fb01c5c4e5620bdf106cb5bfb70f5b59642178a9fee4b5d034e4a79be4",
+      "scripts/runtime/linux-x86_64/agent-lens": "4d221067b6cf7152ed9d98a3dc46aca1baaf7a1ce23d46407b9dc2251ca43519",
+      "scripts/runtime/linux-x86_64/libagent_lens_engine.so": "1d7e9027a739ea2374dc4bc89e37f0acd1f241c14bf2b11ce417ae0bdac90794"
+    },
+    "configuration": "Five-event generated config through plugin-relative wrapper; binary/library bundled under scripts/runtime/linux-x86_64.",
+    "checks": {
+      "automatic_exec_callback_observed": true,
+      "automatic_shell_callback_observed": true,
+      "allowed_write_tool_ui_observed": true,
+      "env_write_denied_tool_ui_observed": true,
+      "stopped_policy_control_tool_ui_observed": true,
+      "restored_policy_denial_tool_ui_observed": true,
+      "exported_ledger_verified": true,
+      "final_package_helper_qualified": true,
+      "metadata_only_fields": true,
+      "native_session_and_tool_use_ids": true,
+      "native_files_control_present_denied_absent_operator_verified": true
+    },
+    "observed_event_types": [
+      "SessionStart",
+      "PreToolUse",
+      "PostToolUse",
+      "PostToolUseFailure"
+    ],
+    "limitations": [
+      "Independent file listing and stop/start control UI verified by integration owner; file contents are not included in exported metadata.",
+      "Prototype run did not observe all five events; separate final_packaged_helper records all-five-event delivery for its exact runtime. Neither run establishes timeout/failure handling or local macOS/Windows hook execution."
+    ],
+    "events_sha256": "9c7df9fdab045be9430b569ff066f29edcb4303c232954a31566494a3b0420d1",
+    "event_count": 18,
+    "event_counts": {
+      "SessionStart": 1,
+      "PreToolUse": 10,
+      "PostToolUse": 6,
+      "PostToolUseFailure": 1
+    },
+    "decision_counts": {
+      "allow": 16,
+      "block": 2
+    },
+    "blocked_write_tool_use_ids": [
+      "toolu_018SmD8iudzFE53LCam1o6zJ",
+      "toolu_01QXoxNR1CrnazsgPRVsVqzQ"
+    ],
+    "qualification_note": "Prototype and v0.3.0 helper records retained; v0.3.1 CI-candidate package separately passed. Tagged-release artifacts are separate builds.",
+    "final_packaged_helper": {
+      "zip_sha256": "f7775c49872a6deae87aefd57e84bb4c44cf8fa1f42c2be64525f3f93b4c9878",
+      "launcher_sha256": "ff220848b6377e8ddcbf63386d4f5f652e19ba1698b2428a1b0ff3ea73aa7b38",
+      "engine_version": "0.3.0",
+      "helper_source_candidate": "b8c041afd419331a6bf9b2a3959d99b824b57d5b",
+      "events_sha256": "d137975fbff6ddf4d0f2d4b9fbe6257ea708deb6bfda42f235314b494cb4ab10",
+      "bytes": 11484,
+      "events": 32,
+      "event_counts": {
+        "SessionStart": 2,
+        "PreToolUse": 16,
+        "PostToolUse": 12,
+        "SessionEnd": 1,
+        "PostToolUseFailure": 1
+      },
+      "decision_counts": {
+        "allow": 30,
+        "block": 2
+      },
+      "sessions": [
+        "6b42fe08-68e0-551b-8588-6ebad66233ac"
+      ],
+      "block_tools": [
+        {
+          "event": "PreToolUse",
+          "tool": "Write",
+          "id": "toolu_01YDFSxsAutxxcv1SQXKaBaH",
+          "rules": [
+            "protect-env-files"
+          ]
+        },
+        {
+          "event": "PreToolUse",
+          "tool": "Write",
+          "id": "toolu_01Q4KsLnT9P3AFHPFZLtRRBH",
+          "rules": [
+            "protect-env-files"
+          ]
+        }
+      ],
+      "metadata_nonces_absent": true,
+      "native_ui_checks": {
+        "allow_write": true,
+        "pre_disable_deny": true,
+        "disabled_write": true,
+        "restored_deny": true,
+        "directory_listing_two_absent_control_present": true,
+        "enabled_restored": true,
+        "capture_content": false
+      },
+      "temporary_plugins_disabled": [
+        "ai-lens-playground",
+        "ai-lens-callback-probe",
+        "ai-lens-runtime-playground"
+      ],
+      "final_plugin_enabled": "ai-lens-cowork",
+      "complete_export": {
+        "events_sha256": "d137975fbff6ddf4d0f2d4b9fbe6257ea708deb6bfda42f235314b494cb4ab10",
+        "bytes": 11484,
+        "event_count": 32,
+        "event_counts": {
+          "SessionStart": 2,
+          "PreToolUse": 16,
+          "PostToolUse": 12,
+          "SessionEnd": 1,
+          "PostToolUseFailure": 1
+        },
+        "decision_counts": {
+          "allow": 30,
+          "block": 2
+        },
+        "all_five_registered_events_observed": true,
+        "metadata_nonces_absent": true
+      },
+      "status": "passed_exact_packaged_helper_with_v0.3.0_runtime",
+      "frontend": "Claude Desktop 4.29.0 on macOS",
+      "execution_host": "Linux x86_64 /home/claude",
+      "binary_sha256": "4d221067b6cf7152ed9d98a3dc46aca1baaf7a1ce23d46407b9dc2251ca43519",
+      "library_sha256": "1d7e9027a739ea2374dc4bc89e37f0acd1f241c14bf2b11ce417ae0bdac90794",
+      "event_count": 32,
+      "scope_note": "All five registered events observed on this exact packaged helper and tested runtime. Does not qualify all Desktop versions, timeout/failure handling, or a new v0.3.1 binary.",
+      "source_identity_note": "The ZIP was prepared before b8c041 in the working tree. Helper and launcher code match that revision; its bundled README precedes the documentation edit in that commit. The exact tested ZIP and native runtime hashes remain distinct from v0.3.1 artifacts.",
+      "intermediate_export": {
+        "events_sha256": "cf464b7b7e32988abfc10edfeb3cff9548dd7336dc9c4add8f9a59d4d9e34622",
+        "bytes": 8491,
+        "event_count": 24,
+        "event_counts": {
+          "SessionStart": 2,
+          "PreToolUse": 12,
+          "PostToolUse": 9,
+          "SessionEnd": 1
+        },
+        "decision_counts": {
+          "allow": 22,
+          "block": 2
+        }
+      }
+    },
+    "v0.3.1_candidate_proof": {
+      "release": "0.3.1",
+      "source": "ede99fa749e36d390122e5ebbdca66131af55a80",
+      "candidate_head": "b8c041afd419331a6bf9b2a3959d99b824b57d5b",
+      "tree": "6f60bbc8b6b39c1f87429cc9d91382f4d4a32e7b",
+      "ci_run": 40928090488,
+      "client": "Claude Desktop 4.29.0 macOS26.6.2 ARM64 frontend",
+      "execution_host": "cloud Linux x86_64",
+      "task": "cse_0177tajNqTMbtpHvLKmDHm86",
+      "package": {
+        "archive": ".context/windows-clients/ai-lens-cowork-0.3.1-ci.zip",
+        "plugin_members": {
+          ".claude-plugin/plugin.json": "debdd1809a3f4ad8fdea1851b7ba5dc9db018f6e84e14e406307b2a56e1d2703",
+          "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "NOTICE": "4db961fb01c5c4e5620bdf106cb5bfb70f5b59642178a9fee4b5d034e4a79be4",
+          "hooks/hooks.json": "f75ff731341c5b25009b5f74d2517dab26023e53475910f605c8932420ef75cf",
+          "scripts/lens-hook.sh": "84e41ec144438158d3cb2499d5edbe023ed8e5752b934da15cf416891431e084",
+          "scripts/rules.yaml": "d6a3716cf20de19b85d4ca3ac8a0deeee12090645c55671d9cb521f738553ddc",
+          "scripts/runtime/linux-x86_64/agent-lens": "680e4e617e77319e8c9f6b7fd7ae2767c5c9c8e1604c71d749485b02f307eb8c",
+          "scripts/runtime/linux-x86_64/libagent_lens_engine.so": "b87ac7935a08bd6ec906249b984955e8a27defe239c5a1f650024e27ba0d1de3"
+        },
+        "release_archive": "agent-lens-0.3.1-linux-x86_64.zip",
+        "release_archive_sha256": "9584a4e4ea0e6a9e8c017c73dfd1b95b0b0024df59f8667bf910bee69b0c38d6",
+        "release_members": {
+          "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "NOTICE": "4db961fb01c5c4e5620bdf106cb5bfb70f5b59642178a9fee4b5d034e4a79be4",
+          "scripts/rules.yaml": "d6a3716cf20de19b85d4ca3ac8a0deeee12090645c55671d9cb521f738553ddc",
+          "scripts/runtime/linux-x86_64/agent-lens": "680e4e617e77319e8c9f6b7fd7ae2767c5c9c8e1604c71d749485b02f307eb8c",
+          "scripts/runtime/linux-x86_64/libagent_lens_engine.so": "b87ac7935a08bd6ec906249b984955e8a27defe239c5a1f650024e27ba0d1de3"
+        },
+        "runtime": "Linux x86_64",
+        "sha256": "d3850bd03e2d3732665429d00d0e994e6cd963d386d37397d64e1b44e3da1879"
+      },
+      "exports_sha256": {
+        "cowork-v031-events.jsonl": "5e04b827eb0e142c9c20896a5b0b3ad8d7e8abb7c919352a57fdd371cbf4fc06",
+        "cowork-v031-state.json": "f085726da11613b72bb863681b17f0af33f59d7966e097d2473379ec8fbf4abe",
+        "cowork-v031-observations.json": "c7befae586fb9f64a25ecdb0911cc6aee45be2d92f1094e60893174371597257"
+      },
+      "event_count": 18,
+      "event_counts": {
+        "SessionStart": 1,
+        "PreToolUse": 10,
+        "PostToolUse": 6,
+        "PostToolUseFailure": 1
+      },
+      "decision_counts": {
+        "allow": 16,
+        "block": 2
+      },
+      "native_blocks": [
+        {
+          "agent": "cowork",
+          "decision": "block",
+          "enforcement": "supported",
+          "hook_event": "PreToolUse",
+          "matched_rules": [
+            "protect-env-files"
+          ],
+          "observer": {
+            "name": "agent-lens",
+            "version": "0.3.1"
+          },
+          "phase": "pre",
+          "schema_version": 1,
+          "session_id": "b03c25d5-eb85-51cb-8c05-745681167d53",
+          "timestamp": "2026-10-29T18:23:16.212Z",
+          "tool_name": "Write",
+          "tool_use_id": "toolu_01RP52F94y2kFXEBmWytxt7R"
+        },
+        {
+          "agent": "cowork",
+          "decision": "block",
+          "enforcement": "supported",
+          "hook_event": "PreToolUse",
+          "matched_rules": [
+            "protect-env-files"
+          ],
+          "observer": {
+            "name": "agent-lens",
+            "version": "0.3.1"
+          },
+          "phase": "pre",
+          "schema_version": 1,
+          "session_id": "b03c25d5-eb85-51cb-8c05-745681167d53",
+          "timestamp": "2026-10-29T18:24:02.603Z",
+          "tool_name": "Write",
+          "tool_use_id": "toolu_01Us5ZHzh4odUpqVF96RScoG"
+        }
+      ],
+      "observations": {
+        "synthetic": true,
+        "package": "AI Lens v0.3.1 (ai-lens-cowork)",
+        "allowed_file": {
+          "path": "/home/claude/cowork-v031-allow.txt",
+          "exact_text": "COWORK_V031_ALLOW",
+          "text_source": "read via Bash"
+        },
+        "control_file": {
+          "path": "/home/claude/.env.cowork-v031-control",
+          "exists": true,
+          "exact_text": "DEMO_ONLY=V031_CONTROL",
+          "text_source": "content passed to the Write tool while policy was stopped; re-read via Bash was blocked by Agent Lens policy (protect .env), not worked around"
+        },
+        "deny_file_absent": true,
+        "restored_file_absent": true,
+        "absence_source": "Glob /home/claude/.env.cowork-v031-* returned only .env.cowork-v031-control",
+        "hashes_sha256": {
+          "agent-lens": "680e4e617e77319e8c9f6b7fd7ae2767c5c9c8e1604c71d749485b02f307eb8c",
+          "libagent_lens_engine.so": "b87ac7935a08bd6ec906249b984955e8a27defe239c5a1f650024e27ba0d1de3",
+          "lens-hook.sh": "84e41ec144438158d3cb2499d5edbe023ed8e5752b934da15cf416891431e084"
+        },
+        "state": {
+          "enabled": true,
+          "capture_content": false
+        },
+        "runtime_uname": "Linux vm 6.18.44-fc-v185 #1 SMP PREEMPT_DYNAMIC @0 x86_64 x86_64 x86_64 GNU/Linux"
+      },
+      "checks": {
+        "allow_write": true,
+        "denied_write_absent": true,
+        "stopped_control_write_present": true,
+        "restored_write_absent": true,
+        "enabled_final": true,
+        "capture_content_false": true,
+        "metadata_nonces_absent": true,
+        "transfer_hashes_match": true
+      },
+      "limitations": [
+        "Export is the exact 18-row snapshot; subsequent export/tool activity is not included.",
+        "Control contents witnessed in native Write tool request; later readback was blocked by expected shell policy. Glob independently confirmed only control present.",
+        "SessionEnd was not observed in this snapshot; all five registered events were observed separately with the same helper code and v0.3.0 engine.",
+        "No timeout or alternate execution-host acceptance claimed."
+      ]
+    }
+  },
+  "copilot_windows": {
+    "client_version": "1.0.105",
+    "client_architecture": "ARM64",
+    "status": "passed_v0.3.1_scoped_installed_client_checks",
+    "native_tool_acceptance": true,
+    "note": "Authenticated Windows Copilot 1.0.105 raw apply_patch allow/deny/stopped-control/restored-deny passed using exact CI-source ede99fa artifacts. Prior v0.3.0 defect and local regression retained; no all-event/timeout claim.",
+    "v0.3.1_local_candidate_regression": {
+      "rust_tests": 99,
+      "binary_seam_assertions": 112,
+      "new_raw_patch_cases": 9,
+      "before_fix_falsifier": "expected_failure",
+      "platform": "macOS",
+      "release_artifact": false
+    },
+    "v0.3.1_native_proof": {
+      "release": "0.3.1",
+      "binary_custody": {
+        "zip": ".context/windows-clients/candidate-downloads/agent-lens-0.3.1-windows-x86_64.zip",
+        "sha256": "333fd10b7eeb0e573dfc119c4cc82f06a42c5096858f2b9335b0f13773c12890",
+        "source": "ede99fa749e36d390122e5ebbdca66131af55a80",
+        "candidate_head": "b8c041afd419331a6bf9b2a3959d99b824b57d5b",
+        "tree": "6f60bbc8b6b39c1f87429cc9d91382f4d4a32e7b",
+        "native_sha256": {
+          "agent-lens.exe": "987a81b3434fe249ca88341af26e85c19640d33d40e0c3d8cc6fe2dd5d231c8a",
+          "agent_lens_engine.dll": "855deda906041973c7fb9b1fba046e9b4cc355957fa4ef8122244d96eaf6c564"
+        }
+      },
+      "client_version": "1.0.105",
+      "client_architecture": "ARM64",
+      "os": "Windows11 ARM64 build26200.9168",
+      "permissions": "medium user; normal workspace trust once per session; only apply_patch exposed; write approval and workspace path checks retained; built-in MCPs disabled",
+      "config": "original generated direct exec restored; hash6b5b3ce85f1e67501093a595f53502c1aeb0b99516ee4916bcc64d3a25d71620",
+      "native_summary": {
+        "AllowedBase64": "Q09QSUxPVF9BTExPV18xMDI5DQo=",
+        "ControlBase64": "REVNT19PTkxZPUNPUElMT1RfQ09OVFJPTF8xMDI5DQo=",
+        "DenyAbsent": true,
+        "RestoredAbsent": true,
+        "State": {
+          "config": {
+            "capture_content": false,
+            "enabled": true,
+            "output": "\\\\?\\C:\\Users\\michaelhaag\\AI-Lens-Playground\\.lens\\events.jsonl",
+            "rules": "\\\\?\\C:\\Users\\michaelhaag\\AI-Lens-Playground\\.lens\\rules.yaml"
+          },
+          "note": "state only; agent registration and delivery are not probed",
+          "state": "\\\\?\\C:\\Users\\michaelhaag\\AI-Lens-Playground\\.lens\\state"
+        }
+      },
+      "copilot_event_count": 16,
+      "event_counts": {
+        "sessionStart": 3,
+        "userPromptSubmitted": 3,
+        "preToolUse": 3,
+        "postToolUse": 1,
+        "agentStop": 3,
+        "sessionEnd": 3
+      },
+      "decision_counts": {
+        "allow": 14,
+        "block": 2
+      },
+      "copilot_events_sha256": "4374aba661743c6ff4a8951a3dcca0813f7715020c0d7d28098ee1152850014d",
+      "raw_combined_events_sha256": "83ab9ef1e607ddd494c1c2ace0d93d91ffa68136c5d31b31dc18a53991ea3477",
+      "metadata_content_nonces_absent": true,
+      "checks": {
+        "allowed_text": true,
+        "disabled_text": true,
+        "denied_absent": true,
+        "restored_absent": true,
+        "policy_enabled": true,
+        "capture_content_false": true
+      },
+      "native_blocks": [
+        {
+          "agent": "copilot",
+          "decision": "block",
+          "enforcement": "supported",
+          "hook_event": "preToolUse",
+          "matched_rules": [
+            "protect-env-files"
+          ],
+          "observer": {
+            "name": "agent-lens",
+            "version": "0.3.1"
+          },
+          "phase": "pre",
+          "schema_version": 1,
+          "session_id": "6b292572-6666-4e6f-8c72-0f98cf4a622f",
+          "timestamp": "2026-10-29T18:18:12.046Z",
+          "tool_name": "apply_patch"
+        },
+        {
+          "agent": "copilot",
+          "decision": "block",
+          "enforcement": "supported",
+          "hook_event": "preToolUse",
+          "matched_rules": [
+            "protect-env-files"
+          ],
+          "observer": {
+            "name": "agent-lens",
+            "version": "0.3.1"
+          },
+          "phase": "pre",
+          "schema_version": 1,
+          "session_id": "6c672eb0-5041-4d77-bfd1-726eda795644",
+          "timestamp": "2026-10-29T18:18:25.473Z",
+          "tool_name": "apply_patch"
+        }
+      ],
+      "client_default_model": "gpt-6-luna",
+      "native_tool_call_id_in_lens_records": false
+    }
+  },
+  "local_evidence_sha256": {
+    ".context/windows-clients/cursor-allow-evidence.log": "51676562330568e2866b6603cce4d27f95c340ae53f58ced3ec308a34d4a6735",
+    ".context/windows-clients/cursor-deny-evidence.log": "283b32cd737ef61b85f2bc52c325f1601122307d39ec4e665af557ff55cee19f",
+    ".context/windows-clients/cursor-control-evidence.log": "2e1898daba9b5ae2537db6c1cbef1aec0b29e1d7f113535c67971b20f016bedd",
+    ".context/windows-clients/cursor-summary.log": "4c9905e6acab53e2be23ccefaa842186a2321ed0e07ae1813f0a6810ba7cdbaf",
+    ".context/windows-clients/cursor-restored.log": "1395903eec65633658376a4e3f9357d228e8a1337cbb655383bdc835f14d6791",
+    ".context/windows-clients/cursor-restored-evidence.log": "115eb1132ed379a18825cd342e191b9ec2721ea414d9d8cddd4b4ad777153f11",
+    ".context/windows-clients/cowork-cloud-probe-evidence.txt": "d65dec93d4a387b5db0401da750f53d82d55a57670b2b9b4dc1188d57de50d2c",
+    ".context/windows-clients/cowork-runtime-plugin.json": "40da8c82ff07546278c84a5055632a3188b431a9724ab6f9b4419ccf9eee9b9e",
+    ".context/windows-clients/cursor-native-export.json": "b6d0372b9beedc5b84df5cee4823a83c7f1498069c4f4323f8774f32f5a25173",
+    ".context/windows-clients/cursor-native-events.jsonl": "9eede9f6edd423a45ee8cb73fecffe550fef8a4da158e0585c02593cc8daa6e3",
+    ".context/windows-clients/cowork-cloud-events.jsonl": "9c7df9fdab045be9430b569ff066f29edcb4303c232954a31566494a3b0420d1",
+    ".context/windows-clients/cowork-cloud-runtime.txt": "6394aa75d675831c94dc24488d6ca5f4ba69e2e93798e977e432a4acd12fd462",
+    ".context/windows-clients/cursor-native-export-final.json": "72de6d86cca994c9402e4163f30e786814b8c9b2286d4ed4a8f92424774e9eca",
+    ".context/windows-clients/cursor-native-events-final.jsonl": "87cfdf7e2cb6cb3c1b5bd46bdb997406e2d9ca470df59c47492283b76ac2c3ff",
+    ".context/windows-clients/cursor-native-export-final.log": "bc7df3626eb4543e5a661cf273d0a27bf266bfbe44cd97922c95b731d797587b",
+    ".context/native/copilot-raw-patch-regression.json": "d8bf55876772fd57b9929964d5f90f72a506cce02f887454b590c722d95b51a9",
+    ".context/windows-clients/cowork-final-helper-evidence.json": "2838cb15dd9833c5c9bea9ece0c700d4b9efc57fe7e3c1f3aa3e790dcc85ba4b",
+    ".context/windows-clients/cowork-package-events-complete.jsonl": "d137975fbff6ddf4d0f2d4b9fbe6257ea708deb6bfda42f235314b494cb4ab10",
+    ".context/windows-clients/copilot-v031-native-evidence.json": "655a563150a03c6003c126a703a7f9a384f78b53ffa65f7553bd4a0271e7360f",
+    ".context/windows-clients/windows-candidate-custody.json": "f190a0a9dd5bbe3840c442af69d20cc6036c55b5d78c0bb162674973f04fbdfb",
+    ".context/windows-clients/copilot-v031-events.jsonl": "4374aba661743c6ff4a8951a3dcca0813f7715020c0d7d28098ee1152850014d",
+    ".context/windows-clients/cowork-v031-native-evidence.json": "05d42e31a624ed21c6b7df8ba701ff7b69d5fa32d401fdd96388bd71e4efd258",
+    ".context/windows-clients/cowork-v031-events.jsonl": "5e04b827eb0e142c9c20896a5b0b3ad8d7e8abb7c919352a57fdd371cbf4fc06",
+    ".context/windows-clients/cowork-v031-state.json": "f085726da11613b72bb863681b17f0af33f59d7966e097d2473379ec8fbf4abe",
+    ".context/windows-clients/cowork-v031-observations.json": "c7befae586fb9f64a25ecdb0911cc6aee45be2d92f1094e60893174371597257"
+  },
+  "first_export_failure": {
+    "classification": "transport",
+    "detail": "Host bridge refused source under /tmp; copy to /mnt/user-data/outputs succeeded before host transfer. Export byte count and SHA256 retained."
+  }
+}

@@ -547,6 +547,106 @@ mod tests {
     }
 
     #[test]
+    fn copilot_apply_patch_paths_cover_all_operations_and_every_file() {
+        let yaml = "version: 1\nrules: [{id: private, path_pattern: '(?i)(^|/)\\.env($|[./])', action: block}]";
+        for (operations, blocked) in [
+            (
+                "*** Add File: copilot-allow-1029.txt\n+COPILOT_ALLOW_1029\n",
+                false,
+            ),
+            ("*** Add File: .env\n+SYNTHETIC\n", true),
+            ("*** Update File: .env\n@@\n-old\n+new\n", true),
+            ("*** Delete File: .env\n", true),
+            (
+                "*** Update File: safe.txt\n*** Move to: .env\n@@\n-old\n+new\n",
+                true,
+            ),
+            (
+                "*** Update File: .env\n*** Move to: safe.txt\n@@\n-old\n+new\n",
+                true,
+            ),
+            (
+                "*** Add File: safe.txt\n+safe\n*** Delete File: .env\n",
+                true,
+            ),
+            (
+                "*** Add File: .env\n+secret\n*** Add File: safe.txt\n+safe\n",
+                true,
+            ),
+            ("*** Add File: C:\\public\\..\\private\\.env\n+safe\n", true),
+            ("*** Add File: 路径/安全/../.env\n+safe\n", true),
+            ("*** Add File: .environment\n+safe\n", false),
+            ("*** Add File: safe.txt\n+*** Add File: .env\n", false),
+        ] {
+            let patch = format!("*** Begin Patch\n{operations}*** End Patch\n");
+            for event in ["preToolUse", "postToolUse"] {
+                let output = crate::process(&json!({"agent":"copilot", "event":event,
+                    "payload":{"toolName":"apply_patch", "toolArgs":patch, "sessionId":"patch-paths"},
+                    "rules_yaml":yaml})).unwrap();
+                assert_eq!(
+                    output["blocked"],
+                    blocked && event == "preToolUse",
+                    "{event}: {operations}"
+                );
+                assert_eq!(
+                    output["event"]["decision"],
+                    if blocked && event == "preToolUse" {
+                        "block"
+                    } else if blocked {
+                        "would_block"
+                    } else {
+                        "allow"
+                    }
+                );
+                assert_eq!(
+                    output["event"]["matched_rules"],
+                    if blocked {
+                        json!(["private"])
+                    } else {
+                        json!([])
+                    }
+                );
+                assert!(output["event"].get("content").is_none());
+                if blocked && event == "preToolUse" {
+                    assert_eq!(output["response"]["permissionDecision"], "deny");
+                } else {
+                    assert_eq!(output["response"], json!({}));
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn copilot_apply_patch_raw_content_and_privacy_survive_path_extraction() {
+        let patch = "*** Begin Patch\n*** Add File: safe.txt\n+COPILOT_ALLOW_1029\n+api_key=SYNTHETIC_PATCH_PRIVATE_VALUE\n*** End Patch\n";
+        for capture in [false, true] {
+            let output = crate::process(&json!({"agent":"copilot", "event":"preToolUse",
+                "payload":{"toolName":"apply_patch", "toolArgs":patch, "sessionId":"patch-content"},
+                "rules_yaml":"version: 1\nrules: [{id: raw-patch, content_pattern: '(?m)^\\+COPILOT_ALLOW_1029$', action: block}]",
+                "capture_content":capture})).unwrap();
+            assert_eq!(output["blocked"], true);
+            assert_eq!(output["event"]["matched_rules"], json!(["raw-patch"]));
+            assert!(!output.to_string().contains("SYNTHETIC_PATCH_PRIVATE_VALUE"));
+            if capture {
+                assert!(output["event"]["content"]["toolArgs"].is_string());
+                assert!(output.to_string().contains("[REDACTED]"));
+            } else {
+                assert!(output["event"].get("content").is_none());
+                assert!(!output.to_string().contains("COPILOT_ALLOW_1029"));
+            }
+        }
+        let raw = json!({"toolName":"apply_patch", "toolArgs":"*** Begin Patch\n*** Add File: safe.txt\n+safe\n*** End Patch\n",
+            "prompt":"*** Begin Patch\n*** Add File: .env\n+private\n*** End Patch\n"});
+        let normalized = crate::adapters::normalize("copilot", Some("preToolUse"), &raw).unwrap();
+        let policy = Policy::parse(
+            "version: 1\nrules: [{id: private, path_pattern: '(^|/)\\.env$', action: block}]",
+        )
+        .unwrap();
+        assert!(!policy.evaluate("copilot", &normalized).unwrap().block);
+        assert_eq!(normalized.input, raw);
+    }
+
+    #[test]
     fn copilot_parsing_is_scoped_to_tool_args_and_keeps_raw_content() {
         let policy = Policy::parse(
             "version: 1\nrules: [{id: path, path_pattern: '^/private/file$', action: block}]",

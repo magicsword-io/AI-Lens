@@ -49,6 +49,7 @@ const posixStart = `lens_state="$PWD/lens-state"
         <a href="#demo">02 / Run the demo</a>
         <a href="#connect">03 / Connect an agent</a>
         <a href="#gemini">Gemini CLI</a>
+        <a href="#cowork">Cowork</a>
         <a href="#evidence">04 / Collect evidence</a>
         <a href="#stop">05 / Stop collection</a>
         <a href="#source">Build from source</a>
@@ -340,6 +341,18 @@ $lensRules = Join-Path $PWD 'examples\\rules\\default.yaml'
             <a href="https://geminicli.com/docs/cli/trusted-folders/">workspace trust guidance</a>,
             and <a href={source("docs/agents.md")}>adapter coverage notes</a>.
           </p>
+        </section>
+        <section class="doc-section" id="cowork">
+          <p class="eyebrow">COWORK</p>
+          <h2>Upload a plugin. Start a task.</h2>
+          <p>Download the <a href={releaseAsset(`ai-lens-cowork-${releaseVersion}.zip`)}>Cowork plugin ZIP</a>,
+            then open Customize → Plugins → Add → Upload plugin in Claude Desktop.
+            Enable AI Lens and start a new Cowork task. Follow normal folder permissions.</p>
+          <p>The plugin includes the Linux executable, engine and default rules for Cowork's cloud runtime.
+            Try creating <code>hello.txt</code>, then a harmless <code>.env</code> file.
+            The first should work; the second should be blocked.</p>
+          <p>State and metadata logs stay inside the task runtime. See <a href={source("examples/cowork-plugin/README.md")}>the plugin guide</a>
+            for finding the log, exporting it, and turning Lens off or back on.</p>
         </section>
         <section class="doc-section" id="evidence">
           <p class="eyebrow">04 / JSONL TO YOUR WORKFLOW</p>

@@ -77,6 +77,11 @@ jobs:
           node --test scripts/windows_cleanup_test.mjs
       - name: Verify release artifact integrity and completeness gates
         run: python scripts/release_artifacts_test.py
+      - name: Verify Cowork plugin packaging, launcher boundaries and release aggregation
+        if: runner.os == 'Linux'
+        run: |
+          python examples/cowork-plugin/package_test.py
+          python scripts/package_cowork_release_test.py
       - name: Install pinned Gemini hook runtime for credential-free integration
         run: npm install --prefix .context/gemini-native --ignore-scripts --no-package-lock --save-exact @google/gemini-cli-core@0.66.0
       - name: Exercise Gemini's native hook system and real file tool (no model or credentials)

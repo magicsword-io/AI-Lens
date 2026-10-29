@@ -176,3 +176,39 @@ grant audit access. Verify positive controls, timestamp units/correlation,
 content omission, pagination, provider lag, credential expiry, rate limits,
 checkpoint recovery, and downstream deduplication in the authorized tenant.
 A fixture/loopback pass does not establish any of those live-provider properties.
+
+
+## Installed Desktop checks
+
+The [installed-client follow-up](verification.md#installed-client-follow-up--october-29-2026)
+records Cursor 3.27.22 on Windows ARM64 and Cowork through Claude Desktop 4.29.0
+cloud tasks. Keep these client/runtime results separate from callback replay.
+
+For Cursor, generate project hooks using the actual Windows Lens executable and
+`--shell powershell`, preserve existing entries, and complete workspace trust.
+Compare exact allowed file contents with an absent denied harmless path. A
+Read precheck denial proves that Read was blocked; do not describe it as a Write
+denial. Stop Lens, repeat with a distinct harmless control path, restore the same
+policy, and require another denied side effect. Retain metadata-only logs and
+independent file checks. Session IDs alone do not establish tool-call linkage.
+
+For Cowork, start a fresh task after plugin installation. First establish the
+actual execution host through an automatic neutral callback. A macOS Desktop
+frontend can execute plugin hooks in a cloud Linux task; use that runtime's
+binary and adjacent engine. The tested package used `scripts/runtime` and a
+plugin-relative wrapper, avoiding hard-coded host paths. Compare an allowed
+Write, denied Write, stopped-policy control, and restored-policy denial through
+the real tool UI and independent files. Export the metadata ledger, verify native
+session identifiers and content omission, and hash the exact tested plugin and
+runtime files. Test any rebuilt packaging helper as its own artifact; a previous
+plugin pass does not qualify a different ZIP.
+
+
+The authenticated Copilot Windows follow-up used CLI 1.0.105 ARM64 with v0.3.1
+x64 Lens under emulation. Keep the generated direct-exec hook configuration,
+normal workspace trust, write approval, and workspace-path checks. Expose the
+actual `apply_patch` tool and pair exact allowed contents with absent denied
+paths, then repeat with policy stopped and restored. Preserve the artifact's CI
+source identity and executable/library hashes. The successful run emitted six
+event types; do not infer all-event or timeout coverage from it. See the
+[verification record](verification.md#copilot-raw-patch-regression--v031-candidate).

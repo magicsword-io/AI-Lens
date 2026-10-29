@@ -116,7 +116,7 @@ pub(super) fn normalize(
 
 /// Parse only Copilot's native toolArgs, never arbitrary strings in a callback.
 /// Official CLI examples use a JSON string; SDK/native schemas also allow an
-/// object. This adapter deliberately accepts object arguments in either form.
+/// object. The native apply_patch tool additionally sends its patch verbatim.
 pub(crate) fn copilot_tool_args(payload: &Value) -> Result<Option<Value>> {
     let Some(raw) = payload.get("toolArgs") else {
         return Ok(None);
@@ -127,6 +127,11 @@ pub(crate) fn copilot_tool_args(payload: &Value) -> Result<Option<Value>> {
                 text.len() <= crate::MAX_PAYLOAD_BYTES,
                 "Copilot toolArgs exceeds byte limit"
             );
+            if payload.get("toolName").and_then(Value::as_str) == Some("apply_patch")
+                && text.starts_with("*** Begin Patch")
+            {
+                return copilot_patch_args(text).map(Some);
+            }
             serde_json::from_str(text)
                 .map_err(|_| anyhow::anyhow!("invalid Copilot toolArgs JSON"))?
         }
@@ -142,6 +147,91 @@ pub(crate) fn copilot_tool_args(payload: &Value) -> Result<Option<Value>> {
     );
     crate::check_json_bounds(&parsed, crate::MAX_PAYLOAD_BYTES)?;
     Ok(Some(parsed))
+}
+
+/// Extract the native patch's declared targets without treating added/context
+/// text as a path. The original callback remains the content/redaction input.
+fn copilot_patch_args(text: &str) -> Result<Value> {
+    fn target<'a>(line: &'a str, prefix: &str) -> Result<&'a str> {
+        let path = line.strip_prefix(prefix).context("invalid patch header")?;
+        ensure!(
+            !path.is_empty()
+                && path.len() <= 4096
+                && path.trim() == path
+                && !path.chars().any(char::is_control),
+            "invalid patch target"
+        );
+        Ok(path)
+    }
+
+    let mut lines = text.lines().peekable();
+    ensure!(
+        lines.next() == Some("*** Begin Patch"),
+        "invalid patch start"
+    );
+    let mut paths = Vec::new();
+    loop {
+        let header = lines.next().context("missing patch end")?;
+        if header == "*** End Patch" {
+            ensure!(
+                !paths.is_empty() && lines.next().is_none(),
+                "invalid patch end"
+            );
+            break;
+        }
+        let kind = if header.starts_with("*** Add File: ") {
+            paths.push(target(header, "*** Add File: ")?);
+            "add"
+        } else if header.starts_with("*** Delete File: ") {
+            paths.push(target(header, "*** Delete File: ")?);
+            "delete"
+        } else if header.starts_with("*** Update File: ") {
+            paths.push(target(header, "*** Update File: ")?);
+            if lines
+                .peek()
+                .is_some_and(|line| line.starts_with("*** Move to: "))
+            {
+                paths.push(target(lines.next().unwrap(), "*** Move to: ")?);
+            }
+            "update"
+        } else {
+            bail!("unsupported patch section");
+        };
+        let mut update_body = false;
+        while let Some(line) = lines.peek().copied() {
+            if line.starts_with("*** ") && line != "*** End of File" {
+                break;
+            }
+            lines.next();
+            match kind {
+                "add" => ensure!(line.starts_with('+'), "invalid added patch line"),
+                "delete" => bail!("unexpected deleted patch body"),
+                "update" => {
+                    if line == "*** End of File" {
+                        ensure!(update_body, "empty patch update");
+                        ensure!(
+                            lines.peek().is_some_and(|line| line.starts_with("*** ")),
+                            "misplaced patch end-of-file"
+                        );
+                        break;
+                    }
+                    ensure!(
+                        line.is_empty()
+                            || line.starts_with([' ', '+', '-'])
+                            || line == "@@"
+                            || line.starts_with("@@ "),
+                        "invalid updated patch line"
+                    );
+                    update_body |= line != "@@" && !line.starts_with("@@ ");
+                }
+                _ => unreachable!(),
+            }
+        }
+        ensure!(kind != "update" || update_body, "empty patch update");
+    }
+    let parsed = json!({"paths": paths, "patch": text});
+    crate::check_json_bounds(&parsed, crate::MAX_PAYLOAD_BYTES)?;
+    Ok(parsed)
 }
 
 pub(super) fn response(agent: &str, event: &str, blocked: bool, reason: &str) -> Value {
@@ -623,6 +713,63 @@ mod tests {
             "cursor",
             Some("preToolUse"),
             &json!({"tool_name":"Read", "tool_input":text})
+        )
+        .is_err());
+    }
+
+    #[test]
+    fn copilot_apply_patch_observed_freeform_preserves_original_input() {
+        // Copilot CLI 1.0.105 Windows ARM64 emitted this exact freeform shape.
+        let patch = "*** Begin Patch\n*** Add File: copilot-allow-1029.txt\n+COPILOT_ALLOW_1029\n*** End Patch\n";
+        let raw = json!({"toolName":"apply_patch", "toolArgs":patch,
+            "sessionId":"copilot-patch-session", "nativeExtra":"preserved"});
+        let normalized = adapters::normalize("copilot", Some("preToolUse"), &raw).unwrap();
+        assert_eq!(normalized.input, raw);
+        assert_eq!(normalized.tool_name.as_deref(), Some("apply_patch"));
+        assert_eq!(
+            normalized.session_id.as_deref(),
+            Some("copilot-patch-session")
+        );
+        for other in ["view", "edit", "Apply_Patch", "apply_patch "] {
+            let mut wrong_tool = raw.clone();
+            wrong_tool["toolName"] = json!(other);
+            assert!(adapters::normalize("copilot", Some("preToolUse"), &wrong_tool).is_err());
+        }
+    }
+
+    #[test]
+    fn copilot_apply_patch_malformed_and_oversized_remain_errors() {
+        for patch in [
+            "PRIVATE_BAD_PATCH",
+            "*** Begin Patch\n*** Add File: safe.txt\n+PRIVATE_BAD_PATCH\n",
+            "*** Add File: safe.txt\n+PRIVATE_BAD_PATCH\n*** End Patch\n",
+            "*** Begin Patch\n*** Add File: \n+PRIVATE_BAD_PATCH\n*** End Patch\n",
+            "*** Begin Patch\n*** Unknown File: safe.txt\n+PRIVATE_BAD_PATCH\n*** End Patch\n",
+            "*** Begin Patch\n*** Move to: private.txt\n*** End Patch\n",
+            "*** Begin Patch\n*** Add File: safe.txt\nPRIVATE_BAD_PATCH\n*** End Patch\n",
+            "*** Begin Patch\n*** Delete File: safe.txt\n+PRIVATE_BAD_PATCH\n*** End Patch\n",
+            "*** Begin Patch\n*** Add File: safe.txt\n+safe\n*** End Patch\nPRIVATE_BAD_PATCH",
+            "[]",
+            "null",
+            "42",
+            "\"PRIVATE_BAD_PATCH\"",
+        ] {
+            let error = adapters::normalize(
+                "copilot",
+                Some("preToolUse"),
+                &json!({"toolName":"apply_patch", "toolArgs":patch}),
+            )
+            .unwrap_err();
+            assert!(!error.to_string().contains("PRIVATE_BAD_PATCH"));
+        }
+        let oversized = format!(
+            "*** Begin Patch\n*** Add File: safe.txt\n+{}\n*** End Patch\n",
+            "x".repeat(crate::MAX_PAYLOAD_BYTES)
+        );
+        assert!(adapters::normalize(
+            "copilot",
+            Some("preToolUse"),
+            &json!({"toolName":"apply_patch", "toolArgs":oversized})
         )
         .is_err());
     }
