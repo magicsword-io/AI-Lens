@@ -1,0 +1,44 @@
+---
+import { Code } from "astro:components";
+import Icon from "./Icon.astro";
+interface Props {
+  code: string;
+  lang?: "bash" | "yaml" | "json" | "powershell" | "text";
+  label?: string;
+}
+const { code, lang = "bash", label = "Terminal" } = Astro.props;
+---
+
+<div class="code-block">
+  <div class="code-toolbar">
+    <span>{label}</span>
+    <button
+      type="button"
+      class="copy-code"
+      aria-label={`Copy ${label} code`}
+      data-copy={code}
+    >
+      <Icon name="copy" size={14} />
+      <span>Copy</span>
+    </button>
+  </div>
+  <Code code={code} lang={lang} theme="github-dark" wrap={false} />
+</div>
+<script>
+  document
+    .querySelectorAll<HTMLButtonElement>(".copy-code")
+    .forEach((button) => {
+      button.addEventListener("click", async () => {
+        const label = button.querySelector("span");
+        try {
+          await navigator.clipboard.writeText(button.dataset.copy || "");
+          if (label) label.textContent = "Copied";
+        } catch {
+          if (label) label.textContent = "Select to copy";
+        }
+        window.setTimeout(() => {
+          if (label) label.textContent = "Copy";
+        }, 2200);
+      });
+    });
+</script>

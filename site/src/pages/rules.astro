@@ -1,0 +1,373 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
+import CodeBlock from "../components/CodeBlock.astro";
+import { packs, ruleCount, source, href } from "../data/project";
+const example = `version: 1
+rules:
+  - id: protect-env-files
+    description: Check direct file tools targeting .env files.
+    agents: [claude, codex, hermes, gemini, cursor, copilot, cowork]
+    tool_pattern: '^(Read|Write|Edit|read_file|write_file|replace|view|create|edit|str_replace_editor)$'
+    path_pattern: '(?i)(^|/)\\.env(\\.[^/]*)?$'
+    action: block`;
+const fields = [
+  [
+    "id",
+    "Required",
+    "Unique stable identifier recorded in matched_rules. Use a nonempty identifier of at most 64 ASCII letters, digits, underscores, periods, colons, or hyphens; no sensitive text.",
+  ],
+  ["description", "Optional", "Human-readable explanation, up to 2,048 bytes."],
+  [
+    "agents",
+    "Selector",
+    "Source preview: nonempty list of claude, codex, hermes, gemini, cursor, copilot, or cowork. Published v0.2.0 accepts the first four. Entries within the list are alternatives.",
+  ],
+  [
+    "events",
+    "Selector",
+    "Nonempty list of exact native event names, such as PreToolUse, preToolUse, pre_tool_call, or BeforeTool. Names are case-sensitive.",
+  ],
+  [
+    "tool_pattern",
+    "Selector",
+    "Rust regex over the native tool name. Anchor it when you intend an exact tool match.",
+  ],
+  [
+    "path_pattern",
+    "Selector",
+    "Rust regex over recognized native path fields, after lexical normalization. It does not parse embedded shell/patch text into paths.",
+  ],
+  [
+    "content_pattern",
+    "Selector",
+    "Rust regex over original callback JSON and string values, before redaction. It works even when content capture is off.",
+  ],
+  [
+    "action",
+    "Required",
+    "block or audit. There is no allow action, approval action, or first-match priority.",
+  ],
+];
+---
+
+<Layout
+  title="YAML rule reference — AI Lens"
+  active="rules"
+  description="The AI Lens v1 YAML policy schema: AND selectors, block/audit semantics, 30 practical rules, safe extension, and the limits of textual hook policy."
+>
+  <div class="container">
+    <header class="page-intro">
+      <p class="eyebrow">FIELD GUIDE / 02</p>
+      <h1>
+        Readable policies.
+        <br />
+        <span>Explicit tradeoffs.</span>
+      </h1>
+      <p>
+        Explore {ruleCount} shipped rules, understand every selector, and adapt
+        a policy you can explain. No hidden scoring or opaque rule ordering.
+      </p>
+    </header>
+    <div class="docs-layout">
+      <aside class="toc" aria-label="On this page">
+        <span>ON THIS PAGE</span>
+        <a href="#schema">YAML schema</a>
+        <a href="#decisions">Decisions & matching</a>
+        <a href="#packs">The rule catalog</a>
+        <a href="#extend">Extend a policy</a>
+        <a href="#limits">Limits & verification</a>
+      </aside>
+      <div class="docs-content">
+        <section class="doc-section" id="schema">
+          <p class="eyebrow">SCHEMA / VERSION 1</p>
+          <h2>A small policy, end to end.</h2>
+          <p>
+            These examples and policy files follow the experimental source branch,
+            with seven native adapters. Published v0.2.0 accepts Claude Code,
+            Codex, Hermes and Gemini CLI; it does not accept the new
+            <code>cursor</code>, <code>copilot</code> or <code>cowork</code> selectors.
+            Use the policy files bundled with your release. Earlier v0.1.0
+            downloads also lack <code>gemini</code>.
+          </p>
+          <p>
+            Every file has one <code>version: 1</code> and a <code>rules</code>{" "}
+            list. Rules are strict: unknown fields, duplicate IDs, invalid
+            regexes, and selector-free entries are errors.
+          </p>
+          <CodeBlock
+            code={example}
+            lang="yaml"
+            label="Example · direct file-tool policy"
+          />
+          <p>
+            This example requires both a listed agent and a matching tool and
+            path. A direct <code>Read</code> of <code>/work/.env.local</code>{" "}
+            matches; <code>/work/env.example</code> does not. A shell command
+            needs a separate shell-scoped content rule. Gemini uses
+            <code>read_file</code>, <code>write_file</code>, <code>replace</code>,
+            and <code>run_shell_command</code> in the relevant selectors. Direct
+            path rules cover the file tools' native <code>file_path</code>
+            arguments. They do not interpret or expand <code>read_many_files</code>
+            include globs; that tool is outside this direct-file coverage.
+          </p>
+          <div class="table-scroll">
+            <table>
+              <caption>Rule fields</caption>
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Use</th>
+                  <th>Meaning</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fields.map(([field, use, text]) => (
+                  <tr>
+                    <td>
+                      <code>{field}</code>
+                    </td>
+                    <td>
+                      <span class="field-use">{use}</span>
+                    </td>
+                    <td>{text}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p>
+            At least one selector is required. An absent selector adds no
+            restriction. Present selectors combine with <strong>AND</strong>;
+            entries inside <code>agents</code> or <code>events</code> are
+            alternatives. A path match and a content match need not refer to the
+            same nested value.
+          </p>
+        </section>
+        <section class="doc-section" id="decisions">
+          <p class="eyebrow">DECISIONS / NO ALLOW OVERRIDE</p>
+          <h2>A match is only half the story.</h2>
+          <div class="decision-grid">
+            <article>
+              <span class="decision allow">allow</span>
+              <h3>No block match</h3>
+              <p>
+                No rules match, or only audit rules match. Audit IDs remain in
+                the event; the agent's own permissions still apply.
+              </p>
+            </article>
+            <article>
+              <span class="decision block">block</span>
+              <h3>Supported pre-tool event</h3>
+              <p>
+                A block rule matches an enforceable callback. AI Lens returns
+                the vendor's denial response.
+              </p>
+            </article>
+            <article>
+              <span class="decision audit">would_block</span>
+              <h3>Observational callback</h3>
+              <p>
+                A block rule matches a post-tool or other observe-only event.
+                The event is recorded; no action is reversed.
+              </p>
+            </article>
+          </div>
+          <p>
+            Every matching rule contributes its ID. Any block match wins over
+            audit, regardless of list order. Keep <code>events</code> absent to
+            observe the same rule before and after tools; use exact event names
+            when restricting its scope.
+          </p>
+          <p>
+            Claude/Codex support preventive <code>PreToolUse</code> and{" "}
+            <code>PermissionRequest</code> in this project; Hermes supports{" "}
+            <code>pre_tool_call</code>. Gemini CLI supports only <code>BeforeTool</code>;
+            its other eight registered events return neutral responses.
+            In the source preview, Cursor and Copilot CLI enforce only
+            <code>preToolUse</code>, and Cowork only <code>PreToolUse</code>.
+            Copilot command timeouts fail open; Cowork Desktop execution remains
+            unvalidated. OTLP and provider audit ingestion never evaluate these rules.
+            Unknown hook events are rejected. A
+            known event name alone does not guarantee that your installed client
+            invokes or honors it.
+          </p>
+        </section>
+        <section class="doc-section" id="packs">
+          <p class="eyebrow">CATALOG / {ruleCount} RULES · 6 POLICY FILES</p>
+          <h2>Choose the questions you want to ask.</h2>
+          <p>
+            Five rules live in the default policy. The other 25 are optional
+            recipes. Selecting a pack does not automatically load the default or
+            other packs.
+          </p>
+          <div class="reference-packs">
+            {packs.map((pack) => (
+              <article id={pack.slug} class="reference-pack">
+                <div class="reference-pack-heading">
+                  <div>
+                    <span class="card-category">
+                      {pack.category} · {pack.count} rules
+                    </span>
+                    <h3>{pack.title}</h3>
+                  </div>
+                  <a class="text-link" href={pack.url}>
+                    View YAML <Icon name="external" size={14} />
+                  </a>
+                </div>
+                <p>{pack.description}</p>
+                <ul class="rule-id-list">
+                  {pack.ids.map((id) => (
+                    <li>
+                      <code>{id}</code>
+                    </li>
+                  ))}
+                </ul>
+                <details>
+                  <summary>Read the shipped policy</summary>
+                  <CodeBlock
+                    code={pack.yaml.trimEnd()}
+                    lang="yaml"
+                    label={`${pack.slug}.yaml`}
+                  />
+                </details>
+              </article>
+            ))}
+          </div>
+          <p>
+            The <a href={source("docs/rule-catalog.md")}>full catalog</a>{" "}
+            documents intended hits, nearby misses, and false-positive tradeoffs
+            for every optional rule. Broad legitimate uploads, remote access,
+            permission changes, and delegation mostly audit; selected explicit
+            risky forms block. Configuration-integrity patterns include
+            <code>.gemini/settings.json</code>, <code>.gemini/hooks/</code>, and
+            <code>GEMINI.md</code>.
+          </p>
+        </section>
+        <section class="doc-section" id="extend">
+          <p class="eyebrow">EXTEND / ONE FILE AT A TIME</p>
+          <h2>Start with an audit question.</h2>
+          <ol class="numbered-list">
+            <li>
+              <strong>Choose a supported tool and concrete input.</strong>
+              <p>
+                Use a synthetic request. Never use real credentials as fixtures.
+              </p>
+            </li>
+            <li>
+              <strong>Write one scoped rule with a unique ID.</strong>
+              <p>
+                For command text, include a tool selector. Begin with{" "}
+                <code>action: audit</code> and inspect matched IDs before
+                promoting to block.
+              </p>
+            </li>
+            <li>
+              <strong>Merge selected entries into one file.</strong>
+              <p>
+                Copy chosen <code>rules</code> list items under a single{" "}
+                <code>version: 1</code> wrapper. There is no include feature,
+                automatic pack loading, allow override, or implicit default
+                merge.
+              </p>
+            </li>
+            <li>
+              <strong>Validate, replay, and check the real client.</strong>
+              <p>
+                Test a hit, a nearby miss, and a post-tool match. Pair any
+                prevention check with an allowed positive control.
+              </p>
+            </li>
+          </ol>
+          <CodeBlock
+            code={`# Validate your manually combined policy
+./agent-lens rules-check --rules ./my-rules.yaml
+
+# Select it explicitly for collection
+./agent-lens --state "$PWD/lens-state" start \\
+  --output "$PWD/events.jsonl" --rules "$PWD/my-rules.yaml"`}
+            label="Shell · validate and select"
+          />
+          <p>
+            On Windows use <code>.\agent-lens.exe</code> and PowerShell path
+            variables as shown in{" "}
+            <a href={href("getting-started/#connect")}>getting started</a>.{" "}
+            <code>rules-check</code> returns <code>valid</code> and parsed{" "}
+            <code>rule_ids</code>; it does not activate collection.
+          </p>
+        </section>
+        <section class="doc-section" id="limits">
+          <p class="eyebrow">LIMITS / KNOW THE BOUNDARY</p>
+          <h2>Text matching is not a sandbox.</h2>
+          <div class="limit-list">
+            <article>
+              <h3>Regex, not shell syntax</h3>
+              <p>
+                Patterns use{" "}
+                <a href="https://docs.rs/regex/latest/regex/#syntax">
+                  Rust regex syntax
+                </a>
+                , not globs, lookaround, or backreferences. Matches are
+                unanchored unless you add <code>^</code>/<code>$</code>. Use
+                single-quoted YAML strings for literal backslashes;{" "}
+                <code>(?i)</code> enables case-insensitive matching.
+              </p>
+            </article>
+            <article>
+              <h3>Lexical paths, not filesystem identity</h3>
+              <p>
+                Windows separators become <code>/</code> and <code>.</code>/
+                <code>..</code> components collapse lexically. Recognized keys
+                include <code>file_path</code>, <code>path</code>,{" "}
+                <code>paths</code>, <code>target_file</code>,
+                source/destination, <code>cwd</code>, and <code>workdir</code>.
+                Symlinks, environment expansion, custom fields, and embedded
+                patch syntax can evade path checks.
+              </p>
+            </article>
+            <article>
+              <h3>Bounded work, incomplete coverage</h3>
+              <p>
+                Limits: 128 rules, 256 KiB of YAML, 4,096 bytes per pattern, and
+                bounded regex compilation. Hook stdin is limited to 1 MiB.
+                Network example regexes scan bounded 96-character segments; long
+                options and URLs can miss.
+              </p>
+            </article>
+            <article>
+              <h3>Context without a completeness claim</h3>
+              <p>
+                Content rules can match quoted examples or unrelated callback
+                fields. Aliases, encoded input, later scripts, renamed tools,
+                and unhooked activity can evade them. Default content omission
+                does not disable matching; opt-in redaction is best effort.
+              </p>
+            </article>
+          </div>
+          <div class="callout">
+            <strong>Prove the layer you rely on.</strong>
+            <p>
+              The repository's replay tests exercise synthetic callbacks through
+              the real executable/library. The source-preview inventory is
+              30 rules × 7 adapters × 3 scenarios = 630 scenarios; an inventory
+              is not a test result. Historical v0.2.0 evidence retains its
+              four-adapter/360-scenario count, and v0.1.0 retains its original
+              counts. These checks do not prove live vendor
+              registration, prevention on every tool path, or tamper resistance.
+              Keep independent approvals and OS isolation.
+            </p>
+          </div>
+          <div class="doc-next">
+            <a class="text-link" href={source("docs/rules.md")}>
+              Read the repository specification{" "}
+              <Icon name="external" size={15} />
+            </a>
+            <a class="text-link" href={href("getting-started/")}>
+              Put it into practice <Icon name="arrow" size={15} />
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</Layout>

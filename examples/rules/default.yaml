@@ -1,0 +1,32 @@
+# Educational examples, not comprehensive security controls.
+# No raw content is logged unless start --capture-content is explicitly used.
+version: 1
+rules:
+  - id: protect-env-files
+    description: Demonstrate protection of direct file-tool access to .env files.
+    agents: [claude, codex, hermes, gemini, cursor, copilot, cowork]
+    tool_pattern: '^(Read|Write|Edit|MultiEdit|read_file|write_file|replace|apply_patch|patch|view|create|edit|str_replace_editor)$'
+    path_pattern: '(?i)(^|/)\.env(\.[^/]*)?$'
+    action: block
+
+  - id: protect-shell-env
+    description: Best-effort detection of a literal .env name in shell input.
+    tool_pattern: '(?i)^(bash|powershell|shell|terminal|exec_command|shell_command|run_command|run_shell_command)$'
+    content_pattern: '(?i)(^|[^A-Za-z0-9_])\.env([^A-Za-z0-9_]|$)'
+    action: block
+
+  - id: protect-credential-files
+    description: Demonstrate direct file-tool checks for common credential paths.
+    tool_pattern: '^(Read|Write|Edit|MultiEdit|read_file|write_file|replace|apply_patch|patch|view|create|edit|str_replace_editor)$'
+    path_pattern: '(?i)(^|/)(\.aws/credentials|id_rsa|id_ed25519)$'
+    action: block
+
+  - id: demo-marker
+    description: Harmless sentinel for synthetic block demonstrations.
+    content_pattern: 'AGENT_LENS_BLOCK_DEMO'
+    action: block
+
+  - id: audit-shell-tools
+    description: Record shell-tool rule matches while allowing the tool call.
+    tool_pattern: '(?i)^(bash|powershell|shell|terminal|exec_command|shell_command|run_command|run_shell_command)$'
+    action: audit

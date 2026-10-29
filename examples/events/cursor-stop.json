@@ -1,0 +1,13 @@
+{
+  "conversation_id": "synthetic-cursor-session",
+  "generation_id": "synthetic-generation",
+  "cursor_version": "synthetic",
+  "workspace_roots": [
+    "/synthetic/work"
+  ],
+  "user_email": null,
+  "transcript_path": null,
+  "status": "completed",
+  "loop_count": 0,
+  "hook_event_name": "stop"
+}

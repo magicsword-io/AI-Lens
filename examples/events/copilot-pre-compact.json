@@ -1,0 +1,8 @@
+{
+  "sessionId": "synthetic-copilot-session",
+  "timestamp": 1793232000000,
+  "cwd": "/synthetic/work",
+  "transcriptPath": "/synthetic/transcript.json",
+  "trigger": "auto",
+  "customInstructions": "SYNTHETIC_INSTRUCTION"
+}

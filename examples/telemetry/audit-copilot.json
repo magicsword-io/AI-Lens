@@ -1,0 +1,11 @@
+[
+  {
+    "_document_id": "github-event-1",
+    "@timestamp": 1793268000000,
+    "action": "copilot.cfb_seat_added",
+    "actor_id": 42,
+    "org_id": 123,
+    "actor": "PRIVATE_EMAIL",
+    "token": "PRIVATE_TOKEN"
+  }
+]

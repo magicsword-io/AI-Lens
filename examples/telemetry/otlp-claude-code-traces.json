@@ -1,0 +1,52 @@
+{
+  "_fixture": "SYNTHETIC: invented vendor-shaped protocol example; not a captured live session.",
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "claude-code"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "claude-code"
+          },
+          "spans": [
+            {
+              "name": "claude_code.tool",
+              "traceId": "11111111111111111111111111111111",
+              "spanId": "2222222222222222",
+              "parentSpanId": "3333333333333333",
+              "startTimeUnixNano": "1793275200000000000",
+              "endTimeUnixNano": "1793275200012000000",
+              "kind": 1,
+              "status": {
+                "code": 1
+              },
+              "attributes": [
+                {
+                  "key": "tool_name",
+                  "value": {
+                    "stringValue": "Read"
+                  }
+                },
+                {
+                  "key": "session.id",
+                  "value": {
+                    "stringValue": "synthetic-session-001"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

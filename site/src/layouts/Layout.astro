@@ -1,0 +1,122 @@
+---
+import "../styles/global.css";
+import Icon from "../components/Icon.astro";
+import { href, repository, source } from "../data/project";
+interface Props {
+  title?: string;
+  description?: string;
+  active?: string;
+}
+const {
+  title = "AI Lens — Bring agent actions into focus.",
+  description = "An open-source runtime hook project for defenders. Explore AI coding-agent tool activity, review YAML policies, and collect local JSONL evidence.",
+  active = "overview",
+} = Astro.props;
+const nav = [
+  { id: "overview", label: "Overview", path: "" },
+  { id: "start", label: "Getting started", path: "getting-started/" },
+  { id: "rules", label: "Rule reference", path: "rules/" },
+  { id: "telemetry", label: "Telemetry", path: "telemetry/" },
+];
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#09090b" />
+    <link rel="icon" type="image/svg+xml" href={href("favicon.svg")} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href={href()} aria-label="AI Lens home">
+          <span class="brand-wordmark"><strong>AI</strong>Lens</span>
+          <span class="brand-maker"><span>by</span><img src={href("magicsword-logo.svg")} alt="MagicSword" width="170" height="68" /></span>
+        </a>
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-label="Open navigation"
+          aria-expanded="false"
+          aria-controls="main-nav"
+        >
+          <Icon name="menu" />
+        </button>
+        <nav id="main-nav" aria-label="Main navigation">
+          {nav.map((item) => (
+            <a
+              href={href(item.path)}
+              aria-current={active === item.id ? "page" : undefined}
+            >
+              {item.label}
+            </a>
+          ))}
+          <a class="nav-source" href={repository}>
+            GitHub <Icon name="external" size={14} />
+          </a>
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <a class="brand footer-brand" href={href()}>
+            <Icon name="lens" size={24} />
+            <span>AI Lens</span>
+          </a>
+          <p>Make agent behavior easier to see, question, and understand.</p>
+          <small>
+            Apache-2.0 licensed · Built for learning. Designed for defenders.
+          </small>
+        </div>
+        <div class="footer-links">
+          <a href={source("LICENSE")}>License</a>
+          <a href={source("CONTRIBUTING.md")}>Contribute</a>
+          <a href={repository}>
+            Source <Icon name="external" size={13} />
+          </a>
+        </div>
+      </div>
+    </footer>
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>(".menu-toggle");
+      const nav = document.getElementById("main-nav");
+      toggle?.addEventListener("click", () => {
+        const expanded = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", String(!expanded));
+        toggle.setAttribute(
+          "aria-label",
+          expanded ? "Open navigation" : "Close navigation",
+        );
+        nav?.classList.toggle("is-open", !expanded);
+      });
+      document.addEventListener("keydown", (event) => {
+        if (
+          event.key === "Escape" &&
+          toggle?.getAttribute("aria-expanded") === "true"
+        ) {
+          toggle.setAttribute("aria-expanded", "false");
+          toggle.setAttribute("aria-label", "Open navigation");
+          nav?.classList.remove("is-open");
+          toggle.focus();
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "sessionId": "synthetic-copilot-session",
+  "timestamp": 1793232000000,
+  "cwd": "/synthetic/work",
+  "toolName": "view",
+  "toolArgs": "{\"path\":\"/synthetic/work/.env\"}",
+  "error": "Synthetic failure"
+}

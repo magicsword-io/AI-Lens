@@ -1,0 +1,11 @@
+{
+  "event_id": "session-event-1",
+  "type": "request",
+  "user_id": 42,
+  "enterprise_id": 123,
+  "endpoint": "/chat/completions",
+  "body": "{\"messages\":[{\"content\":\"PRIVATE_PROMPT\"}]}",
+  "@timestamp": 1793268000000,
+  "truncated": false,
+  "github_request_id": "request-1"
+}

@@ -1,0 +1,33 @@
+# OPTIONAL: protect illustrated direct configuration writes; audit instructions.
+# These files remain writable outside hooked tools; this is not tamper resistance.
+version: 1
+rules:
+  - id: integrity-agent-config-write
+    description: Block direct writes to illustrated agent settings, hooks, and plugins.
+    tool_pattern: '(?i)^(write|edit|multiedit|write_file|edit_file|replace|apply_patch|patch|create|str_replace_editor)$'
+    path_pattern: '(?i)(^|/)(\.claude/(settings(\.local)?\.json|hooks/.+)|\.codex/(config\.toml|hooks\.json|hooks/.+)|\.gemini/(settings\.json|hooks/.+)|\.cursor/hooks\.json|\.github/hooks/[^/]+\.json|\.copilot/(config\.json|hooks/[^/]+\.json)|\.hermes/(config\.ya?ml|hooks/.+|plugins/.+))$'
+    action: block
+
+  - id: integrity-instructions-write
+    description: Audit direct edits to common agent instruction and personality files.
+    tool_pattern: '(?i)^(write|edit|multiedit|write_file|edit_file|replace|apply_patch|patch|create|str_replace_editor)$'
+    path_pattern: '(?i)(^|/)(AGENTS(\.override)?\.md|CLAUDE\.md|GEMINI\.md|SOUL\.md|\.claude/rules/.+\.md)$'
+    action: audit
+
+  - id: integrity-policy-write
+    description: Block direct writes to default Lens state and illustrated policy paths.
+    tool_pattern: '(?i)^(write|edit|multiedit|write_file|edit_file|replace|apply_patch|patch|create|str_replace_editor)$'
+    path_pattern: '(?i)(^|/)(\.agent-lens/(config\.json|control\.lock)|examples/rules/[^/]+\.ya?ml|agent-lens(-rules|-policy)?\.ya?ml)$'
+    action: block
+
+  - id: integrity-engine-binary-write
+    description: Block direct writes to the named Lens executable and engine library.
+    tool_pattern: '(?i)^(write|edit|multiedit|write_file|edit_file|replace|apply_patch|patch|create|str_replace_editor)$'
+    path_pattern: '(?i)(^|/)(agent-lens(\.exe)?|agent_lens_engine\.dll|libagent_lens_engine\.(so|dylib))$'
+    action: block
+
+  - id: integrity-shell-config-references
+    description: Audit literal agent settings, instruction, and Lens policy shell references.
+    tool_pattern: '(?i)^(bash|powershell|shell|terminal|exec_command|shell_command|run_command|run_shell_command)$'
+    content_pattern: '(?i)(^|[^A-Za-z0-9_])(\.claude[/\\](settings(\.local)?\.json|hooks[/\\])|\.codex[/\\](config\.toml|hooks(\.json|[/\\]))|\.gemini[/\\](settings\.json|hooks[/\\])|\.cursor[/\\]hooks\.json|\.github[/\\]hooks[/\\]|\.copilot[/\\](config\.json|hooks[/\\])|\.hermes[/\\](config\.ya?ml|hooks[/\\]|plugins[/\\])|AGENTS(\.override)?\.md|CLAUDE\.md|GEMINI\.md|SOUL\.md|\.agent-lens[/\\](config\.json|control\.lock)|examples[/\\]rules[/\\]|agent-lens(-rules|-policy)?\.ya?ml)'
+    action: audit

@@ -1,0 +1,24 @@
+{
+  "review_only": true,
+  "source": "cursor-runtime",
+  "template_kind": "manual_admin_ui_worksheet_not_a_vendor_configuration_schema",
+  "retrieved": "2026-10-29",
+  "official_documentation": "https://cursor.com/docs/enterprise/opentelemetry-export",
+  "admin_location": "Team Settings > OpenTelemetry Export",
+  "destination_to_enter_manually": {
+    "base_url": "https://collector.example.com:14318",
+    "protocol": "OTLP/HTTP binary protobuf",
+    "conversation_content": "off"
+  },
+  "authentication": "Configure an approved bearer token or API-key header outside this file.",
+  "notes": [
+    "Enterprise plan and team admin access required.",
+    "The endpoint must be publicly reachable over HTTPS; do not enter a loopback address.",
+    "Use the base URL without /v1; Cursor appends /v1/logs and /v1/metrics.",
+    "Run Test connection, then Enable in the admin UI.",
+    "Review telemetry family switches and auto_enable_new_families before enabling.",
+    "The collector forwards to a same-host Lens listener labeled cursor-runtime; keep source pipelines separate.",
+    "Cursor does not export gRPC or HTTP/JSON. A collector may translate the wire encoding.",
+    "Cloud Agent conversation-content coverage does not imply IDE or CLI transcript coverage."
+  ]
+}

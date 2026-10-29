@@ -1,0 +1,37 @@
+---
+interface Props {
+  name: string;
+  size?: number;
+}
+const { name, size = 20 } = Astro.props;
+const paths: Record<string, string> = {
+  arrow: "M4 12h16m-6-6 6 6-6 6",
+  external: "M14 4h6v6M20 4 10 14M10 4H4v16h16v-6",
+  download: "M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5",
+  terminal: "m5 6 5 6-5 6m8 0h6",
+  lens: "M12 2v5m0 10v5M2 12h5m10 0h5M19 12a7 7 0 1 1-14 0 7 7 0 0 1 14 0ZM14 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z",
+  shield: "M12 2 3 6v6c0 5 9 10 9 10s9-5 9-10V6l-9-4Zm-4 10 3 3 5-6",
+  code: "m8 5-6 7 6 7m8-14 6 7-6 7m-3-17-2 20",
+  layers: "m12 2 10 6-10 6L2 8l10-6ZM2 12l10 6 10-6M2 16l10 6 10-6",
+  check: "m5 12 4 4L19 6",
+  windows: "M3 4h8v7H3V4Zm10 0h8v7h-8V4ZM3 13h8v7H3v-7Zm10 0h8v7h-8v-7Z",
+  apple:
+    "M15 3c0 3-3 4-3 4s0-3 3-4ZM17 8c-2-1-4 0-5 0s-3-1-5 0c-5 3-1 13 2 13 1 0 2-1 3-1s2 1 3 1c2 0 4-4 4-6-4-2-3-5-2-7Z",
+  menu: "M3 6h18M3 12h18M3 18h18",
+  copy: "M8 8h12v13H8V8ZM16 8V3H3v13h5",
+};
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+>
+  <path d={paths[name] || paths.lens} />
+</svg>

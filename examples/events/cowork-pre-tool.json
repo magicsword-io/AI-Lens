@@ -1,0 +1,10 @@
+{
+  "hook_event_name": "PreToolUse",
+  "session_id": "synthetic-cowork-session",
+  "cwd": "/work",
+  "tool_name": "Read",
+  "tool_input": {
+    "file_path": "/work/.env"
+  },
+  "tool_use_id": "synthetic-cowork-tool"
+}

@@ -1,0 +1,70 @@
+{
+  "status": "PASS",
+  "evidence_level": "offline unmodified vendor HookSystem and native file tool; explicitly fired events",
+  "not_tested": [
+    "authenticated Gemini CLI",
+    "model event emission",
+    "CLI settings loading and consent",
+    "other operating systems"
+  ],
+  "gemini_core": "0.66.0",
+  "source_commit": "970413207732f5d4d8c50540c7fc359c44fdaaf2",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "architecture": "x64",
+  "shell": {
+    "executable": "bash",
+    "argsPrefix": [
+      "-c"
+    ],
+    "shell": "bash"
+  },
+  "binary_sha256": "1087ce55fac9324df3e858ca1f14c4ab7d622c908f89408de25b2682d2449e42",
+  "library_sha256": "a9fceb2644b91324c0ff806bac7a8696641a8febc7d84fbb529913207793f230",
+  "policy_sha256": "6bbffe625d445b6515779172303cc0d7f2830a81a62181b823310bc267828a65",
+  "vendor_dispatcher_sha256": "764e6ec72111ceb57a2d26bfff5fe9199a1c07b960172eb5b6f1fe69a4420413",
+  "vendor_tool_gate_sha256": "73ffcd2089b384bc40f7e2c3b3101d6ea7f19c1c9877dc0299a82bea9edd4aa0",
+  "registered_events": [
+    "BeforeTool",
+    "AfterTool",
+    "BeforeAgent",
+    "AfterAgent",
+    "BeforeToolSelection",
+    "SessionStart",
+    "SessionEnd",
+    "Notification",
+    "PreCompress"
+  ],
+  "observed_event_count": 10,
+  "additional_failure_dispatches": 3,
+  "checks_passed": 27,
+  "checks": [
+    "$GEMINI_PROJECT_DIR state: config rejects macro path without stdout",
+    "$GEMINI_PROJECT_DIR executable: config rejects macro path without stdout",
+    "$GEMINI_CWD state: config rejects macro path without stdout",
+    "$GEMINI_CWD executable: config rejects macro path without stdout",
+    "$GEMINI_PLANS_DIR state: config rejects macro path without stdout",
+    "$GEMINI_PLANS_DIR executable: config rejects macro path without stdout",
+    "$GEMINI_SESSION_ID state: config rejects macro path without stdout",
+    "$GEMINI_SESSION_ID executable: config rejects macro path without stdout",
+    "$CLAUDE_PROJECT_DIR state: config rejects macro path without stdout",
+    "$CLAUDE_PROJECT_DIR executable: config rejects macro path without stdout",
+    "vendor registry loads all nine generated hooks",
+    "native vendor execution reports Agent Lens policy denial",
+    "blocked harmless file does not exist",
+    "native vendor write_file positive control succeeds",
+    "positive control creates the exact expected file",
+    "all nine supported events recorded",
+    "exact event count (two BeforeTool, one AfterTool)",
+    "native session identity preserved",
+    "telemetry records blocked and allowed tool decisions",
+    "metadata capture omits raw tool inputs and content",
+    "invalid policy: native tool reports hook denial",
+    "invalid policy: harmless file absent",
+    "missing companion library: native tool reports hook denial",
+    "missing companion library: harmless file absent",
+    "post-tool missing library is observable as native exit 1",
+    "vendor treats post-tool exit 1 diagnostic as nonblocking warning",
+    "post-tool failure cannot undo the completed positive control"
+  ]
+}

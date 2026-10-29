@@ -1,0 +1,65 @@
+{
+  "_fixture": "SYNTHETIC: invented vendor-shaped protocol example; not a captured live session.",
+  "resourceMetrics": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "codex"
+            }
+          }
+        ]
+      },
+      "scopeMetrics": [
+        {
+          "scope": {
+            "name": "codex"
+          },
+          "metrics": [
+            {
+              "name": "codex.tool.call.duration_ms",
+              "unit": "ms",
+              "histogram": {
+                "aggregationTemporality": 2,
+                "dataPoints": [
+                  {
+                    "timeUnixNano": "1793275200000000000",
+                    "count": "2",
+                    "sum": 30,
+                    "min": 10,
+                    "max": 20,
+                    "explicitBounds": [
+                      10,
+                      20
+                    ],
+                    "bucketCounts": [
+                      "1",
+                      "1",
+                      "0"
+                    ],
+                    "attributes": [
+                      {
+                        "key": "tool",
+                        "value": {
+                          "stringValue": "shell"
+                        }
+                      },
+                      {
+                        "key": "success",
+                        "value": {
+                          "boolValue": true
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

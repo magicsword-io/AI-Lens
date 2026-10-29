@@ -1,0 +1,9 @@
+{
+  "sessionId": "synthetic-copilot-session",
+  "timestamp": 1793232000000,
+  "cwd": "/synthetic/work",
+  "message": "Synthetic notification",
+  "title": "Synthetic task completed",
+  "notification_type": "agent_completed",
+  "hook_event_name": "Notification"
+}

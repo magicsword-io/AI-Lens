@@ -1,0 +1,33 @@
+# OPTIONAL: block an explicit download-to-shell form; audit broader operations.
+# These text matches neither inspect packages nor observe actual network traffic.
+version: 1
+rules:
+  - id: exec-remote-pipe-shell
+    description: Block a literal HTTP curl/wget download piped directly to a shell.
+    tool_pattern: '(?i)^(bash|powershell|shell|terminal|exec_command|shell_command|run_command|run_shell_command)$'
+    content_pattern: '(?i)(^|[;&|]\s*)(curl|wget)\s+[^;\r\n|]{0,96}https?://[^;\r\n|]{1,96}\|\s*(sudo\s+)?(sh|bash|zsh|pwsh|powershell)(\s|$)'
+    action: block
+
+  - id: exec-outbound-upload
+    description: Audit curl upload/body flags and wget post-file references.
+    tool_pattern: '(?i)^(bash|powershell|shell|terminal|exec_command|shell_command|run_command|run_shell_command)$'
+    content_pattern: '(?i)(^|[;&|]\s*)(curl\s+[^;\r\n]{0,96}(-T|--upload-file|-F|--form|--data-binary|--data|-d)([=\s]|$)|wget\s+[^;\r\n]{0,96}--post-file([=\s]|$))'
+    action: audit
+
+  - id: exec-ssh-scp
+    description: Audit common remote login, copy, and synchronization command names.
+    tool_pattern: '(?i)^(bash|powershell|shell|terminal|exec_command|shell_command|run_command|run_shell_command)$'
+    content_pattern: '(?i)(^|[;&|]\s*)(/usr/bin/)?(ssh|scp|sftp|rsync)\s+'
+    action: audit
+
+  - id: exec-privileged-command
+    description: Audit sudo/doas/runas and an explicit PowerShell RunAs verb.
+    tool_pattern: '(?i)^(bash|powershell|shell|terminal|exec_command|shell_command|run_command|run_shell_command)$'
+    content_pattern: '(?i)((^|[;&|]\s*)(sudo|doas|runas)(\s|$)|(^|[;&|]\s*)Start-Process\s+[^;\r\n]{0,160}-Verb\s+RunAs(\s|$))'
+    action: audit
+
+  - id: exec-permission-changes
+    description: Audit common filesystem permission and ownership command names.
+    tool_pattern: '(?i)^(bash|powershell|shell|terminal|exec_command|shell_command|run_command|run_shell_command)$'
+    content_pattern: '(?i)(^|[;&|]\s*)(sudo\s+)?(chmod|chown|chgrp|icacls|Set-Acl)(\s|$)'
+    action: audit

@@ -1,0 +1,28 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "audit-1",
+      "type": "project.created",
+      "effective_at": 1793268000,
+      "actor": {
+        "type": "session",
+        "session": {
+          "user": {
+            "id": "user-1",
+            "email": "PRIVATE_EMAIL"
+          }
+        }
+      },
+      "project.created": {
+        "id": "proj-1",
+        "data": {
+          "name": "PRIVATE_CONTENT"
+        }
+      }
+    }
+  ],
+  "has_more": false,
+  "first_id": "audit-1",
+  "last_id": "audit-1"
+}

@@ -1,0 +1,14 @@
+{
+  "hook_event_name": "PostToolUse",
+  "session_id": "synthetic-codex-session",
+  "turn_id": "synthetic-turn-1",
+  "cwd": "/workspace/example",
+  "tool_name": "Bash",
+  "tool_use_id": "synthetic-tool-2",
+  "tool_input": {
+    "command": "cat .env"
+  },
+  "tool_response": {
+    "text": "SYNTHETIC_DEMO_RESULT"
+  }
+}

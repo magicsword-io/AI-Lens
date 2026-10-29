@@ -1,0 +1,20 @@
+# Review-only fragment; manually merge with the intended user/managed config.
+# Do not duplicate existing TOML tables or put telemetry routing in project config.
+# Official contracts retrieved 2026-10-29:
+# https://learn.chatgpt.com/docs/config-file/config-advanced#observability-and-telemetry
+# https://learn.chatgpt.com/docs/config-file/config-reference
+# Start Lens --source codex-otel on the SAME host first. This fragment exports logs.
+[otel]
+environment = "agent-lens-preview"
+log_user_prompt = false
+trace_exporter = "none"
+metrics_exporter = "none"
+
+[otel.exporter.otlp-http]
+endpoint = "http://127.0.0.1:4318/v1/logs"
+protocol = "binary"
+
+# Prompt redaction does not remove every tool-result snippet. Lens drops raw content.
+# Separate trace_exporter / metrics_exporter can be configured per official docs.
+# analytics.enabled=false disables custom metrics exporters in Codex CLI.
+# This fragment does not change sandbox, approvals, or project trust.

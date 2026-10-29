@@ -1,0 +1,22 @@
+[package]
+name = "agent-lens"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+clap = { version = "4", features = ["derive"] }
+libloading = "0.8"
+fs2 = "0.4"
+tempfile = "3"
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+prost = "0.14"
+opentelemetry-proto = { version = "0.31", default-features = false, features = ["gen-tonic-messages", "with-serde", "logs", "metrics", "trace"] }
+ureq = { version = "3.5", features = ["json"] }
+url = "2"
+base64 = "0.22"
+same-file = "1"

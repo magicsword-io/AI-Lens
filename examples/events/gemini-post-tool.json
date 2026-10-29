@@ -1,0 +1,15 @@
+{
+  "session_id": "synthetic-gemini-session",
+  "transcript_path": "/synthetic/transcript.json",
+  "cwd": "/synthetic/work",
+  "timestamp": "2026-10-29T00:00:00Z",
+  "hook_event_name": "AfterTool",
+  "tool_name": "read_file",
+  "tool_input": {
+    "file_path": "/synthetic/work/.env"
+  },
+  "tool_response": {
+    "llmContent": "SYNTHETIC_RESPONSE",
+    "returnDisplay": "Synthetic result"
+  }
+}

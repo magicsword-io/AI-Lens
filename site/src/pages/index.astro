@@ -1,0 +1,310 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
+import CodeBlock from "../components/CodeBlock.astro";
+import { href, packs, ruleCount, source } from "../data/project";
+const event = `{"schema_version":1,"agent":"claude","hook_event":"PreToolUse","tool_name":"Write","phase":"pre","decision":"block","matched_rules":["protect-env-files"],"enforcement":"supported"}`;
+---
+
+<Layout>
+  <div class="container">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">
+          <span class="signal-dot"></span> RUNTIME HOOKS. DEFENDER CONTEXT.
+        </p>
+        <h1 id="hero-title">
+          Bring agent
+          <br />
+          actions <span>into focus.</span>
+        </h1>
+        <p class="hero-intro">
+          AI agents use real tools. Give defenders a clearer view.
+        </p>
+        <p class="hero-description">
+          Observe tool requests, apply readable YAML policies, and turn
+          cooperative agent hooks into local evidence you can investigate.
+          The source preview also collects OTLP and provider audit observations.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href={href("getting-started/")}>
+            Get started <Icon name="arrow" size={17} />
+          </a>
+          <a class="text-link" href={href("rules/")}>
+            Explore the rules <Icon name="arrow" size={16} />
+          </a>
+        </div>
+        <div class="hero-agents">
+          <span>NATIVE HOOK ADAPTERS</span>
+          <strong>Claude Code</strong>
+          <i></i>
+          <strong>Codex</strong>
+          <i></i>
+          <strong>Hermes</strong>
+          <i></i>
+          <strong>Gemini CLI</strong>
+        </div>
+        <p class="small-note">
+          Plus Cursor, Copilot CLI and experimental Cowork. Seven native adapters,
+          with <a href={href("telemetry/")}>eleven observation-only telemetry sources</a>.
+          Coverage depends on the client and event; Cowork Desktop/VM execution remains unvalidated.
+        </p>
+      </div>
+      <div
+        class="event-console"
+        aria-label="Illustrative synthetic hook events"
+      >
+        <div class="console-head">
+          <span class="console-dots">
+            <i></i>
+            <i></i>
+            <i></i>
+          </span>
+          <span>agent-lens / events.jsonl</span>
+          <span class="mono-chip">DEMO</span>
+        </div>
+        <div class="console-status">
+          <span>
+            <span class="signal-dot"></span> TOOL ACTIVITY
+          </span>
+          <span>SYNTHETIC REPLAY</span>
+        </div>
+        <div class="event-row">
+          <span class="event-time">12:04:21</span>
+          <span class="event-icon allow">
+            <Icon name="check" size={17} />
+          </span>
+          <div>
+            <strong>
+              Read <span>src/main.rs</span>
+            </strong>
+            <small>claude · PreToolUse</small>
+          </div>
+          <span class="decision allow">allow</span>
+        </div>
+        <div class="event-row selected">
+          <span class="event-time">12:04:22</span>
+          <span class="event-icon block">
+            <Icon name="shield" size={17} />
+          </span>
+          <div>
+            <strong>
+              Write <span>.env.local</span>
+            </strong>
+            <small>claude · PreToolUse</small>
+          </div>
+          <span class="decision block">block</span>
+        </div>
+        <div class="console-detail">
+          <span class="code-comment">
+            // a rule match, with content omitted
+          </span>
+          <code>
+            <span class="syntax-key">"matched_rules"</span>: [
+            <span class="syntax-string">"protect-env-files"</span>],
+            <br />
+            <span class="syntax-key">"enforcement"</span>:{" "}
+            <span class="syntax-string">"supported"</span>
+          </code>
+        </div>
+        <div class="event-row">
+          <span class="event-time">12:04:23</span>
+          <span class="event-icon audit">
+            <Icon name="lens" size={17} />
+          </span>
+          <div>
+            <strong>
+              Read <span>.env</span>
+            </strong>
+            <small>codex · PostToolUse</small>
+          </div>
+          <span class="decision audit">would_block</span>
+        </div>
+        <div class="console-foot">
+          <span>
+            <i></i> LOCAL JSONL
+          </span>
+          <span>METADATA FIRST. CONTENT OPT-IN.</span>
+        </div>
+      </div>
+    </section>
+    <div class="metrics" aria-label="Project at a glance">
+      <div>
+        <strong>
+          {ruleCount}
+          <span> / YAML rules</span>
+        </strong>
+        <p>5 defaults + 25 optional recipes</p>
+      </div>
+      <div>
+        <strong>
+          7<span> / native adapters</span>
+        </strong>
+        <p>Client and event coverage varies</p>
+      </div>
+      <div>
+        <strong>
+          3<span> / desktop platforms</span>
+        </strong>
+        <p>Windows · Linux · macOS</p>
+      </div>
+      <div>
+        <strong>
+          Apache 2.0<span> / open source</span>
+        </strong>
+        <p>Local collection. No hosted backend.</p>
+      </div>
+    </div>
+    <section class="section" aria-labelledby="flow-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">FOLLOW THE ACTION</p>
+          <h2 id="flow-title">
+            From tool request to
+            <br />
+            defender evidence.
+          </h2>
+        </div>
+        <p>
+          Understand the decision at the hook boundary, then carry that context
+          into your investigation.
+        </p>
+      </div>
+      <div class="flow-grid">
+        {[
+          [
+            "01",
+            "terminal",
+            "Observe the request",
+            "An installed agent hook launches AI Lens with a native JSON callback.",
+          ],
+          [
+            "02",
+            "code",
+            "Evaluate your policy",
+            "Explicit tool, path, and content selectors match the original input.",
+          ],
+          [
+            "03",
+            "shield",
+            "Return a decision",
+            "Supported pre-tool hooks can request denial. Post-tool matches stay observational.",
+          ],
+          [
+            "04",
+            "layers",
+            "Keep the evidence",
+            "One event per JSONL line, ready for your existing log shipper and SIEM.",
+          ],
+        ].map(([number, icon, title, text]) => (
+          <article class="flow-card">
+            <div class="card-top">
+              <Icon name={icon} size={24} />
+              <span>{number}</span>
+            </div>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section
+      class="section catalog-section"
+      id="catalog"
+      aria-labelledby="catalog-title"
+    >
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">READ IT. QUESTION IT. ADAPT IT.</p>
+          <h2 id="catalog-title">
+            A small policy catalog.
+            <br />A practical starting point.
+          </h2>
+        </div>
+        <a class="text-link" href={href("rules/#packs")}>
+          Open rule reference <Icon name="arrow" size={16} />
+        </a>
+      </div>
+      <div class="catalog-grid">
+        {packs.map((pack) => (
+          <a class="catalog-card" href={href(`rules/#${pack.slug}`)}>
+            <div class="card-top">
+              <span class="pack-number">{pack.number}</span>
+              <span class="rule-count">{pack.count} RULES</span>
+            </div>
+            <span class="card-category">{pack.category}</span>
+            <h3>
+              {pack.title}
+              <Icon name="arrow" size={17} />
+            </h3>
+            <p>{pack.description}</p>
+          </a>
+        ))}
+      </div>
+      <p class="section-note">
+        One policy file is loaded at a time. Optional packs are selected
+        explicitly; combine chosen rule lists manually.
+      </p>
+    </section>
+    <section class="section evidence-section" aria-labelledby="evidence-title">
+      <div>
+        <p class="eyebrow">USE THE TOOLS YOU ALREADY HAVE</p>
+        <h2 id="evidence-title">
+          Readable events.
+          <br />
+          <span>Useful context.</span>
+        </h2>
+        <p>
+          Agent, tool, phase, matched rules, and enforcement support travel
+          together. Raw prompts and tool content stay out of normal collection
+          by default.
+        </p>
+        <a class="text-link" href={href("getting-started/#evidence")}>
+          Take JSONL into your SIEM <Icon name="arrow" size={16} />
+        </a>
+      </div>
+      <div>
+        <CodeBlock
+          code={event}
+          lang="json"
+          label="Illustrative event · content omitted"
+        />
+        <div class="evidence-tags">
+          <span>allow</span>
+          <span>block</span>
+          <span>would_block</span>
+        </div>
+      </div>
+    </section>
+    <aside class="boundary-note">
+      <Icon name="shield" size={26} />
+      <div>
+        <h3>A hook decision is one piece of the defense.</h3>
+        <p>
+          AI Lens is an educational project, not an OS sandbox. Prevention
+          depends on a supported callback and a client that honors it. Keep
+          agent approvals and OS controls in place; verify outcomes through your
+          actual client.
+        </p>
+      </div>
+    </aside>
+    <section class="closing-cta">
+      <div>
+        <p class="eyebrow">BUILD YOUR UNDERSTANDING</p>
+        <h2>
+          Start with a demo.
+          <br />
+          Follow the evidence.
+        </h2>
+      </div>
+      <div>
+        <a class="button primary" href={href("getting-started/#demo")}>
+          Run the local demo <Icon name="arrow" size={17} />
+        </a>
+        <a class="text-link" href={source("CONTRIBUTING.md")}>
+          Help improve the project <Icon name="external" size={15} />
+        </a>
+      </div>
+    </section>
+  </div>
+</Layout>

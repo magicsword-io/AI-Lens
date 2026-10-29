@@ -1,0 +1,9 @@
+{
+  "hook_event_name": "pre_tool_call",
+  "session_id": "synthetic-hermes-session",
+  "cwd": "/workspace/example",
+  "profile": "default",
+  "tool_name": "terminal",
+  "tool_input": {"command": "cat .env"},
+  "extra": {"task_id": "synthetic-task", "tool_call_id": "synthetic-tool-3"}
+}

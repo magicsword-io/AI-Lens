@@ -1,0 +1,25 @@
+{
+  "review_only": true,
+  "source": "claude-cowork-otel",
+  "template_kind": "manual_admin_ui_worksheet_not_a_vendor_configuration_schema",
+  "retrieved": "2026-10-29",
+  "official_documentation": "https://claude.com/docs/cowork/monitoring",
+  "admin_location": "Admin settings > Cowork (Monitoring placement may vary by admin-console version)",
+  "fields_to_enter_manually": {
+    "OTLP endpoint": "https://collector.example.com:14318",
+    "OTLP protocol": "http/protobuf"
+  },
+  "authentication": "Configure OTLP headers using the collector's approved secret outside this file.",
+  "device_policy_to_review_separately": {
+    "otlpContentCapture": []
+  },
+  "notes": [
+    "Team or Enterprise plan; an authorized admin configures monitoring.",
+    "Deploy the content policy through approved device management, not this JSON worksheet; restart Desktop to apply it.",
+    "Start a new Cowork session after saving collector settings.",
+    "The exporter runs in the Cowork runtime. Its loopback is not the host running Agent Lens.",
+    "Use an authenticated reachable collector; forward from that collector to same-host Lens --source claude-cowork-otel.",
+    "Code tab and terminal Claude Code require their own telemetry configuration.",
+    "Email, connected-folder paths and API error messages can still appear with content capture off."
+  ]
+}

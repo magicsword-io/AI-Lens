@@ -1,0 +1,11 @@
+{
+  "sessionId": "synthetic-copilot-session",
+  "timestamp": 1793232000000,
+  "cwd": "/synthetic/work",
+  "transcriptPath": "/synthetic/transcript.json",
+  "agentId": "synthetic-child",
+  "agentType": "explore",
+  "agentName": "explore",
+  "response": "SYNTHETIC_RESPONSE",
+  "stopReason": "end_turn"
+}

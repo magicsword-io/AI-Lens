@@ -1,0 +1,16 @@
+{
+  "conversation_id": "synthetic-cursor-session",
+  "generation_id": "synthetic-generation",
+  "cursor_version": "synthetic",
+  "workspace_roots": [
+    "/synthetic/work"
+  ],
+  "user_email": null,
+  "transcript_path": null,
+  "session_id": "synthetic-cursor-session",
+  "reason": "completed",
+  "duration_ms": 1000,
+  "is_background_agent": false,
+  "final_status": "completed",
+  "hook_event_name": "sessionEnd"
+}

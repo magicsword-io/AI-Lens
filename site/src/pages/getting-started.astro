@@ -1,0 +1,394 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
+import CodeBlock from "../components/CodeBlock.astro";
+import { href, source, repository } from "../data/project";
+const windowsDemo = `.\\agent-lens.exe rules-check --rules .\\examples\\rules\\default.yaml
+.\\agent-lens.exe demo --output .\\demo.jsonl
+Get-Content .\\demo.jsonl`;
+const posixDemo = `./agent-lens rules-check --rules ./examples/rules/default.yaml
+./agent-lens demo --output ./demo.jsonl
+cat ./demo.jsonl`;
+const windowsStart = `$lensState = Join-Path $PWD 'lens-state'
+$lensOutput = Join-Path $PWD 'events.jsonl'
+$lensRules = Join-Path $PWD 'examples\\rules\\default.yaml'
+.\\agent-lens.exe --state $lensState start --output $lensOutput --rules $lensRules
+.\\agent-lens.exe --state $lensState config --agent claude --shell powershell
+.\\agent-lens.exe --state $lensState status`;
+const posixStart = `lens_state="$PWD/lens-state"
+./agent-lens --state "$lens_state" start \\
+  --output "$PWD/events.jsonl" \\
+  --rules "$PWD/examples/rules/default.yaml"
+./agent-lens --state "$lens_state" config --agent claude
+./agent-lens --state "$lens_state" status`;
+---
+
+<Layout
+  title="Getting started — AI Lens"
+  active="start"
+  description="Build AI Lens for Windows, Linux, or macOS. Run the synthetic demo, review native hook configuration, and collect local JSONL events."
+>
+  <div class="container">
+    <header class="page-intro">
+      <p class="eyebrow">FIELD GUIDE / 01</p>
+      <h1>
+        Get a clearer view.
+        <br />
+        <span>Start locally.</span>
+      </h1>
+      <p>
+        Run a synthetic demo first. Then connect a supported agent, review its
+        hooks, and verify what reaches your event stream.
+      </p>
+    </header>
+    <div class="docs-layout">
+      <aside class="toc" aria-label="On this page">
+        <span>ON THIS PAGE</span>
+        <a href="#downloads">01 / Build locally</a>
+        <a href="#demo">02 / Run the demo</a>
+        <a href="#connect">03 / Connect an agent</a>
+        <a href="#gemini">Gemini CLI</a>
+        <a href="#evidence">04 / Collect evidence</a>
+        <a href="#stop">05 / Stop collection</a>
+        <a href="#source">Build from source</a>
+      </aside>
+      <div class="docs-content">
+        <section class="doc-section" id="downloads">
+          <p class="eyebrow">01 / LOCAL BUILD</p>
+          <h2>Build for your platform.</h2>
+          <p>
+            Build AI Lens from source on Windows, Linux, or macOS. The command
+            remains <code>agent-lens</code> for compatibility. Build both the CLI
+            and its engine, then package them together.
+          </p>
+          <a class="button primary" href="#source">Build from source <Icon name="arrow" size={17} /></a>
+          <div class="callout">
+            <strong>Seven native adapters. Eleven telemetry sources.</strong>
+            <p>Claude Code, Codex, Hermes, Gemini CLI, Cursor, Copilot CLI and experimental Cowork
+              use native hooks. <a href={href("telemetry/#native")}>Review client setup and limits</a>.
+              OTLP and provider audit ingestion are observation-only.
+              Cowork Desktop/VM execution remains unvalidated. Antigravity is unsupported.</p>
+          </div>
+          <p>
+            Packages contain an executable and adjacent engine library:
+            <code>agent_lens_engine.dll</code> on Windows,
+            <code>libagent_lens_engine.so</code> on Linux, and
+            <code>libagent_lens_engine.dylib</code> on macOS.
+            Run <code>python3 scripts/package.py</code> after building to create a local ZIP.
+          </p>
+          <p class="small-note">Release assets for this repository are not published yet. Start with the source build below.</p>
+        </section>
+        <section class="doc-section" id="demo">
+          <p class="eyebrow">02 / NO AGENT ACCOUNT NEEDED</p>
+          <h2>Make the first event synthetic.</h2>
+          <p>
+            From the extracted package folder, validate the default policy and
+            run the demo. It appends five synthetic events; it does not install
+            hooks or execute the illustrated tool operations.
+          </p>
+          <details class="command-details" open>
+            <summary>Windows · PowerShell</summary>
+            <CodeBlock
+              code={windowsDemo}
+              lang="powershell"
+              label="PowerShell · extracted package"
+            />
+          </details>
+          <details class="command-details" open>
+            <summary>Linux & macOS · POSIX shell</summary>
+            <CodeBlock code={posixDemo} label="Shell · extracted package" />
+          </details>
+          <p>
+            Demo events include <code>synthetic: true</code> and redacted sample
+            content. Normal collection omits raw prompts and tool content by
+            default. Reusing the output file appends another five records.
+          </p>
+        </section>
+        <section class="doc-section" id="connect">
+          <p class="eyebrow">03 / MANUAL CONFIGURATION</p>
+          <h2>Connect an agent deliberately.</h2>
+          <p>
+            Use one absolute state path in both management commands and
+            generated hooks. Output and rule paths below resolve from the
+            extracted package folder; the output parent must already exist.
+          </p>
+          <p>
+            AI Lens does not detect running agents or install settings. You
+            choose the project or user configuration file and merge the printed
+            entries yourself. No Claude or Codex executable path is needed: the
+            agent invokes the absolute AI Lens command printed by{" "}
+            <code>config</code>. Review hook approval and workspace trust in
+            your client; generated configuration does not bypass consent.
+          </p>
+          <details class="command-details" open>
+            <summary>Windows · PowerShell</summary>
+            <CodeBlock
+              code={windowsStart}
+              lang="powershell"
+              label="PowerShell · start and print configuration"
+            />
+          </details>
+          <details class="command-details">
+            <summary>Linux & macOS · POSIX shell</summary>
+            <CodeBlock
+              code={posixStart}
+              label="Shell · start and print configuration"
+            />
+          </details>
+          <div class="callout">
+            <strong>
+              <code>config</code> prints. You review and merge.
+            </strong>
+            <p>
+              It does not edit settings, approve trust, or start the agent.
+              Preserve existing hook entries and follow the agent's own reload
+              and consent requirements.
+            </p>
+          </div>
+          <div class="integration-list">
+            <article>
+              <span class="integration-label">CLAUDE CODE</span>
+              <h3>Merge into the settings hooks.</h3>
+              <p>
+                Use <code>--agent claude</code>. Review the generated{" "}
+                <code>hooks</code> object for <code>.claude/settings.json</code>{" "}
+                or your user settings. On Windows, the command above requests
+                PowerShell quoting.
+              </p>
+            </article>
+            <article>
+              <span class="integration-label">CODEX</span>
+              <h3>Review native hooks JSON.</h3>
+              <p>
+                Run the same config command with <code>--agent codex</code>.
+                Merge its entries into <code>.codex/hooks.json</code> or{" "}
+                <code>~/.codex/hooks.json</code>; review the definitions through
+                the client's hook interface.
+              </p>
+            </article>
+            <article>
+              <span class="integration-label">HERMES</span>
+              <h3>Use native synchronous shell hooks.</h3>
+              <p>
+                Use <code>--agent hermes</code>. Merge the generated mapping
+                into the profile's <code>config.yaml</code>. Hermes uses native
+                argv quoting on each OS, independently of <code>--shell</code>;
+                do not add PowerShell's <code>&amp;</code> operator. Complete
+                Hermes's hook consent normally.
+              </p>
+            </article>
+            <article>
+              <span class="integration-label">GEMINI CLI</span>
+              <h3>Merge native settings hooks.</h3>
+              <p>
+                Use <code>--agent gemini</code>. Merge the
+                generated hooks into <code>~/.gemini/settings.json</code> or a
+                trusted project's <code>.gemini/settings.json</code>. Follow the
+                <a href="#gemini">Gemini registration steps below</a>.
+              </p>
+            </article>
+          </div>
+          <p>
+            Claude/Codex prevention covers supported <code>PreToolUse</code> and{" "}
+            <code>PermissionRequest</code> events. Hermes uses{" "}
+            <code>pre_tool_call</code>; Gemini CLI uses <code>BeforeTool</code>.
+            Verify your installed client/version and
+            the exact tool surface in the{" "}
+            <a href={source("docs/agents.md")}>adapter coverage notes</a>.
+          </p>
+          <p>
+            Register hooks where the tools execute. A local hook does not cover
+            a separate cloud runner. Test an allowed call and a denied, harmless
+            side effect through your actual client. <code>status</code> reports
+            local state; it does not probe agent registration or event delivery.
+          </p>
+        </section>
+        <section class="doc-section" id="gemini">
+          <p class="eyebrow">FOURTH ADAPTER / GEMINI CLI</p>
+          <h2>Register Gemini's native hooks.</h2>
+          <p>
+            Build and extract a local package, then run these commands from its directory.
+            Keep the executable beside its engine library. You can also
+            <a href="#source">build and package the source</a> yourself.
+          </p>
+          <CodeBlock
+            code={`lens_state="$PWD/lens-state"
+./agent-lens --state "$lens_state" start \\
+  --output "$PWD/events.jsonl" --rules "$PWD/examples/rules/default.yaml"
+./agent-lens --state "$lens_state" config --agent gemini`}
+            label="Gemini CLI · Linux & macOS package"
+          />
+          <CodeBlock
+            code={`$lensState = Join-Path $PWD 'lens-state'
+$lensOutput = Join-Path $PWD 'events.jsonl'
+$lensRules = Join-Path $PWD 'examples\\rules\\default.yaml'
+.\\agent-lens.exe --state $lensState start --output $lensOutput --rules $lensRules
+.\\agent-lens.exe --state $lensState config --agent gemini`}
+            lang="powershell"
+            label="Gemini CLI · Windows package"
+          />
+          <ol class="numbered-list">
+            <li>
+              <strong>Review and merge the printed hooks.</strong>
+              <p>
+                Use <code>~/.gemini/settings.json</code> or the trusted project's
+                <code>.gemini/settings.json</code>. Preserve existing settings
+                and hook entries. Each generated command has a timeout of
+                <code>10000</code> milliseconds, or ten seconds.
+              </p>
+            </li>
+            <li>
+              <strong>Review the registration in Gemini CLI.</strong>
+              <p>
+                Open the intended workspace and use <code>/hooks panel</code>.
+                Complete native project-hook review and any workspace trust
+                prompts; changed project hooks may need review again. Agent
+                Lens does not install Gemini, configure it automatically, or
+                change trust and permissions.
+              </p>
+            </li>
+            <li>
+              <strong>Check an allowed and a denied harmless call.</strong>
+              <p>
+                Inspect both the actual side effect and the JSONL. A printed
+                config or Lens <code>status</code> does not confirm registration.
+                Local replay and offline dispatcher checks do not establish an
+                authenticated Google live-client result.
+              </p>
+            </li>
+          </ol>
+          <p>
+            The inspected Gemini CLI 0.66.0 runtime shell helper selects
+            PowerShell on Windows and <code>bash -c</code> on Unix. This describes
+            runtime components, not verified whole-client compatibility. AI Lens selects native quoting
+            independently of <code>--shell</code>. Its nine events are
+            <code>BeforeTool</code>, <code>AfterTool</code>, <code>BeforeAgent</code>,
+            <code>AfterAgent</code>, <code>BeforeToolSelection</code>,
+            <code>SessionStart</code>, <code>SessionEnd</code>,
+            <code>Notification</code>, and <code>PreCompress</code>.
+          </p>
+          <p>
+            <code>SessionEnd</code> delivery is best effort: upstream shutdown
+            does not wait for the hook, so its callback may be lost. Configuring
+            all nine events does not guarantee that every event will be observed
+            in a live session.
+          </p>
+          <p>
+            Only <code>BeforeTool</code> is enforceable: AI Lens replies with
+            <code>decision: "deny"</code> and a generic <code>reason</code> for
+            a block. Other matches produce <code>would_block</code> and a neutral
+            response; no completed action is undone. <code>BeforeModel</code>
+            and <code>AfterModel</code> are excluded to avoid model-request and
+            response-chunk overhead. Antigravity is not supported.
+          </p>
+          <div class="callout">
+            <strong>Whole-client compatibility remains unverified.</strong>
+            <p>
+              The pinned 0.66.0 native check exercises the unmodified vendor
+              runtime/tool seam, including the full <code>HookSystem</code>, with
+              a minimal Config facade and explicitly fired events. It excludes
+              actual CLI settings loading, trust/consent, and provider sessions.
+              The check is configured in CI for Linux, Windows, and macOS; see
+              the <a href={source("docs/verification.md")}>verification record</a>
+              and workflow results for observed outcomes. This is not an
+              authenticated Google live-client claim.
+            </p>
+          </div>
+          <p>
+            Direct path rules cover native <code>file_path</code> arguments in
+            <code>read_file</code>, <code>write_file</code>, and <code>replace</code>.
+            They do not interpret <code>read_many_files</code> include globs or
+            expand them into file paths; that tool is outside this coverage.
+          </p>
+          <p>
+            Read the <a href="https://geminicli.com/docs/hooks/reference/">official hook reference</a>,
+            <a href="https://geminicli.com/docs/hooks/">configuration and hook review</a>,
+            <a href="https://geminicli.com/docs/cli/trusted-folders/">workspace trust guidance</a>,
+            and <a href={source("docs/agents.md")}>adapter coverage notes</a>.
+          </p>
+        </section>
+        <section class="doc-section" id="evidence">
+          <p class="eyebrow">04 / JSONL TO YOUR WORKFLOW</p>
+          <h2>Take the context with you.</h2>
+          <p>
+            Normal events contain the agent, native hook/tool identifiers when
+            present, phase, decision, matched rule IDs, and enforcement support.
+            Configure your existing collector to tail <code>events.jsonl</code>{" "}
+            and parse one JSON object per line.
+          </p>
+          <CodeBlock
+            code={`index=agent_lens sourcetype=agent_lens:jsonl decision=block
+| stats count by agent, tool_name`}
+            lang="text"
+            label="Splunk · after collector field mapping"
+          />
+          <p>
+            <code>block</code> records the denial AI Lens requested. Confirm
+            actual prevention independently. <code>would_block</code> is
+            observational and never means an action was undone. Exclude{" "}
+            <code>synthetic: true</code> demo events from live activity counts.
+          </p>
+          <div class="callout">
+            <strong>Keep collection metadata first.</strong>
+            <p>
+              <code>start --capture-content</code> enables content capture after
+              best-effort redaction. Redaction can miss secrets. Even metadata
+              can be sensitive; you own permissions, retention, rotation, and
+              forwarding.
+            </p>
+          </div>
+          <p>
+            AI Lens provides no network shipper, delivery acknowledgment, or
+            tamper-evident audit trail. Add trusted host identity at the
+            collector and consult the{" "}
+            <a href={source("docs/siem.md")}>SIEM mapping and query guide</a>.
+          </p>
+        </section>
+        <section class="doc-section" id="stop">
+          <p class="eyebrow">05 / CLOSE THE LOOP</p>
+          <h2>Stop collection with the same state.</h2>
+          <CodeBlock
+            code={`.\\agent-lens.exe --state $lensState stop`}
+            lang="powershell"
+            label="Windows · PowerShell"
+          />
+          <CodeBlock
+            code={'./agent-lens --state "$PWD/lens-state" stop'}
+            label="Linux & macOS · shell"
+          />
+          <p>
+            This disables collection and enforcement for that state directory.
+            It leaves prior events on disk and manually installed hook settings
+            in place. Remove those entries yourself when uninstalling; stop
+            collection before moving its output file.
+          </p>
+        </section>
+        <section class="doc-section" id="source">
+          <p class="eyebrow">ALTERNATIVE / BUILD IT YOURSELF</p>
+          <h2>Build from source.</h2>
+          <p>
+            Use current stable Rust. Python 3.9+ is needed for the repository's
+            checks and packaging, not to run the application. Older Rust
+            toolchains are not validated.
+          </p>
+          <CodeBlock
+            code={`git clone ${repository}.git
+cd AI-Lens
+cargo build --locked --workspace --release
+python3 scripts/package.py`}
+            label="Source build · POSIX shell"
+          />
+          <p>
+            On Windows, use your Python 3 command in place of{" "}
+            <code>python3</code>. The ZIP and manifest appear in{" "}
+            <code>dist/</code>. Build both workspace crates so the executable
+            has its adjacent dynamic engine library.
+          </p>
+          <a class="button secondary" href={href("rules/")}>
+            Understand the policy schema <Icon name="arrow" size={17} />
+          </a>
+        </section>
+      </div>
+    </div>
+  </div>
+</Layout>

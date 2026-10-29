@@ -1,0 +1,163 @@
+{
+  "date": "2026-10-28",
+  "host": "Linux x86_64, Amazon Linux 2023, Conductor cloud VM",
+  "artifact": {
+    "release": "v0.1.0",
+    "source_commit": "3d56fed43d7505fde7ca41b946bac9436a84e586",
+    "archive": "agent-lens-0.1.0-linux-x86_64.zip",
+    "sha256": "2d48df452ea086b725c47a209f6109d426049b4b264ed723acb5bcdd444ee9a9"
+  },
+  "runner_sha256": "11290e89a9dd3c9c9b81686860a71078f62e587c2d7f99af16e7e42d5b462d83",
+  "scope": "Real client execution, default policy, allowed synthetic file write and denied synthetic .env write; no raw transcripts or session identifiers",
+  "reports": [
+    {
+      "agent": "codex",
+      "model": "gpt-5.4",
+      "platform": "Linux-6.18.49-x86_64-with-glibc2.34",
+      "binary_sha256": "4cba4d3530f984e5744885eeafe4c1db347fb4660a4ea6bed94cb53a3c94e836",
+      "library_sha256": "4b44a5205577ebf780bfdf2169741e7adad4ae3a4f3ffd3170eb13625829842a",
+      "policy_sha256": "fe290de4bc52d4b1a618d0cdc8122bc54135cd2746f25a36bd96fe9447f54cb2",
+      "policy": "examples/rules/default.yaml",
+      "sandbox": "workspace-write",
+      "drop_linux_caps": true,
+      "runs": [
+        {
+          "result": "PASS",
+          "exit_code": 0,
+          "consent": "reviewed generated commands; invocation-only --dangerously-bypass-hook-trust",
+          "checks": {
+            "client_exit_zero": true,
+            "positive_control_exact_content": true,
+            "denied_file_absent": true,
+            "one_allowed_native_tool_call": true,
+            "one_denied_native_tool_call": true,
+            "only_two_pre_tool_calls": true,
+            "post_tool_observed": true,
+            "session_start_observed": true,
+            "session_end_observed": true,
+            "one_native_session": true,
+            "native_tool_attribution": true,
+            "metadata_only": true,
+            "native_agent_attribution": true
+          },
+          "events": 7,
+          "event_counts": {
+            "SessionStart": 1,
+            "UserPromptSubmit": 1,
+            "PreToolUse": 2,
+            "PostToolUse": 1,
+            "Stop": 1,
+            "SessionEnd": 1
+          },
+          "diagnostics": []
+        }
+      ],
+      "result": "PASS",
+      "runner_sha256": "11290e89a9dd3c9c9b81686860a71078f62e587c2d7f99af16e7e42d5b462d83",
+      "started_at": "2026-10-28T23:55:28.611413+00:00",
+      "failure_reasons": [],
+      "cleanup": {
+        "host_stopped": true
+      },
+      "client_version": "codex-cli 0.164.0",
+      "hooks_sha256": "a554d92f5d1f7c043f773c0df28e5f533c339718b53eb8061ce60c51191c436f",
+      "finished_at": "2026-10-28T23:55:37.773988+00:00",
+      "events_sha256": "4fd952d85a91d214f9aa3942c752bfce5d04265bf929a95750ee79024a1d5b41"
+    },
+    {
+      "agent": "hermes",
+      "model": "gpt-5.4-mini",
+      "platform": "Linux-6.18.49-x86_64-with-glibc2.34",
+      "binary_sha256": "4cba4d3530f984e5744885eeafe4c1db347fb4660a4ea6bed94cb53a3c94e836",
+      "library_sha256": "4b44a5205577ebf780bfdf2169741e7adad4ae3a4f3ffd3170eb13625829842a",
+      "policy_sha256": "fe290de4bc52d4b1a618d0cdc8122bc54135cd2746f25a36bd96fe9447f54cb2",
+      "policy": "examples/rules/default.yaml",
+      "sandbox": "native file toolset",
+      "drop_linux_caps": false,
+      "runs": [
+        {
+          "result": "PASS",
+          "exit_code": 0,
+          "consent": "--accept-hooks",
+          "checks": {
+            "client_exit_zero": true,
+            "positive_control_exact_content": true,
+            "denied_file_absent": true,
+            "one_allowed_native_tool_call": true,
+            "one_denied_native_tool_call": true,
+            "only_two_pre_tool_calls": true,
+            "post_tool_observed": true,
+            "session_start_observed": true,
+            "session_end_observed": true,
+            "one_native_session": true,
+            "native_tool_attribution": true,
+            "metadata_only": true,
+            "native_agent_attribution": true
+          },
+          "events": 17,
+          "event_counts": {
+            "on_session_start": 1,
+            "pre_llm_call": 1,
+            "pre_api_request": 3,
+            "pre_auxiliary_call": 1,
+            "post_auxiliary_call": 1,
+            "post_api_request": 3,
+            "pre_tool_call": 2,
+            "post_tool_call": 2,
+            "post_llm_call": 1,
+            "on_session_end": 1,
+            "on_session_finalize": 1
+          },
+          "diagnostics": []
+        },
+        {
+          "result": "PASS",
+          "exit_code": 0,
+          "consent": "native persisted consent; no acceptance flag",
+          "checks": {
+            "client_exit_zero": true,
+            "positive_control_exact_content": true,
+            "denied_file_absent": true,
+            "one_allowed_native_tool_call": true,
+            "one_denied_native_tool_call": true,
+            "only_two_pre_tool_calls": true,
+            "post_tool_observed": true,
+            "session_start_observed": true,
+            "session_end_observed": true,
+            "one_native_session": true,
+            "native_tool_attribution": true,
+            "metadata_only": true,
+            "native_agent_attribution": true
+          },
+          "events": 17,
+          "event_counts": {
+            "on_session_start": 1,
+            "pre_llm_call": 1,
+            "pre_auxiliary_call": 1,
+            "pre_api_request": 3,
+            "post_auxiliary_call": 1,
+            "post_api_request": 3,
+            "pre_tool_call": 2,
+            "post_tool_call": 2,
+            "post_llm_call": 1,
+            "on_session_end": 1,
+            "on_session_finalize": 1
+          },
+          "diagnostics": []
+        }
+      ],
+      "result": "PASS",
+      "runner_sha256": "11290e89a9dd3c9c9b81686860a71078f62e587c2d7f99af16e7e42d5b462d83",
+      "started_at": "2026-10-28T23:55:29.849083+00:00",
+      "failure_reasons": [],
+      "cleanup": {
+        "gateway_stopped": true,
+        "host_stopped": true
+      },
+      "client_version": "Hermes Agent v0.22.5+2471.g0c74cc6 (2026.9.24) \u00b7 stable \u00b7 local 0c74cc682dc8",
+      "hooks_sha256": "e6f85b5be1d8e0adb0919aa7b2ebb42da5d82d59fc97cbe2b3343c6a125061d8",
+      "finished_at": "2026-10-28T23:55:56.900039+00:00",
+      "events_sha256": "eb052a0404e4bac2558b14b36ef384ca484bb505a9a3957a4bddec5789fa5964"
+    }
+  ]
+}

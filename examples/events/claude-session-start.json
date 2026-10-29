@@ -1,0 +1,6 @@
+{
+  "hook_event_name": "SessionStart",
+  "session_id": "synthetic-claude-session",
+  "cwd": "/workspace/example",
+  "source": "startup"
+}

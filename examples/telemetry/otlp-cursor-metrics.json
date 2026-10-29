@@ -1,0 +1,48 @@
+{
+  "_fixture": "SYNTHETIC: invented vendor-shaped protocol example; not a captured live session.",
+  "resourceMetrics": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "cursor"
+            }
+          }
+        ]
+      },
+      "scopeMetrics": [
+        {
+          "scope": {
+            "name": "cursor.telemetry"
+          },
+          "metrics": [
+            {
+              "name": "cursor.token.usage",
+              "unit": "{token}",
+              "sum": {
+                "aggregationTemporality": 1,
+                "isMonotonic": true,
+                "dataPoints": [
+                  {
+                    "timeUnixNano": "1793275200000000000",
+                    "asInt": "24",
+                    "attributes": [
+                      {
+                        "key": "cursor.token.type",
+                        "value": {
+                          "stringValue": "input"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

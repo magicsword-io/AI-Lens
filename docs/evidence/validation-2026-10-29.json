@@ -1,0 +1,513 @@
+{
+  "date": "2026-10-29",
+  "production_source_revision": "27a74aa8248a655c92b5a9e2a575eaef9a358b83",
+  "scope": "Cooperative local hooks and observation-only transports; experimental surfaces retain their stated limits.",
+  "runtime_source_unchanged_since_production_revision": true,
+  "registry_events": {
+    "claude": 27,
+    "codex": 12,
+    "hermes": 22,
+    "gemini": 9,
+    "cursor": 11,
+    "copilot": 12,
+    "cowork": 5
+  },
+  "native_registry_replay": {
+    "macos": {
+      "status": "PASS",
+      "source_commit": "27a74aa8248a655c92b5a9e2a575eaef9a358b83",
+      "platform": "darwin",
+      "evidence_level": "synthetic complete documented registry, generated host shell/argv launchers; no installed vendor client",
+      "binary_sha256": "f8e02c6c8b3586430e9ea18d5f456a21e058b1e699070987435f2f5689c847f4",
+      "events": 98,
+      "assertions": 399,
+      "os": "macOS15.7.7",
+      "build": "24G720",
+      "architecture": "arm64",
+      "artifact_architecture": "aarch64",
+      "report": "macos-all-callbacks.json",
+      "report_sha256": "10172f2549ab538654c7fb3a40561efa950e3a3b2e7961ebee12e9ccc04eff75",
+      "library_sha256": "22fabb0b68ea50ebf17d6588abd95efd3d7240082021494e88dbbfe6bc55d4e5",
+      "library_provenance": "macos-native-hooks-results.json",
+      "library_provenance_sha256": "bbb99cb01fdf5cd795286641f8ede943e5ee82afc8637883491f3422ca76cbb6"
+    },
+    "linux": {
+      "status": "PASS",
+      "source_commit": "27a74aa8248a655c92b5a9e2a575eaef9a358b83",
+      "platform": "linux",
+      "evidence_level": "synthetic complete documented registry, generated host shell/argv launchers; no installed vendor client",
+      "binary_sha256": "92deb830962ab6cf05ff309a1143c14b17c06f4f4f5d53fe45b094b2e8810108",
+      "events": 98,
+      "assertions": 399,
+      "os": "Ubuntu24.04.4",
+      "kernel": "7.0.0-28-generic",
+      "architecture": "aarch64",
+      "artifact_architecture": "aarch64",
+      "report": "linux-all-callbacks.json",
+      "report_sha256": "61b16cb2d2c63f39a516d78656286388d6596480a2b8e2e0518e6568fd3348f1",
+      "library_sha256": "57b89feae35cb696efdf075ac34aa04ab18750c02624173b87747f96ce365756",
+      "library_provenance": "linux-native-hooks-results.json",
+      "library_provenance_sha256": "fba082184cba5b0e3849fe741f6fbb61423933bb70cc21af073f9e47d48ea5fd"
+    },
+    "windows": {
+      "status": "PASS",
+      "source_commit": "27a74aa8248a655c92b5a9e2a575eaef9a358b83",
+      "platform": "win32",
+      "evidence_level": "synthetic complete documented registry, generated host shell/argv launchers; no installed vendor client",
+      "binary_sha256": "bb567d7dc9a87fe9fcb240128d74bd38dbdc4536858849d05456ca836c943028",
+      "events": 98,
+      "assertions": 399,
+      "os": "Windows11",
+      "build": "10.0.26200.9168",
+      "architecture": "ARM64",
+      "artifact_architecture": "x86_64-emulated",
+      "report": "windows-all-callbacks.json",
+      "report_sha256": "7e1dd30a5e817f39f3e79e8089c20da8160653064790216ececab536e91416b4",
+      "library_sha256": "470a5fbd468b44281a84dff2df6c8fed0208d01a738263be7b76707af92cb3f3",
+      "library_provenance": "windows-native-hooks-results.json",
+      "library_provenance_sha256": "684aea884bf1a6e8f563aa4e520d2e49b3016de8b26e238ae4c6b219f3cb4e6d"
+    }
+  },
+  "live": {
+    "claude-macos": {
+      "agent": "claude",
+      "model": "claude-haiku-4-5",
+      "result": "PASS",
+      "started_at": "2026-10-29T15:24:57.039557+00:00",
+      "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+      "architecture": "arm64",
+      "binary_sha256": "778e531eda9f28866c0cbf4453c216f9f8efc4768a9e53e6a2ef7aca34581500",
+      "library_sha256": "c09bc66c7228b2d50ef74f75a7413273c4544c8a6abf3ade019b2922a8f486e4",
+      "client_sha256": "6b5ec691195e551b02c41df9f7d723f4ea61eaa03c2df90acefe3736f1aeb620",
+      "harness_sha256": "7ebec5f70c71cb25bb45e125bee9e46e4a2e56956fccbdb2541f8aee03187f5e",
+      "shared_harness_sha256": "11290e89a9dd3c9c9b81686860a71078f62e587c2d7f99af16e7e42d5b462d83",
+      "rules_sha256": "d6a3716cf20de19b85d4ca3ac8a0deeee12090645c55671d9cb521f738553ddc",
+      "policy_mutation": false,
+      "max_budget_usd": 0.5,
+      "timeout_seconds": 180,
+      "cleanup": {
+        "host_stopped": true,
+        "temporary_state_removed": true
+      },
+      "checks": {
+        "client_exit_zero": true,
+        "positive_control_exact_content": true,
+        "denied_file_absent": true,
+        "one_allowed_native_tool_call": true,
+        "one_denied_native_tool_call": true,
+        "only_two_pre_tool_calls": true,
+        "post_tool_observed": true,
+        "session_start_observed": true,
+        "session_end_observed": true,
+        "one_native_session": true,
+        "native_tool_attribution": true,
+        "metadata_only": true,
+        "native_agent_attribution": true,
+        "only_write_tool": true,
+        "denied_tool_has_no_success_post": true,
+        "allow_then_deny": true,
+        "client_json_success": true
+      },
+      "failure_reasons": [],
+      "source_revision": "27a74aa8248a655c92b5a9e2a575eaef9a358b83",
+      "client_version": "2.1.312",
+      "exit_code": 0,
+      "event_count": 9,
+      "event_counts": {
+        "SessionStart": 1,
+        "UserPromptSubmit": 1,
+        "PreToolUse": 2,
+        "PostToolUse": 1,
+        "PostToolBatch": 2,
+        "Stop": 1,
+        "SessionEnd": 1
+      },
+      "diagnostics": [],
+      "finished_at": "2026-10-29T15:25:04.241124+00:00",
+      "events_sha256": "2137066d77259968cbe83b952340f7cc2d78cf2c88f11668a290771544b047b8"
+    },
+    "codex-macos": {
+      "agent": "codex",
+      "model": "gpt-5.4-mini",
+      "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+      "binary_sha256": "f8e02c6c8b3586430e9ea18d5f456a21e058b1e699070987435f2f5689c847f4",
+      "library_sha256": "22fabb0b68ea50ebf17d6588abd95efd3d7240082021494e88dbbfe6bc55d4e5",
+      "policy_sha256": "d6a3716cf20de19b85d4ca3ac8a0deeee12090645c55671d9cb521f738553ddc",
+      "policy": "examples/rules/default.yaml",
+      "sandbox": "workspace-write",
+      "drop_linux_caps": false,
+      "runs": [
+        {
+          "result": "PASS",
+          "exit_code": 0,
+          "consent": "reviewed generated commands; invocation-only --dangerously-bypass-hook-trust",
+          "checks": {
+            "client_exit_zero": true,
+            "positive_control_exact_content": true,
+            "denied_file_absent": true,
+            "one_allowed_native_tool_call": true,
+            "one_denied_native_tool_call": true,
+            "only_two_pre_tool_calls": true,
+            "post_tool_observed": true,
+            "session_start_observed": true,
+            "session_end_observed": true,
+            "one_native_session": true,
+            "native_tool_attribution": true,
+            "metadata_only": true,
+            "native_agent_attribution": true
+          },
+          "events": 7,
+          "event_counts": {
+            "SessionStart": 1,
+            "UserPromptSubmit": 1,
+            "PreToolUse": 2,
+            "PostToolUse": 1,
+            "Stop": 1,
+            "SessionEnd": 1
+          },
+          "diagnostics": []
+        }
+      ],
+      "result": "PASS",
+      "runner_sha256": "11290e89a9dd3c9c9b81686860a71078f62e587c2d7f99af16e7e42d5b462d83",
+      "started_at": "2026-10-29T15:21:23.197551+00:00",
+      "failure_reasons": [],
+      "cleanup": {
+        "host_stopped": true
+      },
+      "client_version": "codex-cli 0.159.2",
+      "finished_at": "2026-10-29T15:21:43.092561+00:00",
+      "events_sha256": "cd897dd934b6f845b977908f63783c6c2dfbf2ff9faead05a137b70d0c19337b"
+    },
+    "live-claude-linux": {
+      "agent": "claude",
+      "model": "claude-haiku-4-5",
+      "result": "PASS",
+      "started_at": "2026-10-29T15:31:59.175975+00:00",
+      "platform": "Linux-7.0.0-28-generic-aarch64-with-glibc2.39",
+      "architecture": "aarch64",
+      "binary_sha256": "92deb830962ab6cf05ff309a1143c14b17c06f4f4f5d53fe45b094b2e8810108",
+      "library_sha256": "57b89feae35cb696efdf075ac34aa04ab18750c02624173b87747f96ce365756",
+      "client_sha256": "dc4af28917455e009d26704b82a438353a06149e825b6cdf782908b2d28661f5",
+      "harness_sha256": "7fb2a1f9072bdc05a5e7b21264a679e9ca748fab88913a3c2fd753fcc905adbe",
+      "shared_harness_sha256": "7560dd32c75fb38b8c88cbc6650270732cce34489b93d6a4f95ec9449b9081e0",
+      "rules_sha256": "d6a3716cf20de19b85d4ca3ac8a0deeee12090645c55671d9cb521f738553ddc",
+      "policy_mutation": false,
+      "max_budget_usd": 0.5,
+      "timeout_seconds": 180,
+      "cleanup": {
+        "host_stopped": true,
+        "temporary_state_removed": true
+      },
+      "checks": {
+        "client_exit_zero": true,
+        "positive_control_exact_content": true,
+        "denied_file_absent": true,
+        "one_allowed_native_tool_call": true,
+        "one_denied_native_tool_call": true,
+        "only_two_pre_tool_calls": true,
+        "post_tool_observed": true,
+        "session_start_observed": true,
+        "session_end_observed": true,
+        "one_native_session": true,
+        "native_tool_attribution": true,
+        "metadata_only": true,
+        "native_agent_attribution": true,
+        "only_write_tool": true,
+        "denied_tool_has_no_success_post": true,
+        "allow_then_deny": true,
+        "client_json_success": true
+      },
+      "failure_reasons": [],
+      "source_revision": "4bf530fc2c0982458421655410b3f5227ffabc0e",
+      "client_version": "2.1.312",
+      "exit_code": 0,
+      "event_count": 9,
+      "event_counts": {
+        "SessionStart": 1,
+        "UserPromptSubmit": 1,
+        "PreToolUse": 2,
+        "PostToolUse": 1,
+        "PostToolBatch": 2,
+        "Stop": 1,
+        "SessionEnd": 1
+      },
+      "diagnostics": [],
+      "finished_at": "2026-10-29T15:32:06.504795+00:00",
+      "events_sha256": "5ae737bb4b8693fbbcd376d02a04116f22e98bcf4ed5d5ff5dd8171fd4f9aa3f"
+    },
+    "live-codex-linux": {
+      "agent": "codex",
+      "model": "gpt-5.4-mini",
+      "platform": "Linux-7.0.0-28-generic-aarch64-with-glibc2.39",
+      "binary_sha256": "92deb830962ab6cf05ff309a1143c14b17c06f4f4f5d53fe45b094b2e8810108",
+      "library_sha256": "57b89feae35cb696efdf075ac34aa04ab18750c02624173b87747f96ce365756",
+      "policy_sha256": "d6a3716cf20de19b85d4ca3ac8a0deeee12090645c55671d9cb521f738553ddc",
+      "policy": "examples/rules/default.yaml",
+      "sandbox": "workspace-write",
+      "drop_linux_caps": false,
+      "runs": [
+        {
+          "result": "FAIL",
+          "exit_code": 0,
+          "consent": "reviewed generated commands; invocation-only --dangerously-bypass-hook-trust",
+          "checks": {
+            "client_exit_zero": true,
+            "positive_control_exact_content": false,
+            "denied_file_absent": true,
+            "one_allowed_native_tool_call": true,
+            "one_denied_native_tool_call": false,
+            "only_two_pre_tool_calls": false,
+            "post_tool_observed": true,
+            "session_start_observed": true,
+            "session_end_observed": true,
+            "one_native_session": true,
+            "native_tool_attribution": false,
+            "metadata_only": true,
+            "native_agent_attribution": true
+          },
+          "events": 6,
+          "event_counts": {
+            "SessionStart": 1,
+            "UserPromptSubmit": 1,
+            "PreToolUse": 1,
+            "PostToolUse": 1,
+            "Stop": 1,
+            "SessionEnd": 1
+          },
+          "diagnostics": []
+        }
+      ],
+      "result": "FAIL",
+      "runner_sha256": "7560dd32c75fb38b8c88cbc6650270732cce34489b93d6a4f95ec9449b9081e0",
+      "started_at": "2026-10-29T15:30:59.889375+00:00",
+      "failure_reasons": [],
+      "cleanup": {
+        "host_stopped": true
+      },
+      "client_version": "codex-cli 0.159.2",
+      "finished_at": "2026-10-29T15:31:12.551771+00:00",
+      "events_sha256": "daf952557c580fb3f9769f0a0ac2c9712512e403bb4137f184fe01e0bd5fa1fe"
+    },
+    "claude-mutation": {
+      "agent": "claude",
+      "model": "claude-haiku-4-5",
+      "result": "FAIL",
+      "started_at": "2026-10-29T15:29:40.398683+00:00",
+      "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+      "architecture": "arm64",
+      "binary_sha256": "778e531eda9f28866c0cbf4453c216f9f8efc4768a9e53e6a2ef7aca34581500",
+      "library_sha256": "c09bc66c7228b2d50ef74f75a7413273c4544c8a6abf3ade019b2922a8f486e4",
+      "client_sha256": "6b5ec691195e551b02c41df9f7d723f4ea61eaa03c2df90acefe3736f1aeb620",
+      "harness_sha256": "7fb2a1f9072bdc05a5e7b21264a679e9ca748fab88913a3c2fd753fcc905adbe",
+      "shared_harness_sha256": "7560dd32c75fb38b8c88cbc6650270732cce34489b93d6a4f95ec9449b9081e0",
+      "rules_sha256": "d6a3716cf20de19b85d4ca3ac8a0deeee12090645c55671d9cb521f738553ddc",
+      "policy_mutation": true,
+      "max_budget_usd": 0.5,
+      "timeout_seconds": 180,
+      "cleanup": {
+        "host_stopped": true,
+        "temporary_state_removed": true
+      },
+      "checks": {
+        "client_exit_zero": true,
+        "positive_control_exact_content": true,
+        "denied_file_absent": false,
+        "one_allowed_native_tool_call": false,
+        "one_denied_native_tool_call": false,
+        "only_two_pre_tool_calls": false,
+        "post_tool_observed": true,
+        "session_start_observed": true,
+        "session_end_observed": true,
+        "one_native_session": true,
+        "native_tool_attribution": false,
+        "metadata_only": true,
+        "native_agent_attribution": true,
+        "only_write_tool": true,
+        "denied_tool_has_no_success_post": false,
+        "allow_then_deny": false,
+        "client_json_success": true
+      },
+      "failure_reasons": [
+        "acceptance_checks_failed"
+      ],
+      "source_revision": "27a74aa8248a655c92b5a9e2a575eaef9a358b83",
+      "client_version": "2.1.312",
+      "exit_code": 0,
+      "event_count": 8,
+      "event_counts": {
+        "SessionStart": 1,
+        "UserPromptSubmit": 1,
+        "PostToolUse": 2,
+        "PostToolBatch": 2,
+        "Stop": 1,
+        "SessionEnd": 1
+      },
+      "diagnostics": [],
+      "finished_at": "2026-10-29T15:29:47.133331+00:00"
+    },
+    "claude-producer-summary": {
+      "result": "PASS",
+      "client": "claude",
+      "client_version": "2.1.312",
+      "execution_host": "macOS arm64 host",
+      "source_revision": "27a74aa8248a655c92b5a9e2a575eaef9a358b83",
+      "harness_sha256": "b19a830258534f22a79780b6fe8493205f9aca1d657920118be32ebe69ce8b7e",
+      "binary_sha256": "778e531eda9f28866c0cbf4453c216f9f8efc4768a9e53e6a2ef7aca34581500",
+      "library_sha256": "c09bc66c7228b2d50ef74f75a7413273c4544c8a6abf3ade019b2922a8f486e4",
+      "checks": {
+        "hook_acceptance": true,
+        "received_actual_client_export": true,
+        "source_match": true,
+        "observe_only": true,
+        "schema_match": true,
+        "synthetic_tool_content_omitted": true,
+        "credentials_omitted": true,
+        "no_raw_content_fields": true
+      },
+      "records": 78,
+      "event_names": [
+        "api_request",
+        "assistant_response",
+        "claude_code.active_time.total",
+        "claude_code.code_edit_tool.decision",
+        "claude_code.cost.usage",
+        "claude_code.lines_of_code.count",
+        "claude_code.session.count",
+        "claude_code.token.usage",
+        "hook_execution_complete",
+        "hook_execution_start",
+        "hook_registered",
+        "managed_settings_resolved",
+        "plugin_loaded",
+        "retention_sweep",
+        "tool_decision",
+        "tool_result",
+        "user_prompt"
+      ],
+      "signals": [
+        "logs",
+        "metrics"
+      ],
+      "ledger_sha256": "1225477c140e3c91cf1e1c0824d41a12ec15aaa75518fb83997bf7bf596b45ec",
+      "limitations": "One local direct OTLP HTTP producer; no enterprise tenant/exporter auth, remote Collector, arbitrary event delivery, or SIEM ingestion claim."
+    },
+    "codex-producer-summary": {
+      "result": "PASS",
+      "client": "codex",
+      "client_version": "codex-cli 0.159.2",
+      "execution_host": "macOS arm64 host",
+      "source_revision": "27a74aa8248a655c92b5a9e2a575eaef9a358b83",
+      "harness_sha256": "b19a830258534f22a79780b6fe8493205f9aca1d657920118be32ebe69ce8b7e",
+      "binary_sha256": "778e531eda9f28866c0cbf4453c216f9f8efc4768a9e53e6a2ef7aca34581500",
+      "library_sha256": "c09bc66c7228b2d50ef74f75a7413273c4544c8a6abf3ade019b2922a8f486e4",
+      "checks": {
+        "hook_acceptance": true,
+        "received_actual_client_export": true,
+        "source_match": true,
+        "observe_only": true,
+        "schema_match": true,
+        "synthetic_tool_content_omitted": true,
+        "credentials_omitted": true,
+        "no_raw_content_fields": true
+      },
+      "records": 250,
+      "event_names": [
+        "event otel/src/events/session_telemetry.rs:1039",
+        "event otel/src/events/session_telemetry.rs:1103",
+        "event otel/src/events/session_telemetry.rs:1150",
+        "event otel/src/events/session_telemetry.rs:1175",
+        "event otel/src/events/session_telemetry.rs:340",
+        "event otel/src/events/session_telemetry.rs:356",
+        "event otel/src/events/session_telemetry.rs:661",
+        "event otel/src/events/session_telemetry.rs:756",
+        "event otel/src/tool_result.rs:54"
+      ],
+      "signals": [
+        "logs"
+      ],
+      "ledger_sha256": "06108e017fba65aa71e1139c0ed1488842e988afe5b7e46a123ae479726bc088",
+      "limitations": "One local direct OTLP HTTP producer; no enterprise tenant/exporter auth, remote Collector, arbitrary event delivery, or SIEM ingestion claim."
+    },
+    "claude-producer-correlation": {
+      "result": "PASS",
+      "checks": {
+        "one_native_telemetry_session": true,
+        "one_allowed_write": true,
+        "one_denied_write": true,
+        "one_successful_write_result": true
+      },
+      "limitations": "Native hook session-ID cross-correlation not retained for this run; telemetry session and paired tool outcomes checked independently."
+    },
+    "codex-producer-correlation": {
+      "checks": {
+        "one_hook_session": true,
+        "exact_session_correlation": true,
+        "conversation_start": true,
+        "tool_decision": true,
+        "tool_result": true
+      },
+      "result": "PASS",
+      "semantic_event_names": [
+        "codex.api_request",
+        "codex.conversation_starts",
+        "codex.sse_event",
+        "codex.startup_phase",
+        "codex.tool_decision",
+        "codex.tool_result",
+        "codex.turn_ttft",
+        "codex.user_prompt"
+      ],
+      "note": "Comparison uses attributes.conversation.id and attributes.event.name; OTLP eventName itself is an instrumentation location on Codex0.159.2."
+    }
+  },
+  "review": {
+    "production": "No actionable production defect confirmed within documented threat model.",
+    "harness_finding": "Stale PASS after operational preflight failure reproduced in both live runners, fixed, and independently rechecked.",
+    "experimental_scope": "User approved proceeding with explicit unverified-client and enterprise-access limits."
+  },
+  "limitations": [
+    "Registry replay executes generated launchers using synthetic payloads; it does not establish vendor event delivery.",
+    "Cursor and Cowork installed-client acceptance remains unverified.",
+    "Gemini uses pinned HookSystem/tool components with a config facade; whole CLI/provider/trust loading remains unverified.",
+    "Copilot offline Linux CLI test emits seven event types; no all-event, Windows/macOS runtime, timeout, or provider-access claim.",
+    "Current Ubuntu 24.04 ARM64 live Codex attempt blocked by AppArmor user-namespace restrictions before the allowed tool could execute; no security controls changed.",
+    "Enterprise audit API access, remote Collector routing, SIEM ingestion, signing, and public GitHub integration/Pages activation remain unverified."
+  ],
+  "source_files_sha256": {
+    "crates/cli/src/loader.rs": "1563620054ecdb81769b5271d47a108af628f2b08ec37c81201b37e95f863c5a",
+    "crates/cli/src/main.rs": "643919a3041110827a1b1ebef7b20abf1ab6520dd2194a88976ed12f8f878b6b",
+    "crates/cli/src/state.rs": "8f68d2458f7d30d143d06cb8184d1313b920e1ebf55036377bd0c7ed56671f58",
+    "crates/cli/src/telemetry/audit.rs": "98dc9fde3eb67a4bce9ecc37e157ab89a1d22bd600fe63949e881b9e8729866b",
+    "crates/cli/src/telemetry/mod.rs": "df9e6aec593c799f2a790ac07e4bd15a7c5ff7296eabb966caa9fe79fa3cf308",
+    "crates/cli/src/telemetry/model.rs": "ceb6d9071ee57a93930701325abf7005695d4231317e52dfbfa54e46739f4380",
+    "crates/cli/src/telemetry/otlp.rs": "e371d95ad43a9e4ad9af2b156766c73544a0f4e70d2c8b953244a6d178d0a2e2",
+    "crates/cli/src/telemetry/poll.rs": "d1d99d98b9dac6ed95b33df2c9366c3d92e6001080dad59b401b771759d43aa4",
+    "crates/cli/src/telemetry/receiver.rs": "8deff2b11c98373d903491b20495a7c42782944a795a64046e881d4a9e3ffbbe",
+    "crates/cli/src/telemetry/wire.rs": "8a3013196fa2af451b5b6d9d12c8ee18f0fa9e9e2cc717d0ef6f6ccf65f9c37d",
+    "crates/engine/src/adapters/native.rs": "55fb03f45649b99910486d8e963de3eddfaf4d384cf89bfd2ce2b18051ac404a",
+    "crates/engine/src/adapters.rs": "4f393b210b1398dc55ce8a958bd01fb13eb1726761bc579908fb6b4e3f044efa",
+    "crates/engine/src/ffi.rs": "cf4643dbf5b4298a4232c3cf826c3f3280cbf3f4d26df382a9ade09bc17188fd",
+    "crates/engine/src/lib.rs": "dd4aacd0896d6360b59bcb55c16f7650acc265147dac6e334cf7b116c41ce07d",
+    "crates/engine/src/policy.rs": "d06dd5f94bbed698dac779ad37f9cba186f2d4762f94b29f9ff2070bab85a4b8",
+    "crates/engine/src/redact.rs": "cf46f70d3013539bff4e4980b0b536115757286de3b61a272aa31b5c82cfb649"
+  },
+  "linux_live_provenance_note": "The Linux Claude report names a guest-local validation snapshot because the build was transferred as a secret-free source TAR without git history; production artifact provenance remains 27a74aa and its native binary/library SHA256 values. Final live harness hashes are explicit. The failed Codex attempt is retained as an image prerequisite failure.",
+  "native_registry_custody": {
+    "source_commit": "27a74aa8248a655c92b5a9e2a575eaef9a358b83",
+    "source_tar_sha256": "4608935306dc6aea68e2aa504124b6b7a5eed801f6c8a95870f2dd04c2223d69",
+    "original_harness_sha256": "cebe09b10a38339b1f7184f606dc093d5f7f8796a4864b41fb46cbe92a7b6e97",
+    "harness_attestation": "all_callbacks.py unchanged since qualifying guest executions; Linux guest retained copy hash confirms original transfer. MacOS guest deleted after report retrieval; Windows original stage removed. Contemporaneous native-hooks report has same EXE hash and companion-library hash in same stage. Metadata association supplements original report, not a rerun or relabel."
+  },
+  "windows_cleanup": {
+    "initial_failures": "Gemini library unlink and extracted-package temporary EXE deletion failed with Windows access-denied during ARM64 emulation. Original failures retained locally.",
+    "diagnosis": "Normal Archive file attributes, adequate ACL, no Restart Manager locking processes or remaining Lens process; delayed same-user removal succeeded.",
+    "repair": "Test-only retry for Windows sharing/access errors; 1 second deadline, 50ms waits, permanent errors propagate. Python 3.9 detached-finalizer fallback covered.",
+    "native_repaired_result": "Package smoke, Gemini27 and expected stopped-policy mutation passed.",
+    "regressions": {
+      "python": 6,
+      "node": 7
+    },
+    "production_changes": false
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "events": [
+    {
+      "event_id": "cursor-event-1",
+      "timestamp": "2026-10-29T10:00:00Z",
+      "event_type": "login",
+      "user_id": "user_1",
+      "user_email": "PRIVATE_EMAIL",
+      "event_data": {
+        "success": true,
+        "login_type": "LOGIN_TYPE_WEB",
+        "token": "PRIVATE_TOKEN"
+      }
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "hasNextPage": false
+  }
+}

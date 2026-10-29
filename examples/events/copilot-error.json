@@ -1,0 +1,11 @@
+{
+  "sessionId": "synthetic-copilot-session",
+  "timestamp": 1793232000000,
+  "cwd": "/synthetic/work",
+  "error": {
+    "message": "Synthetic failure",
+    "name": "SyntheticError"
+  },
+  "errorContext": "tool_execution",
+  "recoverable": true
+}

@@ -1,0 +1,39 @@
+# OPTIONAL: narrow examples of destructive command forms, not a shell parser.
+# Commands in comments/quoted strings can match; do not execute test examples.
+version: 1
+rules:
+  - id: destructive-root-delete
+    description: Block common recursive force-delete forms targeting root or home.
+    tool_pattern: '(?i)^(bash|powershell|shell|terminal|exec_command|shell_command|run_command|run_shell_command)$'
+    content_pattern: '(?i)(^|[;&|]\s*)(sudo\s+)?(/bin/)?rm\s+(-rf|-fr)\s+(/(\*)?|~)(\s|$)'
+    action: block
+
+  - id: destructive-powershell-root-delete
+    description: Block explicit recursive forced removal of a Windows drive root.
+    tool_pattern: '(?i)^(bash|powershell|shell|terminal|exec_command|shell_command|run_command|run_shell_command)$'
+    content_pattern: '(?i)(^|[;&|]\s*)(Remove-Item|ri|del)\s+(-Recurse\s+-Force|-Force\s+-Recurse)\s+(-Path\s+|-LiteralPath\s+)?["'']?[A-Z]:[/\\]\*?["'']?(\s|$)'
+    action: block
+
+  - id: destructive-git-hard-reset
+    description: Block the literal git reset --hard command form.
+    tool_pattern: '(?i)^(bash|powershell|shell|terminal|exec_command|shell_command|run_command|run_shell_command)$'
+    content_pattern: '(?i)(^|[;&|]\s*)git\s+reset\s+--hard(\s|$)'
+    action: block
+
+  - id: destructive-git-clean-force
+    description: Block git clean with a force flag in the first option group.
+    tool_pattern: '(?i)^(bash|powershell|shell|terminal|exec_command|shell_command|run_command|run_shell_command)$'
+    content_pattern: '(?i)(^|[;&|]\s*)git\s+clean\s+(-[A-Za-z]*f[A-Za-z]*|--force)(\s|$)'
+    action: block
+
+  - id: destructive-git-force-push
+    description: Block raw -f or --force git push flags, excluding --force-with-lease.
+    tool_pattern: '(?i)^(bash|powershell|shell|terminal|exec_command|shell_command|run_command|run_shell_command)$'
+    content_pattern: '(?i)(^|[;&|]\s*)git\s+push(\s+[^;\r\n ]+){0,4}\s+(-f|--force)(\s|$)'
+    action: block
+
+  - id: destructive-raw-disk-write
+    description: Block literal dd outputs or mkfs targets on common Linux disk devices.
+    tool_pattern: '(?i)^(bash|powershell|shell|terminal|exec_command|shell_command|run_command|run_shell_command)$'
+    content_pattern: '(?i)(^|[;&|]\s*)(sudo\s+)?(dd\s+[^;\r\n]{0,192}\bof=["'']?/dev/(sd[a-z]|vd[a-z]|xvd[a-z]|nvme[0-9]+n[0-9]+|mmcblk[0-9]+)(p?[0-9]+)?(["'']|\s|$)|mkfs(\.[a-z0-9]+)?\s+(-[a-z0-9]+\s+){0,3}/dev/(sd[a-z]|vd[a-z]|xvd[a-z]|nvme[0-9]+n[0-9]+|mmcblk[0-9]+)(p?[0-9]+)?(\s|$))'
+    action: block

@@ -1,0 +1,56 @@
+# Review-only OpenTelemetry Collector Contrib configuration; not installed by Lens.
+# Official component contracts retrieved 2026-10-29; see docs/telemetry-sources.md.
+# One provider per pipeline: start Lens with that provider's --source on port 4318.
+# Supply real certificates and a token file using approved secret management.
+# This template stays loopback-bound. For Cowork VM / Cursor server-side delivery,
+# deliberately configure reachable ingress, DNS, firewall, TLS and auth first.
+extensions:
+  bearertokenauth/ingress:
+    filename: /etc/otelcol/secrets/ingress-token
+receivers:
+  otlp/provider:
+    protocols:
+      grpc:
+        endpoint: 127.0.0.1:4317
+        tls:
+          cert_file: /etc/otelcol/tls/server.crt
+          key_file: /etc/otelcol/tls/server.key
+        auth:
+          authenticator: bearertokenauth/ingress
+      http:
+        endpoint: 127.0.0.1:14318
+        tls:
+          cert_file: /etc/otelcol/tls/server.crt
+          key_file: /etc/otelcol/tls/server.key
+        auth:
+          authenticator: bearertokenauth/ingress
+processors:
+  batch:
+    send_batch_size: 256
+    send_batch_max_size: 256
+    timeout: 5s
+exporters:
+  otlp_http/lens:
+    endpoint: http://127.0.0.1:4318
+    encoding: proto
+    compression: none
+# Lens requires HTTP/1.1 with Content-Length, not chunked transfer or gzip.
+# Verify framing against your installed exporter before sending real telemetry.
+service:
+  extensions: [bearertokenauth/ingress]
+  pipelines:
+    logs:
+      receivers: [otlp/provider]
+      processors: [batch]
+      exporters: [otlp_http/lens]
+    metrics:
+      receivers: [otlp/provider]
+      processors: [batch]
+      exporters: [otlp_http/lens]
+    traces:
+      receivers: [otlp/provider]
+      processors: [batch]
+      exporters: [otlp_http/lens]
+# Current upstream component name is otlp_http; older builds may use otlphttp.
+# Validate against your installed collector. No debug exporter: it could log content.
+# Queues/retries are not a durable delivery guarantee; size/retention needs local policy.

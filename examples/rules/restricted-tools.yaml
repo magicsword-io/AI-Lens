@@ -1,0 +1,23 @@
+# OPTIONAL: named-tool examples. Replace server/tool names with your registry.
+# Tool names are callback data, not an authenticated capability boundary.
+version: 1
+rules:
+  - id: restricted-mcp-network-tools
+    description: Audit illustrated fetch/http/web MCP request and search tools.
+    tool_pattern: '^(MCP:)?mcp_{1,2}(fetch|http|web)_{1,2}(fetch|fetch_url|get|post|request|search)$'
+    action: audit
+
+  - id: restricted-browser-tools
+    description: Audit illustrated browser navigation, interaction, and script tools.
+    tool_pattern: '^(MCP:)?(browser|browser_navigate|browser_click|mcp_{1,2}playwright_{1,2}browser_(navigate|click|fill_form|evaluate|run_code)|mcp_{1,2}puppeteer_{1,2}puppeteer_(navigate|click|evaluate))$'
+    action: audit
+
+  - id: restricted-browser-script
+    description: Block named Playwright page evaluation and browser code tools.
+    tool_pattern: '^(MCP:)?mcp_{1,2}playwright_{1,2}browser_(evaluate|run_code)$'
+    action: block
+
+  - id: restricted-delegation
+    description: Audit illustrated task and subagent delegation tools.
+    tool_pattern: '^(MCP:)?(Task|Agent|task|spawn_agent|delegate_task|mcp_{1,2}agents_{1,2}delegate)$'
+    action: audit

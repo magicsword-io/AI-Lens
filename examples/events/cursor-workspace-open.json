@@ -1,0 +1,8 @@
+{
+  "cursor_version": "synthetic",
+  "workspace_roots": [
+    "/synthetic/work"
+  ],
+  "user_email": null,
+  "hook_event_name": "workspaceOpen"
+}

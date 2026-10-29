@@ -1,0 +1,6 @@
+{
+  "hook_event_name": "SessionStart",
+  "session_id": "synthetic-codex-session",
+  "cwd": "/workspace/example",
+  "source": "startup"
+}

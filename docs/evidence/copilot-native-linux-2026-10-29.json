@@ -1,0 +1,102 @@
+{
+  "status": "PASS",
+  "evidence_level": "native Copilot CLI config hooks and create tool with a synthetic loopback provider",
+  "copilot_cli": "1.0.105",
+  "copilot_sdk": "1.0.28",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "architecture": "x64",
+  "mutation": false,
+  "checks": [
+    "loopback-only Linux namespace",
+    "pinned SDK package",
+    "vendor executable exists",
+    "pinned CLI executable version",
+    "generated native registry",
+    "generated exec sessionStart",
+    "generated exec sessionEnd",
+    "generated exec preToolUse",
+    "generated exec postToolUse",
+    "generated exec postToolUseFailure",
+    "generated exec errorOccurred",
+    "generated exec userPromptSubmitted",
+    "generated exec agentStop",
+    "generated exec subagentStart",
+    "generated exec subagentStop",
+    "generated exec preCompact",
+    "generated exec notification",
+    "allowed: bounded synthetic model exchange",
+    "allowed: exact harmless file content",
+    "native create positive control",
+    "native allowed pre-tool ledger",
+    "native post-tool rule is observational",
+    "denied: bounded synthetic model exchange",
+    "native blocked path has no side effect",
+    "native tool receives policy denial",
+    "native blocked pre-tool ledger",
+    "blocked tool has no success post event",
+    "default ledger excludes content",
+    "missing-library: bounded synthetic model exchange",
+    "missing library prevents native create",
+    "post observation cannot undo allowed file"
+  ],
+  "not_tested": [
+    "real provider or account",
+    "Windows/macOS",
+    "all lifecycle event delivery",
+    "vendor timeout behavior",
+    "Cowork Desktop"
+  ],
+  "binary_sha256": "fd14197e7b5791ca3d0ea300fa4a1425da84ba93e4317573a7292381e934eb8e",
+  "library_sha256": "e3a5825011cb04e0e28012e62ce2f77dacce1e7026256a0de79497722282ae27",
+  "vendor_cli_sha256": "3bd8bdc75670d7b4ec445725f6a5b9af66ee7ec49e6194646e4a40a0bc09091c",
+  "policy_sha256": "cc434cc02aa6a99f9051fcf0b8d9ae392370521d0bbc6e8223f600b1025f6cdf",
+  "cases": [
+    {
+      "name": "allowed",
+      "model_requests": 2,
+      "file_created": true,
+      "policy_denial_seen": false,
+      "failure_denial_seen": false
+    },
+    {
+      "name": "denied",
+      "model_requests": 2,
+      "file_created": false,
+      "policy_denial_seen": true,
+      "failure_denial_seen": false
+    },
+    {
+      "name": "missing-library",
+      "model_requests": 2,
+      "file_created": false,
+      "policy_denial_seen": false,
+      "failure_denial_seen": true
+    }
+  ],
+  "registered_events": [
+    "sessionStart",
+    "sessionEnd",
+    "preToolUse",
+    "postToolUse",
+    "postToolUseFailure",
+    "errorOccurred",
+    "userPromptSubmitted",
+    "agentStop",
+    "subagentStart",
+    "subagentStop",
+    "preCompact",
+    "notification"
+  ],
+  "observed_events": [
+    "agentStop",
+    "notification",
+    "postToolUse",
+    "preToolUse",
+    "sessionEnd",
+    "sessionStart",
+    "userPromptSubmitted"
+  ],
+  "observed_event_count": 12,
+  "checks_passed": 31
+}

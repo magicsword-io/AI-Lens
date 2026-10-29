@@ -1,0 +1,141 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native:
+    name: Native checks (${{ matrix.platform }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+          - os: windows-latest
+            platform: windows
+          - os: macos-latest
+            platform: macos
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Rust tooling for the native host
+        run: |
+          rustup toolchain install stable --profile minimal --component rustfmt --component clippy
+          rustup override set stable
+          rustc --version --verbose
+          cargo --version
+      - name: Verify Windows uses MSVC
+        if: runner.os == 'Windows'
+        run: |
+          python -c "import subprocess; text = subprocess.check_output(['rustc', '-vV'], text=True); assert 'host: x86_64-pc-windows-msvc' in text, text"
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+      - name: Lint
+        run: cargo clippy --locked --workspace --all-targets -- -D warnings
+      - name: Unit tests
+        run: cargo test --locked --workspace
+      - name: Build debug and release host and engine
+        run: |
+          cargo build --locked --workspace
+          cargo build --locked --workspace --release
+      - name: Exercise the executable and dynamic library
+        run: python scripts/e2e.py
+      - name: Exercise Cursor and Copilot native hook protocols and generated launchers
+        run: python scripts/native_hooks_smoke.py --binary target/release/agent-lens${{ runner.os == 'Windows' && '.exe' || '' }} --report native-hooks-results.json
+      - name: Exercise telemetry imports, OTLP HTTP, and checkpoint recovery (no credentials)
+        run: python scripts/telemetry_smoke.py --binary target/release/agent-lens${{ runner.os == 'Windows' && '.exe' || '' }} --report telemetry-results.json
+      - name: Replay every shipped rule with matches, near misses, and post events
+        run: python scripts/rules_smoke.py --report rule-results.json
+      - name: Verify rule coverage and near-miss checks reject deliberate mutations
+        run: python scripts/rules_oracle_test.py
+      - name: Verify the live acceptance oracle offline (no API credentials)
+        run: python scripts/live_smoke_test.py
+      - name: Verify Claude live-runner oracle offline (POSIX; no API credentials)
+        if: runner.os != 'Windows'
+        run: python scripts/claude_live_smoke_test.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify bounded Windows test-artifact cleanup regressions
+        run: |
+          python scripts/windows_cleanup_test.py
+          node --test scripts/windows_cleanup_test.mjs
+      - name: Install pinned Gemini hook runtime for credential-free integration
+        run: npm install --prefix .context/gemini-native --ignore-scripts --no-package-lock --save-exact @google/gemini-cli-core@0.66.0
+      - name: Exercise Gemini's native hook system and real file tool (no model or credentials)
+        run: node scripts/gemini_native_smoke.mjs --binary target/release/agent-lens${{ runner.os == 'Windows' && '.exe' || '' }} > gemini-native-results.json
+      - name: Verify the Gemini oracle rejects a disabled policy
+        run: |
+          python - <<'PYTEST'
+          import os, subprocess
+          binary = 'target/release/agent-lens' + ('.exe' if os.name == 'nt' else '')
+          result = subprocess.run(['node', 'scripts/gemini_native_smoke.mjs', '--binary', binary, '--disable-policy'], capture_output=True, text=True, timeout=150)
+          assert result.returncode != 0, 'disabled policy incorrectly passed native tool oracle'
+          assert 'native vendor execution reports Agent Lens policy denial' in result.stderr, result.stderr
+          print('PASS disabled policy fails the native Gemini side-effect oracle')
+          PYTEST
+      - name: Install pinned Copilot CLI and SDK for offline native tool integration
+        if: runner.os == 'Linux'
+        run: npm install --prefix .context/copilot-native/sdk --ignore-scripts --no-package-lock --no-audit --no-fund --save-exact @github/copilot@1.0.105 @github/copilot-sdk@1.0.28
+      - name: Exercise Copilot config hooks and real file tool inside an isolated network namespace
+        if: runner.os == 'Linux'
+        run: |
+          sudo env "PATH=$PATH" "$(command -v python)" scripts/copilot_native_offline.py --binary target/release/agent-lens > copilot-native-results.json
+          python - <<'PYTEST'
+          import json, os, subprocess, sys
+          result = subprocess.run(['sudo', 'env', 'PATH=' + os.environ['PATH'], sys.executable,
+                                   'scripts/copilot_native_offline.py', '--binary', 'target/release/agent-lens',
+                                   '--disable-policy'], capture_output=True, text=True, timeout=150)
+          assert result.returncode == 1, 'disabled policy incorrectly passed native Copilot oracle'
+          report = json.loads(result.stdout)
+          assert report.get('failed_check') == 'native blocked path has no side effect', report.get('failed_check')
+          print('PASS disabled policy fails the native Copilot side-effect oracle')
+          PYTEST
+      - name: Package native executable, engine, rules, and documentation
+        run: python scripts/package.py
+      - name: Verify checksums and run the extracted package
+        run: python scripts/package_smoke.py
+      - name: Upload ZIP and checksums
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-lens-${{ matrix.platform }}
+          path: |
+            dist/*.zip
+            dist/SHA256SUMS
+            rule-results.json
+            gemini-native-results.json
+            telemetry-results.json
+            native-hooks-results.json
+            copilot-native-results.json
+          if-no-files-found: error
+
+  site:
+    name: Website preview checks (no publication)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build

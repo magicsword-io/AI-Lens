@@ -1,0 +1,13 @@
+{
+  "hook_event_name": "PostToolUse",
+  "session_id": "synthetic-claude-session",
+  "cwd": "/workspace/example",
+  "tool_name": "Read",
+  "tool_use_id": "synthetic-tool-1",
+  "tool_input": {
+    "file_path": "/workspace/example/.env"
+  },
+  "tool_response": {
+    "text": "SYNTHETIC_DEMO_RESULT"
+  }
+}

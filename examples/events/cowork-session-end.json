@@ -1,0 +1,5 @@
+{
+  "hook_event_name": "SessionEnd",
+  "session_id": "synthetic-cowork-session",
+  "cwd": "/work"
+}

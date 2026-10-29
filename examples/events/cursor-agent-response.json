@@ -1,0 +1,12 @@
+{
+  "conversation_id": "synthetic-cursor-session",
+  "generation_id": "synthetic-generation",
+  "cursor_version": "synthetic",
+  "workspace_roots": [
+    "/synthetic/work"
+  ],
+  "user_email": null,
+  "transcript_path": null,
+  "text": "SYNTHETIC_RESPONSE",
+  "hook_event_name": "afterAgentResponse"
+}

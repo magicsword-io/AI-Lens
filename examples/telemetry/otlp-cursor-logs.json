@@ -1,0 +1,59 @@
+{
+  "_fixture": "SYNTHETIC: invented vendor-shaped protocol example; not a captured live session.",
+  "resourceLogs": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "cursor"
+            }
+          }
+        ]
+      },
+      "scopeLogs": [
+        {
+          "scope": {
+            "name": "cursor.telemetry"
+          },
+          "logRecords": [
+            {
+              "timeUnixNano": "1793275200000000000",
+              "severityNumber": 9,
+              "body": {
+                "stringValue": "api_request"
+              },
+              "attributes": [
+                {
+                  "key": "cursor.event.id",
+                  "value": {
+                    "stringValue": "customer-telemetry:v1:synthetic-001"
+                  }
+                },
+                {
+                  "key": "cursor.request.id",
+                  "value": {
+                    "stringValue": "synthetic-request-001"
+                  }
+                },
+                {
+                  "key": "cursor.model.name",
+                  "value": {
+                    "stringValue": "synthetic-model"
+                  }
+                },
+                {
+                  "key": "cursor.api.request.input_tokens",
+                  "value": {
+                    "intValue": "24"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

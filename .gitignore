@@ -1,0 +1,13 @@
+/target/
+/.context/
+/.agent-lens/
+*.jsonl
+/dist/
+__pycache__/
+*.py[cod]
+
+/rule-results.json
+/telemetry-results.json
+
+/native-hooks-results.json
+/copilot-native-results.json

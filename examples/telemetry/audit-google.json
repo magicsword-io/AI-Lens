@@ -1,0 +1,30 @@
+{
+  "kind": "admin#reports#activities",
+  "items": [
+    {
+      "kind": "admin#reports#activity",
+      "id": {
+        "time": "2026-10-29T10:00:00Z",
+        "uniqueQualifier": "10001",
+        "applicationName": "gemini_in_workspace_apps",
+        "customerId": "customer-1"
+      },
+      "actor": {
+        "profileId": "user-1",
+        "email": "PRIVATE_EMAIL"
+      },
+      "events": [
+        {
+          "type": "activity",
+          "name": "feature_utilization",
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "PRIVATE_PROMPT"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
