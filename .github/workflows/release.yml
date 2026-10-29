@@ -1,0 +1,71 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate release tag, source and notes
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          python - <<'PY'
+          import os, re, tomllib
+          from pathlib import Path
+          tag = os.environ['RELEASE_TAG']
+          assert re.fullmatch(r'v\d+\.\d+\.\d+', tag), 'expected stable vX.Y.Z tag'
+          version = tomllib.loads(Path('Cargo.toml').read_text())['workspace']['package']['version']
+          assert tag == 'v' + version, 'tag and workspace version differ'
+          assert Path('docs/releases/' + tag + '.md').is_file(), 'release notes missing'
+          PY
+          git merge-base --is-ancestor "$GITHUB_SHA" origin/main
+
+  checks:
+    needs: validate
+    uses: ./.github/workflows/ci.yml
+
+  publish:
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: agent-lens-*
+          path: release-input
+      - name: Validate complete native artifacts and aggregate checksums
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: python scripts/release_artifacts.py prepare --input release-input --output release-assets --tag "$RELEASE_TAG" --source "$GITHUB_SHA"
+      - name: Publish complete release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --verify-tag --draft \
+            --title "AI Lens $RELEASE_TAG" --notes-file "docs/releases/$RELEASE_TAG.md"
+          gh release upload "$RELEASE_TAG" release-assets/* --repo "$GITHUB_REPOSITORY"
+          gh release edit "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --draft=false --latest

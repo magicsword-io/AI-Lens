@@ -1,6 +1,6 @@
 # Agent hook adapters
 
-The current source preview has seven native adapter IDs:
+AI Lens v0.3.0 and the current source have seven native adapter IDs:
 `claude`, `codex`, `hermes`, `gemini`, `cursor`, `copilot`, and `cowork`.
 AI Lens prints configuration for review with `config --agent ID`.
 Merge the resulting `hooks` entries into your existing configuration yourself.
@@ -25,9 +25,9 @@ Only the preventive events listed below are enforceable in the current source.
 Other rule matches are recorded as `would_block`; completed actions are never
 undone, and stop events never force an agent into another turn.
 
-Published v0.2.0 downloads have four adapters: Claude Code, Codex, Hermes, and
-Gemini CLI. Cursor, Copilot CLI, and Cowork require the experimental source build;
-they are not added to those downloads by this documentation. Cowork's native
+v0.3.0 packages include all seven adapters; Cursor, Copilot CLI, and Cowork
+remain experimental. Historical v0.2.0 downloads contain only Claude Code, Codex,
+Hermes, and Gemini CLI. Cowork's native
 Desktop/VM execution is unvalidated. The v0.1.0 downloads contain the original
 three adapters. Antigravity is not supported.
 
@@ -317,7 +317,7 @@ Public sources, reviewed 2026-10-29:
 - [Trusted folders](https://geminicli.com/docs/cli/trusted-folders/)
 - [Pinned native shell selection](https://github.com/google-gemini/gemini-cli/blob/970413207732f5d4d8c50540c7fc359c44fdaaf2/packages/core/src/utils/shell-utils.ts)
 
-## Cursor — experimental source preview
+## Cursor — experimental
 
 Build both workspace crates from this repository; keep the executable
 and engine library adjacent. Activate an explicit state directory with `start`,
@@ -382,7 +382,7 @@ and [CLI permissions](https://cursor.com/docs/cli/reference/permissions.md).
 The latter permission files are separate from hook configuration. Synthetic
 adapter replay is not native Cursor enforcement evidence.
 
-## GitHub Copilot CLI — experimental source preview
+## GitHub Copilot CLI — experimental
 
 Use the same activated state directory when printing `config --agent copilot`.
 The generated version-1 JSON has `type: "command"`, an absolute `exec`, separate

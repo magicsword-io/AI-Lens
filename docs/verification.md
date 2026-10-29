@@ -41,7 +41,7 @@ semantics have a dedicated regression. Published packages remain unsigned.
 PE import inspection confirms that both Windows binaries require
 `VCRUNTIME140.dll`. The tested Windows host already had the runtime; a
 runtime-free Windows installation was not qualified. Install the
-[documented Visual C++ runtime prerequisite](../README.md#build-and-try-it).
+[documented Visual C++ runtime prerequisite](../README.md#download-and-try-it).
 A native loader error occurs before Lens can emit a denial.
 
 The user approved migration with explicit experimental limits. Cursor/Cowork
@@ -51,8 +51,8 @@ routing, and SIEM delivery remain unverified. The current Linux Codex image
 failure is infrastructure, not a hook pass: Ubuntu blocked user-namespace setup
 before the positive control. No sandbox or AppArmor setting was weakened.
 See [OpenAI's sandbox prerequisites](https://learn.chatgpt.com/docs/sandboxing#prerequisites)
-before attempting that lane. Public GitHub integration and Pages activation
-remain a separate owner-run step after publication.
+before attempting that lane. The migrated repository is now public; native
+GitHub Actions and Pages deployment passed on revision `0a49d88`.
 
 ## v0.1 behavior and evidence contract
 

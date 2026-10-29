@@ -21,7 +21,7 @@ const fields = [
   [
     "agents",
     "Selector",
-    "Source preview: nonempty list of claude, codex, hermes, gemini, cursor, copilot, or cowork. Published v0.2.0 accepts the first four. Entries within the list are alternatives.",
+    "v0.3.0: nonempty list of claude, codex, hermes, gemini, cursor, copilot, or cowork. Historical v0.2.0 accepts the first four. Entries within the list are alternatives.",
   ],
   [
     "events",
@@ -83,8 +83,8 @@ const fields = [
           <p class="eyebrow">SCHEMA / VERSION 1</p>
           <h2>A small policy, end to end.</h2>
           <p>
-            These examples and policy files follow the experimental source branch,
-            with seven native adapters. Published v0.2.0 accepts Claude Code,
+            These examples and policy files follow v0.3.0,
+            with seven native adapters. Historical v0.2.0 accepts Claude Code,
             Codex, Hermes and Gemini CLI; it does not accept the new
             <code>cursor</code>, <code>copilot</code> or <code>cowork</code> selectors.
             Use the policy files bundled with your release. Earlier v0.1.0
@@ -184,7 +184,7 @@ const fields = [
             <code>PermissionRequest</code> in this project; Hermes supports{" "}
             <code>pre_tool_call</code>. Gemini CLI supports only <code>BeforeTool</code>;
             its other eight registered events return neutral responses.
-            In the source preview, Cursor and Copilot CLI enforce only
+            Cursor and Copilot CLI enforce only
             <code>preToolUse</code>, and Cowork only <code>PreToolUse</code>.
             Copilot command timeouts fail open; Cowork Desktop execution remains
             unvalidated. OTLP and provider audit ingestion never evaluate these rules.
@@ -348,7 +348,7 @@ const fields = [
             <strong>Prove the layer you rely on.</strong>
             <p>
               The repository's replay tests exercise synthetic callbacks through
-              the real executable/library. The source-preview inventory is
+              the real executable/library. The v0.3.0 inventory is
               30 rules × 7 adapters × 3 scenarios = 630 scenarios; an inventory
               is not a test result. Historical v0.2.0 evidence retains its
               four-adapter/360-scenario count, and v0.1.0 retains its original

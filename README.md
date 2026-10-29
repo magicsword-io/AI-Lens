@@ -39,12 +39,48 @@ OTel, enterprise audit feeds, and documented Copilot session exports. These
 always produce `observe_only` records and never run blocking rules. Enterprise
 admin/audit credentials are separate from ordinary model inference keys.
 
-## Build and try it
+## Download and try it
 
-Build from this repository with current stable Rust. This repository does not
-yet publish migrated release downloads. Historical v0.2.0 packages from the
-previous repository contain only Claude Code, Codex, Hermes, and Gemini CLI;
-they do not contain the new preview adapters or telemetry commands.
+[Download v0.3.0](https://github.com/magicsword-io/AI-Lens/releases/tag/v0.3.0)
+includes the CLI, engine, rules, examples, and documentation. Pick your platform:
+
+| Platform | ZIP |
+| --- | --- |
+| Windows x64 | [Download](https://github.com/magicsword-io/AI-Lens/releases/download/v0.3.0/agent-lens-0.3.0-windows-x86_64.zip) |
+| Linux x64 | [Download](https://github.com/magicsword-io/AI-Lens/releases/download/v0.3.0/agent-lens-0.3.0-linux-x86_64.zip) |
+| macOS Apple Silicon | [Download](https://github.com/magicsword-io/AI-Lens/releases/download/v0.3.0/agent-lens-0.3.0-macos-aarch64.zip) |
+
+Extract the ZIP and open a terminal in its `agent-lens-0.3.0-…` folder.
+Keep the executable and engine library together. On Linux/macOS, run:
+
+```sh
+chmod +x ./agent-lens
+./agent-lens rules-check --rules ./examples/rules/default.yaml
+./agent-lens demo --output ./demo.jsonl
+```
+
+On Windows, use PowerShell:
+
+```powershell
+.\agent-lens.exe rules-check --rules .\examples\rules\default.yaml
+.\agent-lens.exe demo --output .\demo.jsonl
+```
+
+`demo` writes five synthetic events, needs no account, and installs no hooks.
+Packages are unsigned. [SHA256SUMS](https://github.com/magicsword-io/AI-Lens/releases/download/v0.3.0/SHA256SUMS)
+and build provenance accompany each release. See the
+[getting started guide](https://magicsword-io.github.io/AI-Lens/getting-started/)
+for checksum, extraction and setup commands.
+
+Windows x64 binaries require the latest
+[Microsoft Visual C++ v14 x64 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist#latest-supported-redistributable-version).
+The ZIP does not bundle it. A missing `VCRUNTIME140.dll` prevents the process
+from starting, before Lens can return a hook decision.
+
+## Build from source
+
+Use current stable Rust for other architectures, including Intel Macs and
+Linux ARM64, or to develop locally:
 
 ```sh
 git clone https://github.com/magicsword-io/AI-Lens.git
@@ -54,16 +90,10 @@ cargo build --locked --workspace
 ./target/debug/agent-lens demo --output demo.jsonl --rules examples/rules/default.yaml
 ```
 
-`demo` writes five synthetic events, needs no account, and installs no hooks.
-Keep both build outputs together: `agent-lens` and `libagent_lens_engine.so`
-(Linux), `libagent_lens_engine.dylib` (macOS), or `agent-lens.exe` and
-`agent_lens_engine.dll` (Windows). Windows commands use
+Build both workspace crates. Keep `agent-lens` beside `libagent_lens_engine.so`
+(Linux), `libagent_lens_engine.dylib` (macOS), or `agent-lens.exe` beside
+`agent_lens_engine.dll` (Windows). Windows build commands use
 `.\target\debug\agent-lens.exe`.
-
-Windows x64 binaries also require the latest
-[Microsoft Visual C++ v14 x64 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist#latest-supported-redistributable-version).
-The ZIP does not bundle this runtime. A missing `VCRUNTIME140.dll` prevents the
-process from starting, before Lens can return a hook decision.
 
 To create a local package, install Python 3.9+ and run:
 
@@ -77,14 +107,16 @@ library, examples, and documentation; they are unsigned.
 
 ## Connect an agent
 
+The commands below run from the extracted package folder. Source builds can
+substitute `./target/debug/agent-lens`; Windows uses `.\agent-lens.exe`.
 Choose absolute paths for your state, output, and rules. Replace the example
 paths with your own and copy a reviewed policy into the rules location first.
 
 ```sh
-./target/debug/agent-lens --state /absolute/path/lens-state start \
+./agent-lens --state /absolute/path/lens-state start \
   --output /absolute/path/events.jsonl --rules /absolute/path/default.yaml
-./target/debug/agent-lens --state /absolute/path/lens-state config --agent claude
-./target/debug/agent-lens --state /absolute/path/lens-state status
+./agent-lens --state /absolute/path/lens-state config --agent claude
+./agent-lens --state /absolute/path/lens-state status
 ```
 
 `config` prints JSON for you to review and merge into the client's settings.
@@ -100,7 +132,7 @@ allowed operation and a denied harmless operation through the actual client.
 `status` reports local state, not whether the client invoked a hook.
 
 ```sh
-./target/debug/agent-lens --state /absolute/path/lens-state stop
+./agent-lens --state /absolute/path/lens-state stop
 ```
 
 `stop` disables collection and policy evaluation for that state directory. It
@@ -132,8 +164,8 @@ callback in memory. Use the [SIEM guide](docs/siem.md) for field mapping.
 Try an account-free synthetic export:
 
 ```sh
-./target/debug/agent-lens telemetry sources
-./target/debug/agent-lens telemetry import \
+./agent-lens telemetry sources
+./agent-lens telemetry import \
   --source codex-otel --signal logs \
   --input examples/telemetry/otlp-codex-logs.json --output telemetry.jsonl
 ```
@@ -165,8 +197,9 @@ credentials, or customer logs.
 ## Website and development
 
 The MagicSword Astro site lives in [site/](site/). Run it with Node 24:
-`cd site`, `npm ci`, then `npm run dev`. Publication depends on the new
-repository's visibility and Pages configuration.
+`cd site`, `npm ci`, then `npm run dev`. The
+[live site](https://magicsword-io.github.io/AI-Lens/) deploys from main through
+GitHub Pages. [Release procedure](docs/releases.md) covers tagged native builds.
 
 [Contributing](CONTRIBUTING.md) lists local checks and evidence expectations.
 [Architecture](docs/architecture.md) explains the executable/library boundary.

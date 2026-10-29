@@ -1,7 +1,8 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import CodeBlock from "../components/CodeBlock.astro";
-import { repository, source } from "../data/project";
+import Downloads from "../components/Downloads.astro";
+import { href, source } from "../data/project";
 const previewSource = source;
 const sources = [
   ["claude-code-otel", "Claude Code", "Local runtime · opt-in client configuration", "OTLP import / HTTP"],
@@ -19,7 +20,7 @@ const sources = [
 ---
 
 <Layout title="Hooks & telemetry — AI Lens" active="telemetry"
-  description="Experimental source-build guide to seven native hook adapters and eleven observation-only telemetry sources. Review blocking, setup, privacy, and coverage limits.">
+  description="Experimental integration guide to seven native hook adapters and eleven observation-only telemetry sources. Review blocking, setup, privacy, and coverage limits.">
   <div class="container">
     <header class="page-intro">
       <p class="eyebrow">FIELD GUIDE / 03 · EXPERIMENTAL</p>
@@ -29,7 +30,7 @@ const sources = [
     <div class="docs-layout">
       <aside class="toc" aria-label="On this page">
         <span>ON THIS PAGE</span>
-        <a href="#preview">01 / Source build</a>
+        <a href="#preview">01 / Get AI Lens</a>
         <a href="#native">Native hooks / Blocking</a>
         <a href="#sources">02 / Source matrix</a>
         <a href="#ingest">03 / Ingest locally</a>
@@ -39,17 +40,18 @@ const sources = [
       </aside>
       <div class="docs-content">
         <section class="doc-section" id="preview">
-          <p class="eyebrow">01 / SOURCE BUILD ONLY</p>
-          <h2>Build the integrations locally.</h2>
+          <p class="eyebrow">01 / DOWNLOAD & EXTRACT</p>
+          <h2>Get the integrations locally.</h2>
           <div class="callout">
-            <strong>Start with a source build.</strong>
-            <p>The current source includes seven native adapters and eleven telemetry sources. The three newer adapters and telemetry ingestion remain experimental. Cowork Desktop/VM execution remains unvalidated.</p>
+            <strong>Seven adapters. Experimental telemetry.</strong>
+            <p>The release includes seven native adapters and eleven telemetry sources. The three newer adapters and telemetry ingestion remain experimental. Cowork Desktop/VM execution remains unvalidated.</p>
           </div>
-          <CodeBlock code={`git clone ${repository}.git
-cd AI-Lens
-cargo build --locked --workspace
-./target/debug/agent-lens telemetry sources`} label="Source build · POSIX shell" />
-          <p>Build both workspace crates so the CLI has its adjacent engine library. On Windows use the corresponding <code>agent-lens.exe</code> path. The commands do not install client settings.</p>
+          <Downloads />
+          <p><a href={href("getting-started/#downloads")}>Extract your package and review platform prerequisites</a>,
+            then run commands from its directory. Keep the executable beside its engine library.
+            On Windows use <code>.\agent-lens.exe</code> in place of <code>./agent-lens</code>.
+            These commands do not install client settings.</p>
+          <CodeBlock code="./agent-lens telemetry sources" label="Extracted package · POSIX shell" />
           <div class="telemetry-kinds">
             <article><span class="integration-label">RUNTIME</span><h3>Requests and tool activity.</h3><p>OTel describes instrumented sessions, requests, timing, and usage. Its coverage follows the producer.</p></article>
             <article><span class="integration-label">PROVIDER AUDIT</span><h3>Account and service activity.</h3><p>Provider feeds describe events within an organization. Administrative logs do not capture every local tool call.</p></article>
@@ -57,14 +59,14 @@ cargo build --locked --workspace
           </div>
         </section>
         <section class="doc-section" id="native">
-          <p class="eyebrow">NATIVE HOOKS / SOURCE PREVIEW</p>
+          <p class="eyebrow">NATIVE HOOKS / EXPERIMENTAL ADAPTERS</p>
           <h2>Block where the client provides a gate.</h2>
           <p>Native adapter IDs are <code>claude</code>, <code>codex</code>, <code>hermes</code>, <code>gemini</code>, <code>cursor</code>, <code>copilot</code>, and <code>cowork</code>. A client must load the hook, invoke it before dispatch, and honor its response. Post-tool and lifecycle matches remain observations.</p>
-          <CodeBlock code={`./target/debug/agent-lens --state /absolute/path/lens-state start \\
+          <CodeBlock code={`./agent-lens --state /absolute/path/lens-state start \\
   --output /absolute/path/events.jsonl --rules /absolute/path/default.yaml
-./target/debug/agent-lens --state /absolute/path/lens-state config --agent cursor
-./target/debug/agent-lens --state /absolute/path/lens-state config --agent copilot
-./target/debug/agent-lens --state /absolute/path/lens-state config --agent cowork`} label="Replace absolute paths · print each integration for review" />
+./agent-lens --state /absolute/path/lens-state config --agent cursor
+./agent-lens --state /absolute/path/lens-state config --agent copilot
+./agent-lens --state /absolute/path/lens-state config --agent cowork`} label="Replace absolute paths · print each integration for review" />
           <ul>
             <li><strong>Cursor: 11 events.</strong> Merge into project or user <code>.cursor/hooks.json</code>, complete workspace trust, and reload/restart as required. Only <code>preToolUse</code> blocks. Generated config sets <code>failClosed: true</code> and a ten-second timeout; normal pre-tool and observational subagent-start responses explicitly allow continuation. Cloud initial read-only turns run no hooks.</li>
             <li><strong>Copilot CLI: 12 events.</strong> Merge into <code>.github/hooks/*.json</code> or user <code>.copilot/hooks/*.json</code>, complete trust, and restart the CLI. Only <code>preToolUse</code> blocks. Direct <code>exec</code>/<code>args</code> configuration is CLI-only; its 30-second timeout <strong>fails open upstream</strong>. It is not an IDE/cloud integration.</li>
@@ -95,20 +97,20 @@ cargo build --locked --workspace
         <section class="doc-section" id="ingest">
           <p class="eyebrow">03 / LOCAL OBSERVATION JSONL</p>
           <h2>Listen, import, or poll.</h2>
-          <CodeBlock code={`./target/debug/agent-lens telemetry listen \\
+          <CodeBlock code={`./agent-lens telemetry listen \\
   --source claude-code-otel --bind 127.0.0.1:4318 \\
   --output ./claude-code-telemetry.jsonl`} label="Foreground OTLP listener" />
           <p>The loopback listener accepts OTLP HTTP JSON and protobuf at <code>/v1/logs</code>, <code>/v1/metrics</code>, and <code>/v1/traces</code>. Providers may emit fewer signals. It has no gRPC server, TLS termination, or collector authentication. Use separate ports and files per source; the source label does not authenticate a sender.</p>
           <p>Send HTTP/1.1 POST requests with <code>Content-Length</code>: up to 8 MiB per body, 16 KiB of headers, and a five-second read deadline. Chunked transfer and gzip are unsupported. Configure collector forwarding with compression disabled and a content length. Success follows a locked, synced append; normalized batches are limited to 10,000 events and 32 MiB.</p>
-          <CodeBlock code={`./target/debug/agent-lens telemetry import \\
+          <CodeBlock code={`./agent-lens telemetry import \\
   --source codex-otel --signal logs --format json \\
   --input ./otlp-logs.json --output ./codex-telemetry.jsonl
 
-./target/debug/agent-lens telemetry import \\
+./agent-lens telemetry import \\
   --source copilot-otel --signal traces --format protobuf \\
   --input ./otlp-traces.pb --output ./copilot-telemetry.jsonl`} label="Import authorized OTLP export messages" />
           <p>Provider exports use their documented JSON envelopes or JSONL records. Binary input is an OTLP export message, without a gRPC frame. CSV and arbitrary console output are not accepted contracts.</p>
-          <CodeBlock code={`./target/debug/agent-lens telemetry poll --source openai-audit \\
+          <CodeBlock code={`./agent-lens telemetry poll --source openai-audit \\
   --token-env OPENAI_ADMIN_KEY --output ./openai-audit.jsonl \\
   --checkpoint ./openai-audit.checkpoint.json --max-pages 10`} label="Bounded read · authorized API Platform organization" />
           <p>Provision the token through your approved secret manager first; <code>--token-env</code> names the variable, not the secret. A poll retrieves a bounded set of pages. It is not a background service or an OAuth login flow. Consult the source guide for account scope, time windows, pagination, and supported polling flags.</p>
@@ -116,7 +118,7 @@ cargo build --locked --workspace
         <section class="doc-section" id="configure">
           <p class="eyebrow">04 / EXPLICIT CONFIGURATION</p>
           <h2>Review before connecting.</h2>
-          <CodeBlock code="./target/debug/agent-lens telemetry config --source claude-code-otel" label="Print configuration for review" />
+          <CodeBlock code="./agent-lens telemetry config --source claude-code-otel" label="Print configuration for review" />
           <p>Review the <a href={previewSource("examples/telemetry/configs")}>configuration templates</a> and merge only the relevant settings manually. Managed policy can override local values. Complete normal client consent and trust steps; Lens does not edit global settings or bypass policy.</p>
           <p>Cowork exports from its VM or cloud runtime. Cursor exports from its servers and requires public HTTPS with authentication. Their loopback address is not your host. Use a reachable, secured collector and forward to Lens on the collector host.</p>
           <p>The <a href={previewSource("examples/telemetry/configs/otel-collector.yaml")}>Collector Contrib example</a> provides TLS/auth ingress and an optional gRPC bridge. Supply real certificates and secrets outside source control, preserve source separation, and validate it against your installed Collector release. It is an example, not a tested production deployment.</p>

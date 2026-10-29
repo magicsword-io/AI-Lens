@@ -12,8 +12,8 @@ including quoted IDs. Validation does not activate collection. Use `start --rule
 file for a state directory, and validate edits before using them. Rules are
 trusted local configuration; keep their directory and contents under review.
 
-The current source build adds `cursor`, `copilot`, and
-experimental `cowork` native hook selectors. Published v0.2.0 ZIPs still contain
+v0.3.0 packages include `cursor`, `copilot`, and
+experimental `cowork` native hook selectors. Historical v0.2.0 ZIPs contain
 four adapters; v0.1.0 does not accept `gemini`. Antigravity is unsupported.
 OTLP and audit source names are not rule agent selectors: those feeds are
 observation-only. See [native setup and limitations](agents.md).
@@ -45,7 +45,7 @@ them into file paths. That tool is outside this direct-file coverage.
 | --- | --- |
 | `id` | Unique stable identifier; recorded in `matched_rules`. Avoid sensitive text. |
 | `description` | Optional human-readable explanation; use generic text. |
-| `agents` | Optional list of adapter names: `claude`, `codex`, `hermes`, `gemini`, `cursor`, `copilot`, `cowork` in this source build. |
+| `agents` | Optional list of adapter names: `claude`, `codex`, `hermes`, `gemini`, `cursor`, `copilot`, `cowork` in v0.3.0 and the current source. |
 | `events` | Optional list of exact native event names. |
 | `tool_pattern` | Optional Rust regex over the tool name. |
 | `path_pattern` | Optional Rust regex over lexically normalized native path fields. |

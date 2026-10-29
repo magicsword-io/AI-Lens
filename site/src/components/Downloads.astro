@@ -1,0 +1,20 @@
+---
+import Icon from "./Icon.astro";
+import { downloads, releaseVersion, releaseURL, releaseAsset, href } from "../data/project";
+---
+<div class="download-grid" aria-label="Download AI Lens for your platform">
+  {downloads.map((download) => (
+    <a class="download-card" href={download.url}>
+      <span class="integration-label">{download.architecture}</span>
+      <strong>{download.name}<Icon name="download" size={19} /></strong>
+      <span>Download ZIP · v{releaseVersion}</span>
+    </a>
+  ))}
+</div>
+<p class="download-links">
+  <a href={releaseURL}>Release notes</a>
+  <a href={releaseAsset("SHA256SUMS")}>SHA-256 checksums</a>
+  <a href={href("getting-started/#source")}>Build from source</a>
+</p>
+<p class="small-note">Unsigned portable packages. Keep the executable beside its engine library.
+  Intel Macs and other architectures: build from source.</p>

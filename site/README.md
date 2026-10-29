@@ -23,8 +23,9 @@ choose GitHub Actions in Settings → Pages, then run the Website workflow on ma
 when repository visibility and plan permit. Verify the workflow's deployment URL
 and all four routes before calling it live.
 
-The getting-started guide uses a source build; it does not advertise unpublished
-release assets. The executable and engine filenames retain `agent-lens` for
+Download cards use the version and platform assets in `src/data/project.ts`.
+Update that release data together with the published ZIPs and `SHA256SUMS`.
+The getting-started guide covers extraction, platform prerequisites and a source-build fallback. The executable and engine filenames retain `agent-lens` for
 compatibility. Native hook coverage and observation-only telemetry have separate
 limits; the site links to the full adapter and verification guides.
 
