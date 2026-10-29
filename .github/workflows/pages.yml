@@ -45,10 +45,50 @@ jobs:
         with:
           path: site/dist
 
+  release-ready:
+    if: github.event_name != 'pull_request' && github.event.repository.private == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      ready: ${{ steps.release.outputs.ready }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check public download availability
+        id: release
+        run: |
+          python - <<'PY'
+          import json, os, re, tomllib, urllib.error, urllib.request
+          from pathlib import Path
+          version = tomllib.loads(Path('Cargo.toml').read_text())['workspace']['package']['version']
+          site_version = re.search(r'export const releaseVersion = "([^"]+)";', Path('site/src/data/project.ts').read_text())
+          assert site_version and site_version[1] == version, 'website and workspace release versions differ'
+          url = f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/releases/tags/v{version}"
+          try:
+              with urllib.request.urlopen(url, timeout=30) as response:
+                  release = json.load(response)
+          except urllib.error.HTTPError as error:
+              if error.code != 404:
+                  raise
+              release = None
+          expected = {'SHA256SUMS'} | {f'agent-lens-{version}-{target}.zip' for target in
+                                      ('linux-x86_64', 'windows-x86_64', 'macos-aarch64')}
+          ready = bool(release and release['tag_name'] == f'v{version}' and release['published_at']
+                       and not release['draft'] and not release['prerelease']
+                       and expected <= {a['name'] for a in release['assets']
+                                        if a['state'] == 'uploaded' and a['size'] > 0})
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write(f"ready={str(ready).lower()}\n")
+          if not ready:
+              print(f'Deployment deferred: v{version} downloads are not public yet. Re-run Website after Release succeeds.')
+          PY
+
   deploy:
     # Private repositories build normally. The owner enables public Pages later.
-    if: github.event_name != 'pull_request' && github.event.repository.private == false
-    needs: build
+    if: needs.release-ready.outputs.ready == 'true'
+    needs: [build, release-ready]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

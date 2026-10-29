@@ -13,6 +13,9 @@ architectures require a source build. Packages are unsigned.
 2. Review and merge the change into main after native and website checks pass.
 3. Tag that main commit and push the tag: `git tag vX.Y.Z COMMIT`, then
    `git push https://github.com/magicsword-io/AI-Lens.git vX.Y.Z`.
+4. Once Release succeeds, run `gh workflow run pages.yml --repo magicsword-io/AI-Lens --ref main`.
+   Website publication waits for that version's public ZIPs and checksums, so
+   a version bump never replaces the live site with unavailable download links.
 
 The Release workflow validates the tag/version and main ancestry, then calls the
 same native and website CI used for pull requests. It packages and runs the
