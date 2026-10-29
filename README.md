@@ -60,6 +60,11 @@ Keep both build outputs together: `agent-lens` and `libagent_lens_engine.so`
 `agent_lens_engine.dll` (Windows). Windows commands use
 `.\target\debug\agent-lens.exe`.
 
+Windows x64 binaries also require the latest
+[Microsoft Visual C++ v14 x64 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist#latest-supported-redistributable-version).
+The ZIP does not bundle this runtime. A missing `VCRUNTIME140.dll` prevents the
+process from starting, before Lens can return a hook decision.
+
 To create a local package, install Python 3.9+ and run:
 
 ```sh
@@ -166,5 +171,5 @@ repository's visibility and Pages configuration.
 [Contributing](CONTRIBUTING.md) lists local checks and evidence expectations.
 [Architecture](docs/architecture.md) explains the executable/library boundary.
 [Live testing](docs/live-testing.md) describes paired side-effect tests; fixture
-replays alone do not establish live-client compatibility. Original attribution
-is retained in [NOTICE](NOTICE).
+replays alone do not establish live-client compatibility. License information is in
+[LICENSE](LICENSE) and [NOTICE](NOTICE).

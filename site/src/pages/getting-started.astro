@@ -77,6 +77,11 @@ const posixStart = `lens_state="$PWD/lens-state"
             Run <code>python3 scripts/package.py</code> after building to create a local ZIP.
           </p>
           <p class="small-note">Release assets for this repository are not published yet. Start with the source build below.</p>
+          <p>
+            Windows x64 builds require the latest <a href="https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist#latest-supported-redistributable-version">Microsoft Visual C++ v14 x64 Redistributable</a>.
+            The ZIP does not bundle it. A missing <code>VCRUNTIME140.dll</code>
+            prevents Lens from starting and returning hook decisions.
+          </p>
         </section>
         <section class="doc-section" id="demo">
           <p class="eyebrow">02 / NO AGENT ACCOUNT NEEDED</p>

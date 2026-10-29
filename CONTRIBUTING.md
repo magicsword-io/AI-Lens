@@ -127,7 +127,7 @@ tests or SDK callback tests for an installed client's actual command-hook seam.
 ## License and security
 
 Contributions are made under [Apache-2.0](LICENSE). Preserve third-party
-attribution and the original MIT notice in [NOTICE](NOTICE). Report suspected
+attribution when applicable. See [NOTICE](NOTICE) for project license information. Report suspected
 vulnerabilities privately through the repository's GitHub security advisory
 feature when available; do not put secrets or sensitive logs in public issues.
 

@@ -38,6 +38,12 @@ and the stopped-policy mutation on that guest; retries are Windows-only, capped
 at one second, and still propagate permanent errors. Python 3.9 detached-finalizer
 semantics have a dedicated regression. Published packages remain unsigned.
 
+PE import inspection confirms that both Windows binaries require
+`VCRUNTIME140.dll`. The tested Windows host already had the runtime; a
+runtime-free Windows installation was not qualified. Install the
+[documented Visual C++ runtime prerequisite](../README.md#build-and-try-it).
+A native loader error occurs before Lens can emit a denial.
+
 The user approved migration with explicit experimental limits. Cursor/Cowork
 full native-client tests, Gemini whole-CLI trust/provider delivery, broader
 Copilot event/platform behavior, enterprise audit permissions, remote Collector
