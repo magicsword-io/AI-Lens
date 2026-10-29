@@ -16,6 +16,7 @@ LIBRARY = ('agent_lens_engine.dll' if os.name == 'nt' else
 AGENTS = ('cursor', 'copilot')
 SECRET = 'PRIVATE_NATIVE_SECRET'
 BODY = 'SYNTHETIC_CAPTURE_BODY'
+RAW_PATCH_SECRET = 'SYNTHETIC_PATCH_SECRET_1029'
 PRIVACY_FORMS = ('object', 'string', 'escaped-key')
 PRIVACY_SECRETS = ('SYNTHETIC_META_SECRET', 'SYNTHETIC_PRIVATE_KEY_SECRET',
                    'SYNTHETIC_AUTH_SECRET', 'SYNTHETIC_AUTH_MEMBER')
@@ -66,7 +67,10 @@ EXPECTED.update(f'capture/{agent}/{form}' for agent, form in FORMS)
 EXPECTED.update(f'missing-library/{agent}' for agent in AGENTS)
 EXPECTED.update(f'privacy/copilot/{form}/{mode}/{control}' for form in PRIVACY_FORMS
                 for mode in ('metadata', 'capture') for control in ('repeated-secret', 'ordinary-id'))
-EXPECTED_COUNT = 103
+EXPECTED.update(f'copilot/raw-patch/{case}' for case in (
+    'allow', 'deny', 'post', 'metadata', 'capture',
+    'truncated', 'other-tool', 'oversize', 'unknown-header'))
+EXPECTED_COUNT = 112
 INVENTORY_POLICY = 'version: 1\nrules: [{id: inventory, agents: [cursor, copilot], action: block}]\n'
 PATH_POLICY = r'''version: 1
 rules:
@@ -156,7 +160,7 @@ class Smoke:
             out, err = stdout.read(131073), stderr.read(131073)
         require('bounded-cli-output', len(out) <= 131072 and len(err) <= 131072)
         require('private-cli-output', all(value.encode() not in out + err for value in
-                                         (SECRET, 'PRIVATE_BAD_JSON', *PRIVACY_SECRETS)))
+                                         (SECRET, 'PRIVATE_BAD_JSON', *PRIVACY_SECRETS, RAW_PATCH_SECRET)))
         return result.returncode, out, err
 
     def json_run(self, *args, **kwargs):
@@ -275,6 +279,65 @@ class Smoke:
                            and row['matched_rules'] == (['shell-marker'] if decision == 'deny' else [])
                            and (denial(agent, result) if decision == 'deny' else result == neutral(agent)))
 
+    def raw_patch(self):
+        # Captured native shape: Copilot CLI 1.0.105 Windows ARM64 emitted
+        # apply_patch toolArgs as freeform text, not a JSON-encoded object.
+        original = fixture('copilot', 'raw-patch')
+        require('raw-patch-fixture', original['toolName'] == 'apply_patch'
+                and original['toolArgs'] == '*** Begin Patch\n*** Add File: copilot-allow-1029.txt\n+COPILOT_ALLOW_1029\n*** End Patch\n')
+        self.start(PATH_POLICY)
+        for case, event, blocked in [('allow', 'preToolUse', False), ('deny', 'preToolUse', True),
+                                      ('post', 'postToolUse', True)]:
+            payload = dict(original)
+            if blocked:
+                payload['toolArgs'] = payload['toolArgs'].replace('copilot-allow-1029.txt', '.env')
+            count = len(rows(self.log))
+            result = self.hook('copilot', event, payload)
+            events = rows(self.log)
+            row = events[-1]
+            preventive = event == 'preToolUse'
+            self.check(f'copilot/raw-patch/{case}', len(events) == count + 1 and row.get('agent') == 'copilot'
+                       and row.get('hook_event') == event and row.get('tool_name') == 'apply_patch'
+                       and row.get('session_id') == original['sessionId'] and 'content' not in row
+                       and row.get('phase') == ('pre' if preventive else 'post')
+                       and row.get('enforcement') == ('supported' if preventive else 'observe_only')
+                       and row.get('decision') == ('block' if blocked and preventive else 'would_block' if blocked else 'allow')
+                       and row.get('matched_rules') == (['private-path'] if blocked else [])
+                       and (denial('copilot', result) if blocked and preventive else result == {}))
+        for mode in ('metadata', 'capture'):
+            self.start(PATH_POLICY, capture=mode == 'capture')
+            payload = dict(original)
+            payload['toolArgs'] = payload['toolArgs'].replace('*** End Patch', f'+api_key={RAW_PATCH_SECRET}\n*** End Patch')
+            count = len(rows(self.log))
+            result = self.hook('copilot', 'preToolUse', payload)
+            events = rows(self.log)
+            row = events[-1]
+            metadata = {key: value for key, value in row.items() if key != 'content'}
+            valid = (len(events) == count + 1 and result == {} and row.get('decision') == 'allow'
+                     and row.get('matched_rules') == [] and RAW_PATCH_SECRET not in json.dumps(row)
+                     and 'COPILOT_ALLOW_1029' not in json.dumps(metadata))
+            if mode == 'capture':
+                captured = row.get('content', {}).get('toolArgs')
+                valid = (valid and isinstance(captured, str) and 'COPILOT_ALLOW_1029' in captured
+                         and '[REDACTED]' in captured)
+            else:
+                valid = valid and 'content' not in row
+            self.check(f'copilot/raw-patch/{mode}', valid)
+        self.start(PATH_POLICY)
+        for kind in ('truncated', 'other-tool', 'oversize', 'unknown-header'):
+            payload = dict(original)
+            if kind == 'truncated':
+                payload['toolArgs'] = payload['toolArgs'].replace('*** End Patch\n', '')
+            elif kind == 'other-tool':
+                payload['toolName'] = 'view'
+            elif kind == 'oversize':
+                payload['toolArgs'] = '*** Begin Patch\n*** Add File: safe.txt\n+' + 'x' * (1024 * 1024) + '\n*** End Patch\n'
+            else:
+                payload['toolArgs'] = payload['toolArgs'].replace('*** Add File:', '*** Unknown File:')
+            before = self.log.read_bytes()
+            result = self.hook('copilot', 'preToolUse', payload)
+            self.check(f'copilot/raw-patch/{kind}', denial('copilot', result) and self.log.read_bytes() == before)
+
     def malformed(self):
         for agent in AGENTS:
             for kind in BAD:
@@ -391,6 +454,7 @@ class Smoke:
         self.configurations()
         self.fixtures()
         self.policy_controls()
+        self.raw_patch()
         self.malformed()
         self.missing_library()
         self.capture()

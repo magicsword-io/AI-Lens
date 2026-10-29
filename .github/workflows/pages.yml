@@ -73,7 +73,7 @@ jobs:
               if error.code != 404:
                   raise
               release = None
-          expected = {'SHA256SUMS'} | {f'agent-lens-{version}-{target}.zip' for target in
+          expected = {'SHA256SUMS', f'ai-lens-cowork-{version}.zip', 'cowork-plugin-provenance.json'} | {f'agent-lens-{version}-{target}.zip' for target in
                                       ('linux-x86_64', 'windows-x86_64', 'macos-aarch64')}
           ready = bool(release and release['tag_name'] == f'v{version}' and release['published_at']
                        and not release['draft'] and not release['prerelease']

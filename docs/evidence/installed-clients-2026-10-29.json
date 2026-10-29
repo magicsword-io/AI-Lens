@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-29",
+  "status": "partial_evidence_pending",
+  "release": {
+    "version": "0.3.0",
+    "source_revision": "ff2fc329",
+    "note": "Existing release artifacts; historical aggregate hashes remain unchanged."
+  },
+  "evidence_basis": "Cursor and prototype Cowork exported metadata ledgers independently inspected; independent native file listings and control outcomes reported by integration owner. No full platform/event matrix claim.",
+  "cursor": {
+    "client": "Cursor Desktop",
+    "client_version": "3.27.22",
+    "client_architecture": "ARM64",
+    "execution_host": "Windows 11 ARM64 build 26200.9168",
+    "lens_architecture": "x86_64 under ARM64 emulation",
+    "configuration": "generated project hooks with PowerShell commands",
+    "binary_sha256": "ae09b1c6d269824dfefdd5d43c708954ccf9334a9cb7a4c95a75a33566cecc3e",
+    "library_sha256": "8223407b77239f1a7dd9c92306a336a7d109706bbb175d99e80ac146f024c6fe",
+    "checks": {
+      "allowed_write_exact_contents": true,
+      "denied_env_absent": true,
+      "denial_is_read_precheck": true,
+      "matched_rule": "protect-env-files",
+      "stopped_policy_control_exact_contents": true,
+      "restored_policy_enabled": true,
+      "restored_policy_reblock": true,
+      "metadata_content_nonces_absent": true,
+      "native_session_id_on_tool_callbacks": true,
+      "native_tool_call_id_established": false
+    },
+    "observed_event_types": [
+      "afterAgentResponse",
+      "postToolUse",
+      "postToolUseFailure",
+      "preToolUse",
+      "stop",
+      "workspaceOpen"
+    ],
+    "positive_control": {
+      "file": "cursor-allow-1029.txt",
+      "contents": "CURSOR_ALLOW_1029\r\n"
+    },
+    "stopped_policy_control": {
+      "file": ".env.cursor-control-1029",
+      "contents": "DEMO_ONLY=CONTROL_1029\r\n"
+    },
+    "limitations": [
+      "No all-eleven-event delivery, timeout, other-platform or native Windows ARM64 Lens build claim."
+    ],
+    "hooks_sha256": "bbb94091b4795f8235db6dee7c441ee7ba5ed6d236d077c9ab71f66c29f3265e",
+    "rules_sha256": "1ccbfd95302c34f7eb83e95ad2d959b9640d02540413ead6dab0b9fa98132710",
+    "events_sha256": "87cfdf7e2cb6cb3c1b5bd46bdb997406e2d9ca470df59c47492283b76ac2c3ff",
+    "prior_events_sha256": "9eede9f6edd423a45ee8cb73fecffe550fef8a4da158e0585c02593cc8daa6e3",
+    "event_count": 15,
+    "event_counts": {
+      "workspaceOpen": 1,
+      "preToolUse": 4,
+      "postToolUseFailure": 3,
+      "postToolUse": 1,
+      "afterAgentResponse": 3,
+      "stop": 3
+    },
+    "decision_counts": {
+      "allow": 11,
+      "block": 2,
+      "would_block": 2
+    },
+    "restored_block_timestamp": "2026-10-29T17:50:55.522Z",
+    "status": "passed_scoped_installed_client_checks"
+  },
+  "cowork": {
+    "frontend": "Claude Desktop",
+    "frontend_version": "4.29.0",
+    "frontend_host": "macOS",
+    "execution_host": {
+      "os": "Linux",
+      "architecture": "x86_64",
+      "workspace": "/home/claude"
+    },
+    "plugin_sha256": "0f467ab082ab01ae9716b8a95a9a46beaf48a20e80d5c4d0f8a6cd5974f0cf47",
+    "plugin_files_sha256": {
+      ".claude-plugin/plugin.json": "c523580a46cc210c22d41418f1b529271dc691c776ee77dd8456dfb6bb2d8708",
+      "hooks/hooks.json": "f75ff731341c5b25009b5f74d2517dab26023e53475910f605c8932420ef75cf",
+      "scripts/lens-hook.sh": "fb169fad3cb21d0999dc0b566f3a6ffb1ceb49fec213f517103267a2e132fb0b",
+      "scripts/rules.yaml": "d6a3716cf20de19b85d4ca3ac8a0deeee12090645c55671d9cb521f738553ddc",
+      "scripts/runtime/linux-x86_64/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "scripts/runtime/linux-x86_64/NOTICE": "4db961fb01c5c4e5620bdf106cb5bfb70f5b59642178a9fee4b5d034e4a79be4",
+      "scripts/runtime/linux-x86_64/agent-lens": "4d221067b6cf7152ed9d98a3dc46aca1baaf7a1ce23d46407b9dc2251ca43519",
+      "scripts/runtime/linux-x86_64/libagent_lens_engine.so": "1d7e9027a739ea2374dc4bc89e37f0acd1f241c14bf2b11ce417ae0bdac90794"
+    },
+    "configuration": "Five-event generated config through plugin-relative wrapper; binary/library bundled under scripts/runtime/linux-x86_64.",
+    "checks": {
+      "automatic_exec_callback_observed": true,
+      "automatic_shell_callback_observed": true,
+      "allowed_write_tool_ui_observed": true,
+      "env_write_denied_tool_ui_observed": true,
+      "stopped_policy_control_tool_ui_observed": true,
+      "restored_policy_denial_tool_ui_observed": true,
+      "exported_ledger_verified": true,
+      "final_package_helper_qualified": null,
+      "metadata_only_fields": true,
+      "native_session_and_tool_use_ids": true,
+      "native_files_control_present_denied_absent_operator_verified": true
+    },
+    "observed_event_types": [
+      "SessionStart",
+      "PreToolUse",
+      "PostToolUse",
+      "PostToolUseFailure"
+    ],
+    "limitations": [
+      "Independent file listing and stop/start control UI verified by integration owner; file contents are not included in exported metadata.",
+      "No all-five-event delivery, timeout/failure, local macOS hook host, Windows hook host or rebuilt-helper qualification claim."
+    ],
+    "events_sha256": "9c7df9fdab045be9430b569ff066f29edcb4303c232954a31566494a3b0420d1",
+    "event_count": 18,
+    "event_counts": {
+      "SessionStart": 1,
+      "PreToolUse": 10,
+      "PostToolUse": 6,
+      "PostToolUseFailure": 1
+    },
+    "decision_counts": {
+      "allow": 16,
+      "block": 2
+    },
+    "blocked_write_tool_use_ids": [
+      "toolu_018SmD8iudzFE53LCam1o6zJ",
+      "toolu_01QXoxNR1CrnazsgPRVsVqzQ"
+    ]
+  },
+  "copilot_windows": {
+    "client_version": "1.0.105",
+    "client_architecture": "ARM64",
+    "status": "v0.3.0_raw_patch_defect_reproduced_v0.3.1_client_rerun_pending",
+    "native_tool_acceptance": null,
+    "note": "Authenticated v0.3.0 Windows client attempt rejected legitimate raw apply_patch arguments before its positive control; fixed v0.3.1 Windows artifact/client validation pending. Existing Linux offline evidence remains separately scoped.",
+    "v0.3.1_local_candidate_regression": {
+      "rust_tests": 99,
+      "binary_seam_assertions": 112,
+      "new_raw_patch_cases": 9,
+      "before_fix_falsifier": "expected_failure",
+      "platform": "macOS",
+      "release_artifact": false
+    }
+  },
+  "local_evidence_sha256": {
+    ".context/windows-clients/cursor-allow-evidence.log": "51676562330568e2866b6603cce4d27f95c340ae53f58ced3ec308a34d4a6735",
+    ".context/windows-clients/cursor-deny-evidence.log": "283b32cd737ef61b85f2bc52c325f1601122307d39ec4e665af557ff55cee19f",
+    ".context/windows-clients/cursor-control-evidence.log": "2e1898daba9b5ae2537db6c1cbef1aec0b29e1d7f113535c67971b20f016bedd",
+    ".context/windows-clients/cursor-summary.log": "4c9905e6acab53e2be23ccefaa842186a2321ed0e07ae1813f0a6810ba7cdbaf",
+    ".context/windows-clients/cursor-restored.log": "1395903eec65633658376a4e3f9357d228e8a1337cbb655383bdc835f14d6791",
+    ".context/windows-clients/cursor-restored-evidence.log": "115eb1132ed379a18825cd342e191b9ec2721ea414d9d8cddd4b4ad777153f11",
+    ".context/windows-clients/cowork-cloud-probe-evidence.txt": "d65dec93d4a387b5db0401da750f53d82d55a57670b2b9b4dc1188d57de50d2c",
+    ".context/windows-clients/cowork-runtime-plugin.json": "40da8c82ff07546278c84a5055632a3188b431a9724ab6f9b4419ccf9eee9b9e",
+    ".context/windows-clients/cursor-native-export.json": "b6d0372b9beedc5b84df5cee4823a83c7f1498069c4f4323f8774f32f5a25173",
+    ".context/windows-clients/cursor-native-events.jsonl": "9eede9f6edd423a45ee8cb73fecffe550fef8a4da158e0585c02593cc8daa6e3",
+    ".context/windows-clients/cowork-cloud-events.jsonl": "9c7df9fdab045be9430b569ff066f29edcb4303c232954a31566494a3b0420d1",
+    ".context/windows-clients/cowork-cloud-runtime.txt": "6394aa75d675831c94dc24488d6ca5f4ba69e2e93798e977e432a4acd12fd462",
+    ".context/windows-clients/cursor-native-export-final.json": "72de6d86cca994c9402e4163f30e786814b8c9b2286d4ed4a8f92424774e9eca",
+    ".context/windows-clients/cursor-native-events-final.jsonl": "87cfdf7e2cb6cb3c1b5bd46bdb997406e2d9ca470df59c47492283b76ac2c3ff",
+    ".context/windows-clients/cursor-native-export-final.log": "bc7df3626eb4543e5a661cf273d0a27bf266bfbe44cd97922c95b731d797587b",
+    ".context/native/copilot-raw-patch-regression.json": "d8bf55876772fd57b9929964d5f90f72a506cce02f887454b590c722d95b51a9"
+  },
+  "first_export_failure": {
+    "classification": "transport",
+    "detail": "Host bridge refused source under /tmp; copy to /mnt/user-data/outputs succeeded before host transfer. Export byte count and SHA256 retained."
+  }
+}

@@ -3,7 +3,7 @@
 AI Lens has two Rust crates: a command-line host and a policy engine. An agent
 runs the host once per registered command hook. Hook management starts no background process.
 
-AI Lens v0.3.0 has seven native adapters: Claude Code, Codex,
+AI Lens v0.3.1 has seven native adapters: Claude Code, Codex,
 Hermes, Gemini CLI, Cursor, Copilot CLI, and Cowork. Published v0.2.0 downloads
 contain the first four. Native adapters normalize callbacks for policy evaluation
 and return vendor denial responses at supported preventive hooks. Cowork is a
@@ -85,7 +85,11 @@ payload fields into metadata.
 
 The Cursor and Copilot native modules register 11 and 12 events respectively;
 only camelCase `preToolUse` is enforceable. Cursor requires object `tool_input`;
-Copilot accepts object `toolArgs` or one JSON-encoded object string. Copilot's
+Copilot accepts object `toolArgs`, one JSON-encoded object string, or, since
+v0.3.1, a bounded raw patch for exact `apply_patch` tool names. The patch parser
+validates structure and exposes all Add/Update/Delete/Move target paths to policy;
+original input remains available for matching without entering default metadata.
+v0.3.0 rejected that raw dialect and could deny legitimate edits. Copilot's
 event is passed explicitly because its native callbacks do not guarantee an
 event discriminator. Cowork registers five Claude-style events, with only
 `PreToolUse` enforceable; its registry does not inherit every Claude Code event.

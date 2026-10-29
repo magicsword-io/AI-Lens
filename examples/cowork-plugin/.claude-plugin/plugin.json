@@ -1,6 +1,6 @@
 {
-  "name": "agent-lens",
-  "description": "Experimental native tool audit and cooperative policy hooks. Provision AI Lens by MagicSword separately and generate hooks/hooks.json for this machine.",
-  "version": "0.2.0",
+  "name": "ai-lens-cowork",
+  "description": "AI Lens native tool hooks with a bundled Linux x64 runtime and local metadata-only policy events.",
+  "version": "0.3.0",
   "license": "Apache-2.0"
 }

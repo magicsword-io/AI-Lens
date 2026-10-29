@@ -60,6 +60,10 @@ jobs:
         env:
           RELEASE_TAG: ${{ github.ref_name }}
         run: python scripts/release_artifacts.py prepare --input release-input --output release-assets --tag "$RELEASE_TAG" --source "$GITHUB_SHA"
+      - name: Add source-bound Cowork upload plugin and checksum
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: python scripts/package_cowork_release.py --assets release-assets --tag "$RELEASE_TAG" --source "$GITHUB_SHA"
       - name: Publish complete release
         env:
           GH_TOKEN: ${{ github.token }}

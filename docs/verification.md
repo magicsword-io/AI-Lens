@@ -44,8 +44,8 @@ runtime-free Windows installation was not qualified. Install the
 [documented Visual C++ runtime prerequisite](../README.md#download-and-try-it).
 A native loader error occurs before Lens can emit a denial.
 
-The user approved migration with explicit experimental limits. Cursor/Cowork
-full native-client tests, Gemini whole-CLI trust/provider delivery, broader
+The user approved migration with explicit experimental limits. At that migration
+checkpoint, Cursor/Cowork full native-client tests, Gemini whole-CLI trust/provider delivery, broader
 Copilot event/platform behavior, enterprise audit permissions, remote Collector
 routing, and SIEM delivery remain unverified. The current Linux Codex image
 failure is infrastructure, not a hook pass: Ubuntu blocked user-namespace setup
@@ -53,6 +53,61 @@ before the positive control. No sandbox or AppArmor setting was weakened.
 See [OpenAI's sandbox prerequisites](https://learn.chatgpt.com/docs/sandboxing#prerequisites)
 before attempting that lane. The migrated repository is now public; native
 GitHub Actions and Pages deployment passed on revision `0a49d88`.
+
+## Installed-client follow-up — October 29, 2026
+
+This follow-up tests installed clients with v0.3.0 artifacts from release source
+`ff2fc329`; it does not relabel the earlier reports or their binary hashes.
+The [safe installed-client inventory](evidence/installed-clients-2026-10-29.json)
+distinguishes exported prototype records from the final helper awaiting qualification.
+
+| Client / actual execution host | Observed behavior | Remaining evidence |
+| --- | --- | --- |
+| Cursor Desktop 3.27.22 ARM64; Windows 11 ARM64 build 26200.9168; x64 Lens under emulation | Generated PowerShell project hooks loaded; allowed Write; `.env` absent after `protect-env-files` blocked Read precheck; stopped-policy control write succeeded | Restored-policy Read reblock and absent test file confirmed; artifact hashes retained |
+| Claude Desktop 4.29.0 Cowork; cloud Linux x86_64 `/home/claude` | Automatic exec/shell callbacks; bundled Linux Lens allowed Write, denied `.env` Write, allowed stopped-policy control, denied again after restore | Exported ledger verified; native files checked by operator; final package-helper qualification pending |
+| Copilot CLI 1.0.105 ARM64; Windows | v0.3.0 rejected legitimate raw `apply_patch` input | v0.3.1 fixed Windows artifact/client rerun pending; existing Linux offline evidence remains separate |
+
+Cursor emitted six observed event types: `workspaceOpen`, `preToolUse`,
+`postToolUse`, `postToolUseFailure`, `afterAgentResponse`, and `stop`. Native
+session IDs occur on tool callbacks; native tool-call IDs were not established.
+The allowed file held `CURSOR_ALLOW_1029\r\n`; the stopped-policy control held
+`DEMO_ONLY=CONTROL_1029\r\n`. These content nonces were absent from the inspected
+metadata logs. Restoring policy blocked a second Read precheck at
+`2026-10-29T17:50:55.522Z`; its test file remained absent and policy ended enabled.
+The final 15-row ledger SHA256 is
+`87cfdf7e2cb6cb3c1b5bd46bdb997406e2d9ca470df59c47492283b76ac2c3ff`.
+The `.env` blocks occurred on Read prechecks, so they are not proof
+that a denied Write was directly submitted in that case.
+
+Cowork's runtime is established by automatic callbacks from a new Desktop task,
+not by assuming that the macOS frontend executes hooks locally. A tested plugin
+bundled the Linux x64 binary/library under `scripts/runtime`, then used a wrapper
+to generate the five-event configuration on that host. The exported ledger has 18 rows: `SessionStart` 1,
+`PreToolUse` 10, `PostToolUse` 6, and `PostToolUseFailure` 1. Two Write blocks
+matched `protect-env-files`, with native session and tool-use IDs. The operator
+independently confirmed both denied files absent and the stopped-policy control
+present. `SessionEnd` was not observed; all-five-event delivery,
+timeout/failure semantics, and qualification of a rebuilt helper are not claimed.
+The prototype ledger SHA256 is
+`9c7df9fdab045be9430b569ff066f29edcb4303c232954a31566494a3b0420d1`.
+Final-helper qualification remains a separate required follow-up.
+
+## Copilot raw-patch regression — v0.3.1 candidate
+
+An authenticated Windows Copilot CLI 1.0.105 attempt using v0.3.0 could not
+complete its allowed positive control: native `apply_patch` supplied a raw patch
+string that the adapter rejected. This was a product compatibility defect, not
+a successful deny test. The first client failure is preserved locally in
+`copilot-allow-attempt4.log` and `copilot-native-shape.log`.
+
+The candidate fix accepts only the exact bounded raw `apply_patch` dialect and
+checks every Add/Update/Delete/Move target while preserving original input and
+metadata privacy. Local macOS checks passed 99 Rust tests, 112 executable/library
+assertions (nine new raw-patch cases), fmt, and clippy. The before-fix falsifier
+failed as expected; `.context/native/copilot-raw-patch-regression.json` binds the
+candidate source and harness hashes. These are local candidate results, not
+release artifact or Windows installed-client proof. Clean three-platform CI and
+the corrected Windows client lane remain pending.
 
 ## v0.1 behavior and evidence contract
 

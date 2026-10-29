@@ -1,6 +1,6 @@
 # Agent hook adapters
 
-AI Lens v0.3.0 and the current source have seven native adapter IDs:
+AI Lens v0.3.1 and the current source have seven native adapter IDs:
 `claude`, `codex`, `hermes`, `gemini`, `cursor`, `copilot`, and `cowork`.
 AI Lens prints configuration for review with `config --agent ID`.
 Merge the resulting `hooks` entries into your existing configuration yourself.
@@ -25,11 +25,11 @@ Only the preventive events listed below are enforceable in the current source.
 Other rule matches are recorded as `would_block`; completed actions are never
 undone, and stop events never force an agent into another turn.
 
-v0.3.0 packages include all seven adapters; Cursor, Copilot CLI, and Cowork
-remain experimental. Historical v0.2.0 downloads contain only Claude Code, Codex,
-Hermes, and Gemini CLI. Cowork's native
-Desktop/VM execution is unvalidated. The v0.1.0 downloads contain the original
-three adapters. Antigravity is not supported.
+v0.3.1 packages include all seven adapters. Installed Cursor and Cowork results
+are scoped to the versions and execution hosts below; Copilot CLI retains its
+Linux offline-runtime evidence. Historical v0.2.0 downloads contain only Claude
+Code, Codex, Hermes, and Gemini CLI; v0.1.0 contains the original three adapters.
+Antigravity is not supported.
 
 Native hooks can request blocking at the specific preventive events below.
 The separate [OTLP and provider audit sources](telemetry-sources.md) are always
@@ -317,7 +317,7 @@ Public sources, reviewed 2026-10-29:
 - [Trusted folders](https://geminicli.com/docs/cli/trusted-folders/)
 - [Pinned native shell selection](https://github.com/google-gemini/gemini-cli/blob/970413207732f5d4d8c50540c7fc359c44fdaaf2/packages/core/src/utils/shell-utils.ts)
 
-## Cursor — experimental
+## Cursor
 
 Build both workspace crates from this repository; keep the executable
 and engine library adjacent. Activate an explicit state directory with `start`,
@@ -330,8 +330,9 @@ state paths are absolute. The CLI does not install Cursor or modify its settings
 The configuration uses a command string, ten-second `timeout`, an explicit
 `--event` for each callback, and `failClosed: true` on `preToolUse`. For Windows
 Desktop use PowerShell command quoting (`--shell powershell`); quoted executable
-paths need the call operator. The published Desktop shell contract does not
-establish Windows CLI execution behavior. Review the actual generated command on
+paths need the call operator. The tested Windows Desktop 3.27.22 installation used ARM64 Cursor with
+the v0.3.0 x64 Lens package under Windows emulation. This does not establish
+Windows CLI execution behavior. Review the actual generated command on
 your target platform rather than assuming shell dialects are interchangeable.
 
 Complete normal workspace trust and hook review, then reload/restart the client
@@ -379,8 +380,16 @@ Official sources retrieved **2026-10-29**:
 [Cursor hooks](https://cursor.com/docs/hooks.md),
 [CLI parameters and trust](https://cursor.com/docs/cli/reference/parameters.md),
 and [CLI permissions](https://cursor.com/docs/cli/reference/permissions.md).
-The latter permission files are separate from hook configuration. Synthetic
-adapter replay is not native Cursor enforcement evidence.
+The latter permission files are separate from hook configuration.
+
+Installed Desktop 3.27.22 on Windows 11 ARM64 build 26200.9168 loaded generated
+PowerShell project hooks. A normal `Write` succeeded; a separate `.env` request
+was blocked at its `Read` precheck by `protect-env-files`, leaving `.env` absent.
+With Lens stopped, a separate `.env.cursor-control-1029` write succeeded.
+Observed events were `workspaceOpen`, `preToolUse`, `postToolUse`,
+`postToolUseFailure`, `afterAgentResponse`, and `stop`. Pre/post rows carried
+native session IDs; no native tool-call ID attribution is claimed. Restoring
+policy blocked another Read precheck and left the restored-test path absent. See the [installed-client record](verification.md#installed-client-follow-up--october-29-2026).
 
 ## GitHub Copilot CLI — experimental
 
@@ -436,6 +445,17 @@ behavior. A host-generated denial only helps if it arrives before the upstream
 timeout. The generated 30-second timeout is not an enforcement guarantee.
 HTTP hook failure behavior is different; Lens generates command hooks.
 
+The v0.3.1 parser accepts Copilot's bounded raw patch string only for exact
+`toolName: "apply_patch"`. It validates the patch structure and evaluates all
+Add, Update, Delete, and Move target paths, preserving the original input for
+content matching and metadata-only capture. Object and JSON-encoded object
+arguments remain supported; arbitrary strings remain invalid.
+
+An installed Windows Copilot 1.0.105 session exposed this dialect: v0.3.0 rejected
+a legitimate raw patch and denied the allowed positive control. The v0.3.1 fix
+passed local parser and executable/library regressions, including a before-fix
+falsifier; fixed Windows installed-client acceptance is still pending.
+
 Native tools include `bash`, `powershell`, `view`, `create`, `edit`, and
 `apply_patch`. Keep native names in rules and review actual tool argument fields;
 MCP names are not universally Claude-style `mcp__` names. Cloud hooks support a
@@ -448,14 +468,15 @@ Official sources retrieved **2026-10-29**:
 and [CLI reference](https://docs.github.com/en/copilot/reference/cli-command-reference).
 No installed-client allow/deny or timeout outcome is inferred from adapter tests.
 
-## Claude Cowork — experimental plugin integration
+## Claude Cowork — plugin integration
 
 `cowork` is a distinct native adapter, separate from `claude` and from
 `claude-cowork-otel`. Official platform documentation explicitly says Cowork
 loads `hooks/hooks.json`, and plugins may contain hooks without skills. This
-supports the integration design; **native Desktop/VM execution remains
-unvalidated**. Do not infer a minimum Cowork Desktop version or executable
-reachability from a Claude Code version gate or a synthetic fixture.
+supports the integration design. Desktop 4.29.0 was also tested through new
+cloud tasks whose actual hook host was Linux x86_64 under `/home/claude`.
+This is cloud runtime evidence, not execution of the macOS binary on the
+Desktop host. It establishes no minimum Desktop version.
 
 The explicit registry has **five events**:
 
@@ -478,12 +499,16 @@ executable `command` and separate `args`, including the explicit event. It uses
 30-second timeouts and `onFailure: "block"` for the preventive hook. Preserve argv
 boundaries; the presence of `args` selects direct execution, not a shell command.
 On Windows the command must identify the actual executable, not a `.cmd` shim.
-These are documented failure controls, pending actual Cowork runtime validation.
+These are documented failure controls; missing-binary, malformed-stdout, and
+timeout behavior still require qualification through the installed runtime.
 
 Use the hooks-only package example under [`examples/cowork-plugin`](../examples/cowork-plugin).
 Its manifest lives at `.claude-plugin/plugin.json`; review the generated hooks
-and package them according to that example. **Provision AI Lens and its
-adjacent engine library separately** where hooks actually execute. Do not put
+and package them according to that example. The installed-client test bundled
+the v0.3.0 Linux executable and adjacent engine under `scripts/runtime`, with a
+plugin-relative wrapper generating state and callback configuration on that host.
+Simply copying generated absolute macOS paths into a cloud plugin will not work.
+Provision or bundle the matching executable/library where hooks actually execute. Do not put
 binaries in top-level `bin/`: ordinary account-uploaded Cowork rejects that plugin
 layout. No skill is required and a ZIP upload cannot establish binary reachability.
 
@@ -505,6 +530,16 @@ and [linked hook schema](https://code.claude.com/docs/en/plugins/components#hook
 Separate Enterprise inference webhooks are a hosted product integration; they
 are not implemented by this local adapter. Cowork OTel and Compliance feeds
 remain observational regardless of plugin availability.
+
+Installed Desktop 4.29.0 tasks invoked automatic exec and shell callbacks.
+The prototype Lens plugin exported 18 rows covering `SessionStart`, `PreToolUse`,
+`PostToolUse`, and `PostToolUseFailure`: an ordinary `Write` succeeded, an `.env` write was denied before execution,
+a stopped-policy control succeeded, and restoring policy denied another write.
+The exported metadata ledger confirms two blocked Write calls with native session
+and tool-use IDs. Independent native file listing confirmed both denied files
+absent and the stopped-policy control present. Qualification of the final
+distributable helper remains pending. This does not claim
+emission of all five events. See the [installed-client record](verification.md#installed-client-follow-up--october-29-2026).
 
 ## Evidence and limits
 
