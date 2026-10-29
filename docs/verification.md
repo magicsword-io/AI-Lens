@@ -56,6 +56,14 @@ GitHub Actions and Pages deployment passed on revision `0a49d88`.
 
 ## Installed-client follow-up — October 29, 2026
 
+The published **v0.3.1** packages also passed follow-up checks. The downloaded
+Windows EXE/DLL were verified after installation, then Copilot repeated all four
+allow/deny and stopped/restored-policy controls. The published Cowork ZIP passed
+a fresh task's startup, allowed Write and denied Write; its Linux binaries match
+the earlier full-control run. The tagged macOS package passed local rules/demo
+checks. All four ZIPs, licenses, checksums and provenance were independently
+verified. See the [published-package record](evidence/release-v0.3.1.json).
+
 This follow-up includes Cursor and early Cowork checks with v0.3.0 artifacts
 from `ff2fc329`, plus Copilot and Cowork checks with v0.3.1 CI-candidate artifacts
 from `ede99fa`. Each report retains its actual source and binary hashes.

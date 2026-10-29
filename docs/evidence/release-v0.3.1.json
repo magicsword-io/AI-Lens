@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-29",
+  "tag": "v0.3.1",
+  "source": "8fe86cc5ac0e27f833560a692855a9a70996c2fa",
+  "release_url": "https://github.com/magicsword-io/AI-Lens/releases/tag/v0.3.1",
+  "release_workflow": {
+    "id": 40931310485,
+    "conclusion": "success",
+    "native_platforms": [
+      "linux-x86_64",
+      "windows-x86_64",
+      "macos-aarch64"
+    ]
+  },
+  "zip_sha256": {
+    "agent-lens-0.3.1-linux-x86_64.zip": "b8675f7af2fb57ff5ed7eead1433ca76df4616505901b53be9ced5b7714fbd00",
+    "agent-lens-0.3.1-windows-x86_64.zip": "eab6b7ab00b0006ba202ba2c424c8529311153172f42b47597cd312bd88dbfe3",
+    "agent-lens-0.3.1-macos-aarch64.zip": "5088baa04ba34de0377cdd1d4c7754f44b4a3ff0b5389a8fccc20b492e6f6871",
+    "ai-lens-cowork-0.3.1.zip": "f9bb6142f5f54725b0d0176a86525e5e31077488941392b2c9f4e4a6ff946056"
+  },
+  "asset_integrity": {
+    "all_seven_github_asset_digests_verified": true,
+    "native_provenance_verified": true,
+    "plugin_provenance_and_all_members_verified": true,
+    "apache_license_and_notice_verified": true
+  },
+  "windows_copilot": {
+    "source": "8fe86cc5ac0e27f833560a692855a9a70996c2fa",
+    "release": "v0.3.1",
+    "client": "Copilot CLI 1.0.105 ARM64 on Windows11 ARM64 build26200.9168",
+    "lens_architecture": "x64 emulation",
+    "zip_sha256": "eab6b7ab00b0006ba202ba2c424c8529311153172f42b47597cd312bd88dbfe3",
+    "native_sha256": {
+      "agent-lens.exe": "411549f92eced8aa02616269a141609fe291aa4e8d178a65cbd22995397bcb9c",
+      "agent_lens_engine.dll": "485a52765dff7a7e44334679bdc41c3a8120fb0641ff922795abce8d9d315eed"
+    },
+    "checks": {
+      "allow_exact": true,
+      "deny_absent": true,
+      "disabled_exact": true,
+      "restored_deny_absent": true,
+      "enabled_final": true,
+      "capture_content_false": true,
+      "metadata_only": true
+    },
+    "event_count": 16,
+    "event_counts": {
+      "sessionStart": 3,
+      "userPromptSubmitted": 3,
+      "preToolUse": 3,
+      "postToolUse": 1,
+      "agentStop": 3,
+      "sessionEnd": 3
+    },
+    "decision_counts": {
+      "allow": 14,
+      "block": 2
+    },
+    "normalized_export_sha256": "6853baba6b39fa3ed7fc41a8e28db17565b398e9c78097dce31bc259c37eefc9",
+    "installed_binary_hashes_read_back": true
+  },
+  "cowork": {
+    "source": "8fe86cc5ac0e27f833560a692855a9a70996c2fa",
+    "tag": "v0.3.1",
+    "zip_sha256": "f9bb6142f5f54725b0d0176a86525e5e31077488941392b2c9f4e4a6ff946056",
+    "launcher_sha256": "455a8a9e23b4d77008fca4f98a435e0aeee75b1a9922c255ce51f318bdb0cd1a",
+    "native_sha256": {
+      "scripts/runtime/linux-x86_64/agent-lens": "680e4e617e77319e8c9f6b7fd7ae2767c5c9c8e1604c71d749485b02f307eb8c",
+      "scripts/runtime/linux-x86_64/libagent_lens_engine.so": "b87ac7935a08bd6ec906249b984955e8a27defe239c5a1f650024e27ba0d1de3"
+    },
+    "frontend": "Claude Desktop4.29.0 macOS26.6.2 ARM64",
+    "execution_host": "cloud Linux x86_64",
+    "checks": {
+      "fresh_published_upload_enabled": true,
+      "native_write_allow_exact_readback": true,
+      "native_write_deny_glob_absent": true,
+      "binary_library_launcher_runtime_hashes_match": true,
+      "policy_enabled_final": true,
+      "capture_content_false": true,
+      "metadata_nonces_absent": true,
+      "exports_transfer_hash_match": true
+    },
+    "event_count": 15,
+    "event_counts": {
+      "SessionStart": 1,
+      "PreToolUse": 8,
+      "PostToolUse": 6
+    },
+    "decision_counts": {
+      "allow": 14,
+      "block": 1
+    },
+    "exports_sha256": {
+      "cowork-release-031-events.jsonl": "3790596b26c30a0c8f99c56edbca14e80a4b9ddc86ba472f5310ef7bdafdb7f8",
+      "cowork-release-031-state.json": "bceb874c3453cafb290237d568e5f58f42922c76beec372585f518cc09ccec00"
+    },
+    "scope": "Fresh startup/allow/deny check for the exact published ZIP and its source-ZIP-scoped namespace. Candidate full off/on mutation remains separate; native Linux bytes are identical, launcher differs only in embedded input ZIP checksum. No new SessionEnd/timeout claim."
+  },
+  "macos_cli": {
+    "host": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "zip_sha256": "5088baa04ba34de0377cdd1d4c7754f44b4a3ff0b5389a8fccc20b492e6f6871",
+    "native_sha256": {
+      "agent-lens": "96601a3b8d4899e40f44a2574b99f07dd48c2ddd2d3d9e5981eedef28d5af14c",
+      "libagent_lens_engine.dylib": "12503e1c713dad2dcdcba743eb4ea290e8a1e71f8a212981d4d616d45fc5e569"
+    },
+    "rules_check_passed": true,
+    "synthetic_demo_events": 5,
+    "state_enabled": true,
+    "capture_content": false
+  },
+  "scope": [
+    "Published Windows native bytes differ from the CI candidate; a new actual-client run qualified the downloaded and installed bytes.",
+    "Cowork published Linux bytes match the full-control CI candidate. Launcher code is identical after normalizing its embedded source-ZIP checksum; a fresh published-ZIP task checked its new runtime namespace and allow/deny behavior.",
+    "Cursor installed-client proof remains separately bound to v0.3.0 in installed-clients-2026-10-29.json.",
+    "Client versions, event sets, timeout behavior and execution-host limits remain as documented in verification.md. Enterprise audit delivery needs separate admin access."
+  ]
+}
