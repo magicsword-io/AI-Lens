@@ -1,8 +1,9 @@
 ---
+import Downloads from "../components/Downloads.astro";
 import Layout from "../layouts/Layout.astro";
 import Icon from "../components/Icon.astro";
 import CodeBlock from "../components/CodeBlock.astro";
-import { href, source, repository } from "../data/project";
+import { href, source, repository, releaseVersion, releaseAsset } from "../data/project";
 const windowsDemo = `.\\agent-lens.exe rules-check --rules .\\examples\\rules\\default.yaml
 .\\agent-lens.exe demo --output .\\demo.jsonl
 Get-Content .\\demo.jsonl`;
@@ -26,7 +27,7 @@ const posixStart = `lens_state="$PWD/lens-state"
 <Layout
   title="Getting started — AI Lens"
   active="start"
-  description="Build AI Lens for Windows, Linux, or macOS. Run the synthetic demo, review native hook configuration, and collect local JSONL events."
+  description="Download AI Lens for Windows, Linux, or macOS. Run the synthetic demo, review native hook configuration, and collect local JSONL events."
 >
   <div class="container">
     <header class="page-intro">
@@ -44,7 +45,7 @@ const posixStart = `lens_state="$PWD/lens-state"
     <div class="docs-layout">
       <aside class="toc" aria-label="On this page">
         <span>ON THIS PAGE</span>
-        <a href="#downloads">01 / Build locally</a>
+        <a href="#downloads">01 / Download & extract</a>
         <a href="#demo">02 / Run the demo</a>
         <a href="#connect">03 / Connect an agent</a>
         <a href="#gemini">Gemini CLI</a>
@@ -54,14 +55,42 @@ const posixStart = `lens_state="$PWD/lens-state"
       </aside>
       <div class="docs-content">
         <section class="doc-section" id="downloads">
-          <p class="eyebrow">01 / LOCAL BUILD</p>
-          <h2>Build for your platform.</h2>
-          <p>
-            Build AI Lens from source on Windows, Linux, or macOS. The command
-            remains <code>agent-lens</code> for compatibility. Build both the CLI
-            and its engine, then package them together.
-          </p>
-          <a class="button primary" href="#source">Build from source <Icon name="arrow" size={17} /></a>
+          <p class="eyebrow">01 / DOWNLOAD & EXTRACT</p>
+          <h2>Ready for your platform.</h2>
+          <p>Download the ZIP for your OS and architecture. The command remains
+            <code>agent-lens</code> for compatibility. Extract the whole package;
+            the executable needs its adjacent engine library.</p>
+          <Downloads />
+          <details class="command-details">
+            <summary>Verify your download · SHA-256</summary>
+            <p>Download <a href={releaseAsset("SHA256SUMS")}>SHA256SUMS</a> and compare
+              your ZIP's hash with the entry for that exact filename. They must match
+              before you extract and run it.</p>
+            <CodeBlock code={`Get-FileHash "$HOME\\Downloads\\agent-lens-${releaseVersion}-windows-x86_64.zip" -Algorithm SHA256`} lang="powershell" label="Windows · PowerShell" />
+            <CodeBlock code={`sha256sum "$HOME/Downloads/agent-lens-${releaseVersion}-linux-x86_64.zip"`} label="Linux · shell" />
+            <CodeBlock code={`shasum -a 256 "$HOME/Downloads/agent-lens-${releaseVersion}-macos-aarch64.zip"`} label="macOS · shell" />
+          </details>
+          <details class="command-details" open>
+            <summary>Windows · extract with PowerShell</summary>
+            <CodeBlock code={`Expand-Archive "$HOME\\Downloads\\agent-lens-${releaseVersion}-windows-x86_64.zip" -DestinationPath "$HOME\\AI-Lens"
+cd "$HOME\\AI-Lens\\agent-lens-${releaseVersion}-windows-x86_64"`} lang="powershell" label="PowerShell · after downloading" />
+          </details>
+          {[
+            { name: "Linux x64", platform: "linux-x86_64" },
+            { name: "macOS Apple Silicon", platform: "macos-aarch64" },
+          ].map(({ name, platform }) => (
+            <details class="command-details" open>
+              <summary>{name} · extract in a shell</summary>
+              <CodeBlock code={`package="$HOME/Downloads/agent-lens-${releaseVersion}-${platform}.zip"
+mkdir -p "$HOME/AI-Lens"
+unzip "$package" -d "$HOME/AI-Lens"
+cd "$HOME/AI-Lens/$(basename "$package" .zip)"
+chmod +x ./agent-lens`} label={`${name} · after downloading`} />
+            </details>
+          ))}
+          <p class="small-note">The macOS package is unsigned and not notarized.
+            If macOS blocks it, review <a href="https://support.apple.com/102445">Apple's downloaded-app approval guidance</a>
+            in System Settings → Privacy &amp; Security. Approve only a download you trust.</p>
           <div class="callout">
             <strong>Seven native adapters. Eleven telemetry sources.</strong>
             <p>Claude Code, Codex, Hermes, Gemini CLI, Cursor, Copilot CLI and experimental Cowork
@@ -74,9 +103,9 @@ const posixStart = `lens_state="$PWD/lens-state"
             <code>agent_lens_engine.dll</code> on Windows,
             <code>libagent_lens_engine.so</code> on Linux, and
             <code>libagent_lens_engine.dylib</code> on macOS.
-            Run <code>python3 scripts/package.py</code> after building to create a local ZIP.
+            Keep the bundled <code>examples/</code> folder for the demo and default rules.
           </p>
-          <p class="small-note">Release assets for this repository are not published yet. Start with the source build below.</p>
+
           <p>
             Windows x64 builds require the latest <a href="https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist#latest-supported-redistributable-version">Microsoft Visual C++ v14 x64 Redistributable</a>.
             The ZIP does not bundle it. A missing <code>VCRUNTIME140.dll</code>
@@ -212,7 +241,7 @@ const posixStart = `lens_state="$PWD/lens-state"
           <p class="eyebrow">FOURTH ADAPTER / GEMINI CLI</p>
           <h2>Register Gemini's native hooks.</h2>
           <p>
-            Build and extract a local package, then run these commands from its directory.
+            Download and extract a package, then run these commands from its directory.
             Keep the executable beside its engine library. You can also
             <a href="#source">build and package the source</a> yourself.
           </p>

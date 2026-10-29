@@ -7,6 +7,20 @@ import integrityYAML from "../../../examples/rules/agent-config-integrity.yaml?r
 import toolsYAML from "../../../examples/rules/restricted-tools.yaml?raw";
 
 export const repository = "https://github.com/magicsword-io/AI-Lens";
+export const releaseVersion = "0.3.0";
+export const releaseTag = `v${releaseVersion}`;
+export const releaseURL = `${repository}/releases/tag/${releaseTag}`;
+export const releaseAsset = (filename: string) =>
+  `${repository}/releases/download/${releaseTag}/${filename}`;
+export const downloads = [
+  { id: "windows", name: "Windows", architecture: "x64", platform: "windows-x86_64" },
+  { id: "linux", name: "Linux", architecture: "x64", platform: "linux-x86_64" },
+  { id: "macos", name: "macOS", architecture: "Apple Silicon", platform: "macos-aarch64" },
+].map((platform) => ({
+  ...platform,
+  filename: `agent-lens-${releaseVersion}-${platform.platform}.zip`,
+  url: releaseAsset(`agent-lens-${releaseVersion}-${platform.platform}.zip`),
+}));
 export const source = (path: string) => `${repository}/blob/main/${path}`;
 export const href = (path = "") =>
   `${import.meta.env.BASE_URL.replace(/\/$/, "")}/${path.replace(/^\//, "")}`;

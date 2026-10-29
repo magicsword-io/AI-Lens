@@ -1,7 +1,7 @@
-# AI telemetry sources — experimental source preview
+# AI telemetry sources — experimental
 
-This guide describes the current source build, researched on
-**2026-10-29**. These commands are **not included in the v0.2.0 downloads**.
+This guide describes the experimental telemetry commands included in v0.3.0,
+researched on **2026-10-29**. Historical v0.2.0 downloads do not include them.
 Provider documentation establishes an upstream contract, not proof of delivery
 from an enterprise tenant. No live enterprise account, admin API, or managed
 client export was used to validate this integration.

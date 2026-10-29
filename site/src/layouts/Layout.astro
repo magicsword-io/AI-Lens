@@ -64,6 +64,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
               {item.label}
             </a>
           ))}
+          <a href={href("getting-started/#downloads")}>Download</a>
           <a class="nav-source" href={repository}>
             GitHub <Icon name="external" size={14} />
           </a>
@@ -86,6 +87,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           </small>
         </div>
         <div class="footer-links">
+          <a href={href("getting-started/#downloads")}>Download</a>
           <a href={source("LICENSE")}>License</a>
           <a href={source("CONTRIBUTING.md")}>Contribute</a>
           <a href={repository}>

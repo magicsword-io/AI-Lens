@@ -2,8 +2,10 @@ name: CI
 
 on:
   push:
+    branches: ['**']
   pull_request:
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
@@ -73,6 +75,8 @@ jobs:
         run: |
           python scripts/windows_cleanup_test.py
           node --test scripts/windows_cleanup_test.mjs
+      - name: Verify release artifact integrity and completeness gates
+        run: python scripts/release_artifacts_test.py
       - name: Install pinned Gemini hook runtime for credential-free integration
         run: npm install --prefix .context/gemini-native --ignore-scripts --no-package-lock --save-exact @google/gemini-cli-core@0.66.0
       - name: Exercise Gemini's native hook system and real file tool (no model or credentials)
@@ -108,6 +112,8 @@ jobs:
         run: python scripts/package.py
       - name: Verify checksums and run the extracted package
         run: python scripts/package_smoke.py
+      - name: Record native package provenance
+        run: python scripts/release_artifacts.py provenance --output build-provenance.json
       - name: Upload ZIP and checksums
         uses: actions/upload-artifact@v4
         with:
@@ -120,6 +126,7 @@ jobs:
             telemetry-results.json
             native-hooks-results.json
             copilot-native-results.json
+            build-provenance.json
           if-no-files-found: error
 
   site:

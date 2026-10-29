@@ -3,13 +3,13 @@
 AI Lens has two Rust crates: a command-line host and a policy engine. An agent
 runs the host once per registered command hook. Hook management starts no background process.
 
-The experimental source branch has seven native adapters: Claude Code, Codex,
+AI Lens v0.3.0 has seven native adapters: Claude Code, Codex,
 Hermes, Gemini CLI, Cursor, Copilot CLI, and Cowork. Published v0.2.0 downloads
 contain the first four. Native adapters normalize callbacks for policy evaluation
 and return vendor denial responses at supported preventive hooks. Cowork is a
 separate plugin adapter whose Desktop/VM execution remains unvalidated.
 
-The experimental source-build `telemetry` commands are a separate host-only
+The experimental `telemetry` commands (included in v0.3.0) are a separate host-only
 path: bounded imports, a foreground loopback OTLP/HTTP listener, and bounded
 provider audit polling. They normalize selected metadata to
 `agent-lens.telemetry.v1` JSONL, without loading the engine, reading hook state,
