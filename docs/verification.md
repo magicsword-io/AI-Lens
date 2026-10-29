@@ -56,16 +56,17 @@ GitHub Actions and Pages deployment passed on revision `0a49d88`.
 
 ## Installed-client follow-up — October 29, 2026
 
-This follow-up tests installed clients with v0.3.0 artifacts from release source
-`ff2fc329`; it does not relabel the earlier reports or their binary hashes.
+This follow-up includes Cursor and early Cowork checks with v0.3.0 artifacts
+from `ff2fc329`, plus Copilot and Cowork checks with v0.3.1 CI-candidate artifacts
+from `ede99fa`. Each report retains its actual source and binary hashes.
 The [safe installed-client inventory](evidence/installed-clients-2026-10-29.json)
-distinguishes exported prototype records from the final helper awaiting qualification.
+keeps prototype, packaged-helper, and passing v0.3.1 candidate records separate.
 
 | Client / actual execution host | Observed behavior | Remaining evidence |
 | --- | --- | --- |
 | Cursor Desktop 3.27.22 ARM64; Windows 11 ARM64 build 26200.9168; x64 Lens under emulation | Generated PowerShell project hooks loaded; allowed Write; `.env` absent after `protect-env-files` blocked Read precheck; stopped-policy control write succeeded | Restored-policy Read reblock and absent test file confirmed; artifact hashes retained |
-| Claude Desktop 4.29.0 Cowork; cloud Linux x86_64 `/home/claude` | Automatic exec/shell callbacks; bundled Linux Lens allowed Write, denied `.env` Write, allowed stopped-policy control, denied again after restore | Exported ledger verified; native files checked by operator; final package-helper qualification pending |
-| Copilot CLI 1.0.105 ARM64; Windows | v0.3.0 rejected legitimate raw `apply_patch` input | v0.3.1 fixed Windows artifact/client rerun pending; existing Linux offline evidence remains separate |
+| Claude Desktop 4.29.0 Cowork; cloud Linux x86_64 `/home/claude` | Automatic exec/shell callbacks; bundled Linux Lens allowed Write, denied `.env` Write, allowed stopped-policy control, denied again after restore | v0.3.0 helper and separate v0.3.1 CI-candidate package passed; tagged builds remain distinct |
+| Copilot CLI 1.0.105 ARM64; Windows | v0.3.0 failure reproduced; v0.3.1 actual `apply_patch` allow/deny, stopped-control, restored-deny passed | Exact CI-source `ede99fa` artifacts; six observed event types; Linux offline evidence remains separate |
 
 Cursor emitted six observed event types: `workspaceOpen`, `preToolUse`,
 `postToolUse`, `postToolUseFailure`, `afterAgentResponse`, and `stop`. Native
@@ -86,11 +87,48 @@ to generate the five-event configuration on that host. The exported ledger has 1
 `PreToolUse` 10, `PostToolUse` 6, and `PostToolUseFailure` 1. Two Write blocks
 matched `protect-env-files`, with native session and tool-use IDs. The operator
 independently confirmed both denied files absent and the stopped-policy control
-present. `SessionEnd` was not observed; all-five-event delivery,
-timeout/failure semantics, and qualification of a rebuilt helper are not claimed.
+present. That prototype did not observe `SessionEnd` or qualify a rebuilt
+helper; the separate packaged-helper run below provides those additional checks.
+Timeout/failure semantics remain outside both runs.
 The prototype ledger SHA256 is
 `9c7df9fdab045be9430b569ff066f29edcb4303c232954a31566494a3b0420d1`.
-Final-helper qualification remains a separate required follow-up.
+A separate run qualified the reusable packaged helper, ZIP SHA256
+`f7775c49872a6deae87aefd57e84bb4c44cf8fa1f42c2be64525f3f93b4c9878`,
+with generated launcher SHA256
+`ff220848b6377e8ddcbf63386d4f5f652e19ba1698b2428a1b0ff3ea73aa7b38`.
+It used the unchanged v0.3.0 Linux executable/library. Three temporary test
+plugins were disabled before the fresh task, leaving the packaged plugin active.
+Allowed Write, denied Write, stopped-policy control, and restored-policy denial
+passed; native listing confirmed both denied files absent and control present.
+Final state was enabled with content capture off.
+
+The complete packaged-helper ledger contains 32 rows: `SessionStart` 2,
+`PreToolUse` 16, `PostToolUse` 12, `SessionEnd` 1, and `PostToolUseFailure` 1
+from a benign missing Read. All five registered events occurred in this exact
+runtime; 30 rows allowed and two Write calls blocked. The 11,484-byte export
+SHA256 is `d137975fbff6ddf4d0f2d4b9fbe6257ea708deb6bfda42f235314b494cb4ab10`.
+The earlier 8,491-byte export is retained as an intermediate phase, not the final
+inventory. This qualifies the packaged helper, not all client versions or the
+new v0.3.1 binary. A separate candidate run below qualifies that binary; tagged
+release builds retain their own provenance.
+
+The separate v0.3.1 Cowork run used CI source `ede99fa` (tree-equivalent to
+`b8c041`), package SHA256
+`d3850bd03e2d3732665429d00d0e994e6cd963d386d37397d64e1b44e3da1879`.
+Runtime inspection matched the packaged Linux executable, engine, and launcher
+hashes retained in the safe aggregate. Actual Write allow, deny, stopped-policy
+control, and restored-policy denial passed. Bash readback confirmed exact allowed
+text; the control's requested contents were witnessed in the successful native
+Write. Its later Bash readback was blocked by the expected `.env` policy and
+was not bypassed. Independent Glob found only the control, with both denied
+paths absent. Final policy was enabled with content capture off.
+
+Its exact 18-row snapshot contains `SessionStart` 1, `PreToolUse` 10,
+`PostToolUse` 6, and `PostToolUseFailure` 1: 16 allow and two Write blocks with
+native session/tool-use IDs. Export SHA256 is
+`5e04b827eb0e142c9c20896a5b0b3ad8d7e8abb7c919352a57fdd371cbf4fc06`.
+`SessionEnd` is not in this snapshot; the earlier v0.3.0 all-five-event result is
+separate. Neither candidate result is relabeled as a tagged-release artifact.
 
 ## Copilot raw-patch regression — v0.3.1 candidate
 
@@ -106,8 +144,26 @@ metadata privacy. Local macOS checks passed 99 Rust tests, 112 executable/librar
 assertions (nine new raw-patch cases), fmt, and clippy. The before-fix falsifier
 failed as expected; `.context/native/copilot-raw-patch-regression.json` binds the
 candidate source and harness hashes. These are local candidate results, not
-release artifact or Windows installed-client proof. Clean three-platform CI and
-the corrected Windows client lane remain pending.
+release artifact or Windows installed-client proof. A separate Windows run below
+provides the corrected installed-client evidence.
+
+The authenticated Windows follow-up passed Copilot CLI 1.0.105 ARM64 on
+Windows 11 ARM64 build 26200.9168 using the v0.3.1 x64 Lens package under
+emulation. The artifact was built from CI source `ede99fa749e36d390122e5ebbdca66131af55a80`,
+whose tree matches candidate `b8c041afd419331a6bf9b2a3959d99b824b57d5b`;
+this is not relabeled as a build from the candidate commit. ZIP SHA256 is
+`333fd10b7eeb0e573dfc119c4cc82f06a42c5096858f2b9335b0f13773c12890`.
+The safe aggregate retains executable/library hashes and custody.
+
+Actual `apply_patch` created the exact allowed text, denied a separate harmless
+path, succeeded with policy stopped, and denied again after policy restoration.
+Both denied paths were absent; final state was enabled with content capture off.
+The 16-row metadata-only ledger has six event types: `sessionStart`,
+`userPromptSubmitted`, `preToolUse`, `postToolUse`, `agentStop`, and `sessionEnd`;
+14 rows allowed and two blocked under `protect-env-files`. Its SHA256 is
+`4374aba661743c6ff4a8951a3dcca0813f7715020c0d7d28098ee1152850014d`.
+Native session attribution was observed; tool-call IDs, all twelve events,
+timeout handling, and other OS/client versions are not claimed.
 
 ## v0.1 behavior and evidence contract
 

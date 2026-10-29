@@ -26,8 +26,8 @@ Other rule matches are recorded as `would_block`; completed actions are never
 undone, and stop events never force an agent into another turn.
 
 v0.3.1 packages include all seven adapters. Installed Cursor and Cowork results
-are scoped to the versions and execution hosts below; Copilot CLI retains its
-Linux offline-runtime evidence. Historical v0.2.0 downloads contain only Claude
+are scoped to the versions and execution hosts below. Copilot CLI also passed
+Windows installed-client checks with v0.3.1. Historical v0.2.0 downloads contain only Claude
 Code, Codex, Hermes, and Gemini CLI; v0.1.0 contains the original three adapters.
 Antigravity is not supported.
 
@@ -391,7 +391,7 @@ Observed events were `workspaceOpen`, `preToolUse`, `postToolUse`,
 native session IDs; no native tool-call ID attribution is claimed. Restoring
 policy blocked another Read precheck and left the restored-test path absent. See the [installed-client record](verification.md#installed-client-follow-up--october-29-2026).
 
-## GitHub Copilot CLI — experimental
+## GitHub Copilot CLI
 
 Use the same activated state directory when printing `config --agent copilot`.
 The generated version-1 JSON has `type: "command"`, an absolute `exec`, separate
@@ -454,7 +454,11 @@ arguments remain supported; arbitrary strings remain invalid.
 An installed Windows Copilot 1.0.105 session exposed this dialect: v0.3.0 rejected
 a legitimate raw patch and denied the allowed positive control. The v0.3.1 fix
 passed local parser and executable/library regressions, including a before-fix
-falsifier; fixed Windows installed-client acceptance is still pending.
+falsifier. Authenticated Windows CLI 1.0.105 ARM64 then passed actual
+`apply_patch` allow, deny, stopped-policy control, and restored-policy denial
+using the v0.3.1 x64 Lens under emulation. Its 16 metadata rows covered six event
+types; session IDs were present, but native tool-call IDs were not established.
+This does not establish all twelve events or timeout behavior.
 
 Native tools include `bash`, `powershell`, `view`, `create`, `edit`, and
 `apply_patch`. Keep native names in rules and review actual tool argument fields;
@@ -537,9 +541,14 @@ The prototype Lens plugin exported 18 rows covering `SessionStart`, `PreToolUse`
 a stopped-policy control succeeded, and restoring policy denied another write.
 The exported metadata ledger confirms two blocked Write calls with native session
 and tool-use IDs. Independent native file listing confirmed both denied files
-absent and the stopped-policy control present. Qualification of the final
-distributable helper remains pending. This does not claim
-emission of all five events. See the [installed-client record](verification.md#installed-client-follow-up--october-29-2026).
+absent and the stopped-policy control present. A separate final packaged-helper run using the same v0.3.0 Linux binaries
+recorded all five registered events, including `SessionEnd` and
+`PostToolUseFailure`, with 32 metadata rows. Its allowed, denied, stopped-policy,
+and restored-policy controls passed. This qualifies that exact helper/runtime;
+A separate v0.3.1 CI-candidate package also passed allow/deny and stopped/restored
+controls, with 18 rows across four event types. `SessionEnd` is not in that
+snapshot; the earlier all-five-event result remains separately scoped. Tagged
+release artifacts are separate builds. See the [installed-client record](verification.md#installed-client-follow-up--october-29-2026).
 
 ## Evidence and limits
 
@@ -553,8 +562,8 @@ Native session/tool identifiers are optional, bounded, and never fabricated.
 
 Synthetic tests and subprocess replay prove the adapter/host boundary. They do
 not prove that an installed agent version invokes the hook, that trust/consent
-was granted, or that every tool path is covered. This applies to the new Cursor,
-Copilot CLI and Cowork source-preview adapters as well as existing integrations. Live agent
+was granted, or that every tool path is covered. Installed-client results are
+separate from replay for every adapter. Live agent
 acceptance needs an allowed harmless operation and a denied harmless operation
 whose side effect is independently checked, plus an observed post/lifecycle
 event on the exact client version and platform. The separate [verification record](verification.md) distinguishes observed live-client

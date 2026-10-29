@@ -24,7 +24,7 @@ response. Coverage depends on the client version, tool, and execution host.
 | Hermes | `hermes` | `pre_tool_call` via native shell hooks |
 | Gemini CLI | `gemini` | `BeforeTool`; other registered events observe only |
 | Cursor | `cursor` | `preToolUse`; tested with Windows Desktop 3.27.22 |
-| GitHub Copilot CLI — preview | `copilot` | `preToolUse`; Linux account-free CLI test available |
+| GitHub Copilot CLI | `copilot` | `preToolUse`; tested with Windows CLI 1.0.105 |
 | Claude Cowork | `cowork` | `PreToolUse` via plugin; tested with Desktop 4.29.0 cloud tasks |
 
 Post-tool and lifecycle events are observational. Copilot hook timeouts fail
@@ -40,9 +40,6 @@ always produce `observe_only` records and never run blocking rules. Enterprise
 admin/audit credentials are separate from ordinary model inference keys.
 
 ## Download and try it
-
-v0.3.1 is the next patch release; publication and fixed Windows Copilot acceptance
-are pending. The links below become available when release checks complete.
 
 [Download v0.3.1](https://github.com/magicsword-io/AI-Lens/releases/tag/v0.3.1)
 includes the CLI, engine, rules, examples, and documentation. Pick your platform:

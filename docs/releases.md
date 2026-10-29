@@ -11,10 +11,11 @@ v0.3.1 fixes the raw `apply_patch` argument dialect observed in Windows Copilot
 CLI 1.0.105. v0.3.0 denied a legitimate edit before it could satisfy the allowed
 control. The fix keeps parsing strict and checks every patch target path.
 Local checks passed 99 Rust tests and 112 executable/library assertions, including
-nine new raw-patch cases and a before-fix falsifier. New three-platform CI and
-the fixed Windows client lane must pass before publication. See the
-[release notes](releases/v0.3.1.md) for the fourth, uploadable Cowork ZIP;
-its final native qualification is separate from the earlier prototype result.
+nine new raw-patch cases and a before-fix falsifier. Windows Copilot CLI 1.0.105
+and Cowork cloud tasks passed native allow/deny and stopped/restored-policy checks
+with v0.3.1 CI-candidate packages. See [verification](verification.md) for tested
+versions and artifact identities. The [release notes](releases/v0.3.1.md) cover
+the new uploadable Cowork ZIP and separate tagged-build provenance.
 
 ## Publish a version
 

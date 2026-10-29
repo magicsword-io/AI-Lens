@@ -202,3 +202,13 @@ the real tool UI and independent files. Export the metadata ledger, verify nativ
 session identifiers and content omission, and hash the exact tested plugin and
 runtime files. Test any rebuilt packaging helper as its own artifact; a previous
 plugin pass does not qualify a different ZIP.
+
+
+The authenticated Copilot Windows follow-up used CLI 1.0.105 ARM64 with v0.3.1
+x64 Lens under emulation. Keep the generated direct-exec hook configuration,
+normal workspace trust, write approval, and workspace-path checks. Expose the
+actual `apply_patch` tool and pair exact allowed contents with absent denied
+paths, then repeat with policy stopped and restored. Preserve the artifact's CI
+source identity and executable/library hashes. The successful run emitted six
+event types; do not infer all-event or timeout coverage from it. See the
+[verification record](verification.md#copilot-raw-patch-regression--v031-candidate).
